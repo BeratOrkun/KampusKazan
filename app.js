@@ -1181,7 +1181,6 @@ import {
   // PWA INSTALL
   // =====================
   window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
     deferredInstallPrompt = e;
     renderAuthArea(getCurrentUser(), getCurrentProfile(), isAdmin());
   });
@@ -1239,9 +1238,6 @@ import {
     }
 
     try {
-      if (authInitPromise) {
-        await authInitPromise;
-      }
       allCampaigns = await fetchActiveCampaigns();
       if (allCampaigns.length === 0) {
         showEmptyState('Henüz aktif kampanya bulunamadı.');

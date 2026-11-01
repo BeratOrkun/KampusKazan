@@ -18,33 +18,102 @@ import {
 } from './firebase.js';
 
 const COLLECTION = 'campaigns';
+const SHEET_ID = '1mCZvq-fdDG7E4CtNaoTtxMITPtWAoMGXn2ys0aYwh4E';
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
 /**
- * Aktif kampanyaları getir (öğrenciler için)
+ * Google Sheets'teki mevcut kampanyaları yedek/ek kaynak olarak getirir
+ * @returns {Promise<Array>}
+ */
+async function fetchSheetCampaigns() {
+  try {
+    const response = await fetch(SHEET_URL);
+    if (!response.ok) return [];
+    const text = await response.text();
+    const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/);
+    if (!jsonStr || !jsonStr[1]) return [];
+    const data = JSON.parse(jsonStr[1]);
+    const rows = data?.table?.rows;
+    if (!Array.isArray(rows) || rows.length === 0) return [];
+
+    const campaigns = [];
+    for (let i = 0; i < rows.length; i++) {
+      const cells = rows[i]?.c;
+      if (!cells) continue;
+      const category = String(cells[0]?.v || '').trim();
+      const title = String(cells[1]?.v || '').trim();
+      const description = String(cells[2]?.v || '').trim();
+      const type = String(cells[3]?.v || '').trim();
+
+      if (category === 'Kampanya Kategori' && title === 'Kampanya Başlığı') continue;
+      if (!title) continue;
+
+      campaigns.push({
+        id: `sheet-${i}`,
+        category: category || 'Genel',
+        title,
+        description,
+        type,
+        active: true,
+      });
+    }
+    return campaigns;
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Aktif kampanyaları getir (öğrenciler için: Firestore + Google Sheets birleşimi)
  * @returns {Promise<Array>}
  */
 export async function fetchActiveCampaigns() {
-  const q = query(
-    collection(db, COLLECTION),
-    where('active', '==', true),
-    orderBy('createdAt', 'desc')
-  );
+  let firestoreItems = [];
 
-  try {
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  } catch (err) {
-    // Composite index yoksa veya orderBy sorun çıkarırsa fallback
-    console.warn('Sıralı sorgu başarısız, fallback kullanılıyor:', err);
-    const fallback = query(collection(db, COLLECTION), where('active', '==', true));
-    const snap = await getDocs(fallback);
-    const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    return items.sort((a, b) => {
-      const ta = a.createdAt?.toMillis?.() || 0;
-      const tb = b.createdAt?.toMillis?.() || 0;
-      return tb - ta;
-    });
+  if (db) {
+    try {
+      const q = query(
+        collection(db, COLLECTION),
+        where('active', '==', true),
+        orderBy('createdAt', 'desc')
+      );
+      const snap = await getDocs(q);
+      firestoreItems = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    } catch (err) {
+      if (err?.code === 'failed-precondition') {
+        try {
+          const fallback = query(collection(db, COLLECTION), where('active', '==', true));
+          const snap = await getDocs(fallback);
+          const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          firestoreItems = items.sort((a, b) => {
+            const ta = a.createdAt?.toMillis?.() || 0;
+            const tb = b.createdAt?.toMillis?.() || 0;
+            return tb - ta;
+          });
+        } catch {
+          // ignore
+        }
+      }
+    }
   }
+
+  const sheetItems = await fetchSheetCampaigns();
+  if (firestoreItems.length === 0) {
+    return sheetItems;
+  }
+
+  const seenTitles = new Set(
+    firestoreItems.map((item) => String(item.title || '').trim().toLocaleLowerCase('tr'))
+  );
+  const merged = [...firestoreItems];
+  for (const item of sheetItems) {
+    const key = String(item.title || '').trim().toLocaleLowerCase('tr');
+    if (key && !seenTitles.has(key)) {
+      seenTitles.add(key);
+      merged.push(item);
+    }
+  }
+  return merged;
 }
 
 /**

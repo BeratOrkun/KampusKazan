@@ -262,6 +262,38 @@ let currentUser = null;
 let currentProfile = getLocalProfile();
 let currentIsAdmin = false;
 let refreshSeq = 0;
+let anonymousAuthBlocked = false;
+
+const ANON_BLOCKED_SESSION_KEY = 'ko_anon_auth_blocked';
+
+async function tryEnsureAnonymousUser() {
+  if (!isFirebaseConfigured() || !auth) return null;
+  if (auth.currentUser) return auth.currentUser;
+  if (anonymousAuthBlocked) return null;
+  try {
+    if (sessionStorage.getItem(ANON_BLOCKED_SESSION_KEY) === '1') {
+      anonymousAuthBlocked = true;
+      return null;
+    }
+  } catch {
+    // ignore
+  }
+  try {
+    const cred = await signInAnonymously(auth);
+    return cred.user;
+  } catch (err) {
+    const code = err?.code || '';
+    if (code === 'auth/admin-restricted-operation' || code === 'auth/operation-not-allowed') {
+      anonymousAuthBlocked = true;
+      try {
+        sessionStorage.setItem(ANON_BLOCKED_SESSION_KEY, '1');
+      } catch {
+        // ignore
+      }
+    }
+    return null;
+  }
+}
 
 /** @type {Array<(user: any, profile: StudentProfile | null, admin: boolean) => void>} */
 const listeners = [];
@@ -297,9 +329,9 @@ async function checkAdmin(uid) {
 }
 
 /**
- * Firestore'a profil belgesini yazar.
- * Eğer sunucudaki eski firestore.rules henüz deviceId alanını tanımıyorsa otomatik olarak deviceId'siz yazar.
- */
+  * Firestore'a profil belgesini yazar.
+  * Eğer sunucudaki eski firestore.rules henüz deviceId alanını tanımıyorsa otomatik olarak deviceId'siz yazar.
+  */
 async function writeProfileToFirestore(uid, payload) {
   const ref = doc(db, 'users', uid);
   try {
@@ -316,11 +348,12 @@ async function writeProfileToFirestore(uid, payload) {
 }
 
 /**
- * Kullanıcı durumunu yerel depo ve Firestore ile senkronize eder.
- * @param {any} user
- */
+  * Kullanıcı durumunu yerel depo ve Firestore ile senkronize eder.
+  * @param {any} user
+  */
 async function refresh(user) {
   const seq = ++refreshSeq;
+  const deviceId = getDeviceId();
   let localProf = getLocalProfile();
   if (!localProf) {
     const idbProf = await idbGet(LOCAL_PROFILE_KEY);
@@ -331,22 +364,22 @@ async function refresh(user) {
 
   let remoteProfile = null;
   let admin = false;
+  const targetDocId = user?.uid || (localProf ? deviceId : null);
 
-  if (user && isFirebaseConfigured()) {
+  if (targetDocId && isFirebaseConfigured() && db) {
     try {
       [remoteProfile, admin] = await Promise.all([
-        fetchProfile(user.uid),
-        user.isAnonymous ? Promise.resolve(false) : checkAdmin(user.uid),
+        fetchProfile(targetDocId),
+        user && !user.isAnonymous ? checkAdmin(user.uid) : Promise.resolve(false),
       ]);
-    } catch (err) {
-      console.warn('Firestore profil okuma uyarısı (yerel profil kullanılacak):', err);
+    } catch {
+      // Firestore okuma yetkisi henüz yoksa yerel profil ile devam edilir
     }
 
     // Cihazda yerel profil var ama Firestore'da henüz yoksa arka planda Firestore'a yaz
     if (!remoteProfile && localProf && isValidSelection(localProf)) {
       try {
-        const deviceId = getDeviceId();
-        await writeProfileToFirestore(user.uid, {
+        await writeProfileToFirestore(targetDocId, {
           cityId: localProf.cityId,
           universityId: localProf.universityId,
           facultyId: localProf.facultyId,
@@ -358,11 +391,11 @@ async function refresh(user) {
         });
         remoteProfile = {
           ...localProf,
-          uid: user.uid,
+          uid: targetDocId,
           deviceId,
         };
-      } catch (syncErr) {
-        console.warn('Yerel profil Firestore’a senkronize edilemedi:', syncErr);
+      } catch {
+        // Firestore yazma yetkisi henüz yoksa yerel kayıt zaten tamamlandı
       }
     }
   }
@@ -375,14 +408,14 @@ async function refresh(user) {
     currentProfile = saveLocalProfile({
       ...localProf,
       ...remoteProfile,
-      uid: user?.uid || remoteProfile.uid || getDeviceId(),
-      deviceId: getDeviceId(),
+      uid: user?.uid || remoteProfile.uid || deviceId,
+      deviceId,
     });
   } else if (localProf && isValidSelection(localProf)) {
     currentProfile = saveLocalProfile({
       ...localProf,
-      uid: user?.uid || localProf.uid || getDeviceId(),
-      deviceId: getDeviceId(),
+      uid: user?.uid || localProf.uid || deviceId,
+      deviceId,
     });
   } else {
     currentProfile = null;
@@ -392,10 +425,10 @@ async function refresh(user) {
 }
 
 /**
- * Öğrenci profilini hem kullanıcının cihazına (anında) hem de Firebase'e kaydeder.
- * Oturum yoksa önce anonim oturum açılır.
- * @param {{ cityId: string, universityId: string, facultyId: string, departmentId: string }} selection
- */
+  * Öğrenci profilini hem kullanıcının cihazına (anında) hem de Firebase'e kaydeder.
+  * Oturum yoksa önce anonim oturum denenir; kapalıysa doğrudan deviceId ile Firestore'a yazılır.
+  * @param {{ cityId: string, universityId: string, facultyId: string, departmentId: string }} selection
+  */
 export async function saveProfile(selection) {
   if (!isValidSelection(selection)) {
     throw new Error('Lütfen il, üniversite, fakülte ve bölüm seçimlerini tamamla.');
@@ -416,16 +449,13 @@ export async function saveProfile(selection) {
   });
   notify();
 
-  // 2. Firebase yapılandırılmışsa anonim kimlik oluştur ve Firestore'a kaydet
-  if (isFirebaseConfigured()) {
+  // 2. Firebase yapılandırılmışsa anonim kimlik (veya deviceId) ile Firestore'a kaydet
+  if (isFirebaseConfigured() && db) {
     try {
-      let user = auth.currentUser;
-      if (!user) {
-        const cred = await signInAnonymously(auth);
-        user = cred.user;
-      }
+      const user = await tryEnsureAnonymousUser();
+      const targetDocId = user?.uid || deviceId;
 
-      const isNew = !currentProfile || currentProfile.uid !== user.uid;
+      const isNew = !currentProfile || currentProfile.uid !== targetDocId;
       /** @type {Record<string, any>} */
       const data = {
         cityId: selection.cityId,
@@ -438,15 +468,15 @@ export async function saveProfile(selection) {
       };
       if (isNew) data.createdAt = serverTimestamp();
 
-      await writeProfileToFirestore(user.uid, data);
+      await writeProfileToFirestore(targetDocId, data);
       currentProfile = saveLocalProfile({
         ...currentProfile,
-        uid: user.uid,
+        uid: targetDocId,
         deviceId,
       });
       await refresh(user);
-    } catch (err) {
-      console.warn('Firebase kaydı sırasında uyarı (cihaz kaydı tamamlandı):', err);
+    } catch {
+      // Cihaz kaydı zaten tamamlandı; Firestore kuralları yayınlandığında otomatik senkronize olur
     }
   }
 
@@ -454,26 +484,31 @@ export async function saveProfile(selection) {
 }
 
 /**
- * KVKK m.11 — silme hakkı: hem cihazdaki yerel kaydı hem de Firestore belgesini ve anonim hesabı siler.
- */
+  * KVKK m.11 — silme hakkı: hem cihazdaki yerel kaydı hem de Firestore belgesini ve anonim hesabı siler.
+  */
 export async function deleteMyData() {
+  const deviceId = getDeviceId();
   clearLocalProfile();
   currentProfile = null;
 
-  if (isFirebaseConfigured() && auth) {
-    const user = auth.currentUser;
-    if (user) {
-      try {
-        await deleteDoc(doc(db, 'users', user.uid));
-      } catch (err) {
-        console.warn('Firestore profil silme uyarısı:', err);
-      }
+  if (isFirebaseConfigured() && db) {
+    const user = auth?.currentUser;
+    const idsToDelete = new Set([deviceId]);
+    if (user?.uid) idsToDelete.add(user.uid);
 
+    for (const id of idsToDelete) {
+      try {
+        await deleteDoc(doc(db, 'users', id));
+      } catch {
+        // ignore
+      }
+    }
+
+    if (user) {
       if (user.isAnonymous) {
         try {
           await deleteUser(user);
-        } catch (err) {
-          console.warn('Anonim hesap silinemedi, oturum kapatılıyor:', err);
+        } catch {
           await signOut(auth);
         }
       } else {
@@ -512,9 +547,9 @@ export function isAdmin() {
 }
 
 /**
- * Auth durum dinleyicisini başlatır.
- * Cihazda yerel profil varsa ama Firebase anonim oturumu henüz açılmamışsa otomatik oturum açıp senkronize eder.
- */
+  * Auth durum dinleyicisini başlatır.
+  * Cihazda yerel profil varsa ama Firebase anonim oturumu henüz açılmamışsa otomatik oturum açıp senkronize eder.
+  */
 export function initAuth() {
   getDeviceId();
   if (!isFirebaseConfigured() || !auth) {
@@ -525,12 +560,7 @@ export function initAuth() {
     let first = true;
     onAuthStateChanged(auth, async (user) => {
       if (!user && getLocalProfile()) {
-        try {
-          const cred = await signInAnonymously(auth);
-          user = cred.user;
-        } catch (err) {
-          console.warn('Anonim oturum başlatılamadı:', err);
-        }
+        user = await tryEnsureAnonymousUser();
       }
       await refresh(user);
       if (first) {

@@ -48,14 +48,19 @@ service cloud.firestore {
             || ('pushToken' in d && 'pushConsentVersion' in d && 'pushConsentAt' in d));
     }
 
-    // Öğrenci profili (anonim uid)
+    // Cihaz kimliği (dev- ile başlayan UUID)
+    function isDeviceDocId(id) {
+      return id is string && id.size() >= 12 && id.size() <= 80 && id.matches('^dev-[a-z0-9-]+$');
+    }
+
+    // Öğrenci profili (anonim uid veya kalıcı cihaz kimliği dev-...)
     match /users/{userId} {
-      allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
-      allow create, update: if signedIn()
-        && request.auth.uid == userId
+      allow get: if (signedIn() && (request.auth.uid == userId || isAdmin())) || isDeviceDocId(userId);
+      allow list: if isAdmin();
+      allow create, update: if ((signedIn() && request.auth.uid == userId) || isDeviceDocId(userId))
         && isValidProfile(request.resource.data);
       // Silme hakkı: öğrenci kendi verisini, admin talep üzerine herkesinkini silebilir.
-      allow delete: if signedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if (signedIn() && (request.auth.uid == userId || isAdmin())) || isDeviceDocId(userId);
     }
 
     // Admin listesi — sadece Firebase Console'dan yönetilir.
@@ -64,9 +69,9 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // Kampanyalar: profil oluşturmuş (oturumlu) herkes aktif olanları okur.
+    // Kampanyalar: aktif kampanyaları herkes okuyabilir, tümünü admin yönetir.
     match /campaigns/{campaignId} {
-      allow read: if signedIn() && (resource.data.active == true || isAdmin());
+      allow read: if resource.data.active == true || isAdmin();
       allow create, update, delete: if isAdmin();
     }
 
