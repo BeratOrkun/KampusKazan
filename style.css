@@ -2861,14 +2861,44 @@ body.is-onboarding .back-to-top {
 }
 
 .onboarding-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
+    gap: 6px;
     margin-bottom: 10px;
     flex-shrink: 0;
 }
 
+.onboarding-brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.onboarding-brand-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    box-shadow: 0 4px 14px rgba(108, 60, 225, 0.35);
+    object-fit: cover;
+}
+
+.onboarding-brand-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 .onboarding-main-title {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+    font-size: clamp(1.05rem, 2.1vw, 1.35rem);
     font-weight: 700;
     line-height: 1.25;
     letter-spacing: -0.02em;
