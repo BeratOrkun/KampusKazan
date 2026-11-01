@@ -1,5 +1,5 @@
 /**
- * KazananÖğrenci — Mobil-First PWA Ana Uygulama
+ * KampüsKazan — Mobil-First PWA Ana Uygulama
  *
  * Akış:
  *  1. Kullanıcı siteye/uygulamaya hayatında İLK DEFA girdiğinde:
@@ -10,6 +10,7 @@
  *       hem de Firebase'e (Anonymous Auth + Firestore users/{uid}) kaydedilir ve DİREKT Kampanya Ekranı açılır.
  *  2. Kullanıcı siteye/uygulamaya sonraki girişlerinde:
  *     - Şehir/üniversite sorulmaz; doğrudan Kampanya Ekranı (#mainAppView) açılır.
+ *  3. Kampanyalar doğrudan `campaigns.json` dosyasından okunur (Firebase'e sunucu yükü binmez).
  */
 
 import { isFirebaseConfigured } from './js/firebase-config.js';
@@ -54,6 +55,7 @@ import {
 
   const CATEGORY_ICONS = {
     Yemek: '🍔',
+    Kafe: '☕',
     Teknoloji: '💻',
     Eğitim: '📚',
     Ulaşım: '🚌',
@@ -66,6 +68,7 @@ import {
     Spor: '⚽',
     Kültür: '🎭',
     Finans: '💳',
+    Banka: '🏦',
     Alışveriş: '🛍️',
     default: '🎯',
   };
@@ -74,9 +77,11 @@ import {
     İndirim: 'indirim',
     Fırsat: 'firsat',
     Ücretsiz: 'ucretsiz',
+    Hediye: 'ucretsiz',
     indirim: 'indirim',
     fırsat: 'firsat',
     ücretsiz: 'ucretsiz',
+    hediye: 'ucretsiz',
   };
 
   const BANNER_DISMISS_KEY = 'ko_push_banner_dismissed';
@@ -555,8 +560,9 @@ import {
       const savedPromise = saveProfile(selection);
       const localProfile = getCurrentProfile();
 
-      // Hiç bekletmeden direkt Kampanya Ekranını aç!
+      // Hiç bekletmeden direkt Kampanya Ekranını aç ve campaigns.json'dan kampanyaları yükle!
       showMainCampaignScreen(localProfile);
+      loadCampaigns();
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showToast('🎉 Hoş geldin!', 'Bilgilerin cihazına kaydedildi. Sana uygun kampanyalar hazır!');
 
@@ -565,7 +571,6 @@ import {
       updateStudentContextBar(finalProfile);
       renderAuthArea(getCurrentUser(), finalProfile, isAdmin());
       updatePushBanner(finalProfile);
-      await loadCampaigns();
     } catch (err) {
       console.error('Onboarding kayıt hatası:', err);
       showToast('Uyarı', mapAuthError(err));
@@ -1061,6 +1066,7 @@ import {
       await reloadProfile();
       const updated = getCurrentProfile();
       showMainCampaignScreen(updated);
+      loadCampaigns();
       const failed = pushMsg.includes('açılamadı');
       showProfileSuccess(`Bilgilerin güncellendi!${pushMsg}`);
       if (!failed) setTimeout(closeProfileModal, 600);
@@ -1202,21 +1208,8 @@ import {
   }
 
   // =====================
-  // CAMPAIGNS
+  // CAMPAIGNS (campaigns.json)
   // =====================
-  function showConfigWarning() {
-    if (loadingState) loadingState.style.display = 'none';
-    campaignsGrid.innerHTML = `
-      <div class="empty-state" style="grid-column: 1 / -1;">
-        <div class="empty-state-icon">⚙️</div>
-        <h3 class="empty-state-title">Firebase Yapılandırması Gerekli</h3>
-        <p class="empty-state-text">
-          <code>js/firebase-config.js</code> dosyasını doldurun. Adımlar için FIREBASE_SETUP.md dosyasına bakın.
-        </p>
-      </div>
-    `;
-  }
-
   async function loadCampaigns() {
     const profile = getCurrentProfile();
     if (!profile) {
@@ -1226,11 +1219,6 @@ import {
 
     showMainCampaignScreen(profile);
 
-    if (!isFirebaseConfigured()) {
-      showConfigWarning();
-      return;
-    }
-
     campaignsGrid.innerHTML = '';
     if (loadingState) {
       campaignsGrid.appendChild(loadingState);
@@ -1238,7 +1226,7 @@ import {
     }
 
     try {
-      allCampaigns = await fetchActiveCampaigns();
+      allCampaigns = await fetchActiveCampaigns(profile);
       if (allCampaigns.length === 0) {
         showEmptyState('Henüz aktif kampanya bulunamadı.');
         updateStats();
@@ -1337,6 +1325,7 @@ import {
 
     const icon = CATEGORY_ICONS[campaign.category] || CATEGORY_ICONS.default;
     const { typeClass, typeIcon } = typeInfo(campaign.type);
+    const dateText = campaign.date || 'Güncel';
 
     card.innerHTML = `
       <div class="card-header">
@@ -1346,7 +1335,7 @@ import {
       <h3 class="card-title">${escapeHtml(campaign.title)}</h3>
       <p class="card-description">${linkifyText(escapeHtml(campaign.description || ''))}</p>
       <div class="card-footer">
-        <span class="card-date">📅 Güncel</span>
+        <span class="card-date">📅 ${escapeHtml(dateText)}</span>
         <button class="card-action" type="button">Detaylar →</button>
       </div>
     `;
@@ -1413,7 +1402,12 @@ import {
       ${campaign.type ? `<span class="card-type ${typeClass}">${typeIcon} ${escapeHtml(campaign.type)}</span>` : ''}
     `;
     modalTitle.textContent = campaign.title;
-    modalDescription.innerHTML = linkifyText(escapeHtml(campaign.description || ''));
+    const descHtml = linkifyText(escapeHtml(campaign.description || ''));
+    const linkHtml =
+      campaign.link && /^https?:\/\//i.test(campaign.link)
+        ? `<div style="margin-top: 18px;"><a href="${escapeHtml(campaign.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Kampanyaya Git ↗</a></div>`
+        : '';
+    modalDescription.innerHTML = descHtml + linkHtml;
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }

@@ -1,4 +1,4 @@
-# KazananÖğrenci — Firebase Kurulum
+# KampüsKazan — Firebase Kurulum
 
 Site **Firebase Authentication** (öğrenci: Anonim, admin: e-posta/şifre), **Cloud Firestore**,
 **Cloud Messaging (web push)** ve isteğe bağlı **Cloud Functions** kullanır.

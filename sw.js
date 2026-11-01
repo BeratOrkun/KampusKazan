@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 /**
- * KazananÖğrenci — Service Worker
+ * KampüsKazan — Service Worker
  *  1) PWA: uygulama kabuğunu önbelleğe alır (network-first)
  *  2) FCM: uygulama kapalıyken gelen bildirimleri gösterir
  *
@@ -8,12 +8,13 @@
  * Bu dosya değiştiğinde CACHE_VERSION'ı artır.
  */
 
-const CACHE_VERSION = 'ko-v6';
+const CACHE_VERSION = 'kk-v1';
 const APP_SHELL = [
   './',
   './index.html',
   './kvkk.html',
   './style.css',
+  './campaigns.json',
   './app.bundle.js',
   './app.js',
   './logo.png',

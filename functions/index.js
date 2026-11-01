@@ -1,5 +1,5 @@
 /**
- * KazananÖğrenci — Bildirim topic senkronizasyonu (OPSİYONEL)
+ * KampüsKazan — Bildirim topic senkronizasyonu (OPSİYONEL)
  *
  * Ne yapar?
  *   users/{uid} belgesi değiştiğinde öğrencinin FCM token'ını şu topic'lere

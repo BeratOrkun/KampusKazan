@@ -1,6 +1,10 @@
 /**
- * KazananÖğrenci — Admin paneli
- * KVKK: Öğrenci tekil kayıtları gösterilmez; yalnızca toplu dağılım.
+ * KampüsKazan — Admin paneli
+ *
+ * - Kampanyalar doğrudan `campaigns.json` dosyasından yönetilir (Firebase sunucusuna yük binmez).
+ * - Admin panelinden kampanya ekleyip/düzenleyip `campaigns.json` olarak indirebilir veya kopyalayabilirsiniz;
+ *   ya da doğrudan kod editöründen `campaigns.json` dosyasını düzenleyebilirsiniz.
+ * - KVKK: Öğrenci tekil kayıtları gösterilmez; yalnızca toplu dağılım gösterilir.
  */
 
 import { isFirebaseConfigured } from './js/firebase-config.js';
@@ -15,9 +19,6 @@ import {
 } from './js/auth.js';
 import {
   fetchAllCampaigns,
-  createCampaign,
-  updateCampaign,
-  deleteCampaign,
   fetchStudentStats,
 } from './js/campaigns-service.js';
 import {
@@ -94,10 +95,10 @@ function showDashboard() {
 }
 
 // =====================
-// CAMPAIGNS
+// CAMPAIGNS (campaigns.json)
 // =====================
 function renderCampaignsTable() {
-  const active = campaigns.filter((c) => c.active).length;
+  const active = campaigns.filter((c) => c.active !== false).length;
   $('statTotal').textContent = String(campaigns.length);
   $('statActive').textContent = String(active);
 
@@ -114,8 +115,8 @@ function renderCampaignsTable() {
         <td>${escapeHtml(c.category || '—')}</td>
         <td>${escapeHtml(c.type || '—')}</td>
         <td>
-          <span class="status-pill ${c.active ? 'active' : 'inactive'}">
-            ${c.active ? 'Aktif' : 'Pasif'}
+          <span class="status-pill ${c.active !== false ? 'active' : 'inactive'}">
+            ${c.active !== false ? 'Aktif' : 'Pasif'}
           </span>
         </td>
         <td class="admin-actions">
@@ -133,6 +134,44 @@ campaignsTableBody?.addEventListener('click', (e) => {
   const delBtn = e.target.closest('[data-delete]');
   if (editBtn) startEdit(editBtn.getAttribute('data-edit'));
   if (delBtn) confirmDelete(delBtn.getAttribute('data-delete'));
+});
+
+function formatCampaignsJson() {
+  const clean = campaigns.map((c, idx) => ({
+    id: c.id || `kampanya-${idx + 1}`,
+    active: c.active !== false,
+    category: c.category || 'Genel',
+    type: c.type || 'İndirim',
+    title: c.title || '',
+    description: c.description || '',
+    link: c.link || '',
+    date: c.date || 'Güncel',
+    cities: Array.isArray(c.cities) ? c.cities : [],
+    universities: Array.isArray(c.universities) ? c.universities : [],
+  }));
+  return JSON.stringify(clean, null, 2) + '\n';
+}
+
+$('btnCopyJson')?.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(formatCampaignsJson());
+    showAdminMessage('success', 'campaigns.json içeriği panoya kopyalandı! Kodda campaigns.json dosyasına yapıştırabilirsin.');
+  } catch {
+    showAdminMessage('error', 'Panoya kopyalanamadı.');
+  }
+});
+
+$('btnDownloadJson')?.addEventListener('click', () => {
+  const blob = new Blob([formatCampaignsJson()], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'campaigns.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showAdminMessage('success', 'campaigns.json indirildi! Proje klasöründeki campaigns.json dosyasının üzerine kaydedebilirsin.');
 });
 
 // =====================
@@ -171,14 +210,18 @@ function renderStudentStats(stats) {
 async function refreshData() {
   showAdminMessage('error', '');
   try {
-    const [cams, stats] = await Promise.all([fetchAllCampaigns(), fetchStudentStats()]);
-    campaigns = cams;
+    campaigns = await fetchAllCampaigns();
     renderCampaignsTable();
-    renderStudentStats(stats);
   } catch (err) {
     console.error(err);
-    showAdminMessage('error', 'Veriler yüklenemedi: ' + mapAuthError(err));
     campaignsTableBody.innerHTML = `<tr><td colspan="5" class="admin-empty">Yükleme hatası</td></tr>`;
+  }
+
+  try {
+    const stats = await fetchStudentStats();
+    renderStudentStats(stats);
+  } catch (err) {
+    console.warn('Öğrenci istatistikleri okunamadı:', err);
   }
 }
 
@@ -245,6 +288,7 @@ function openForm(campaign = null) {
   $('campaignTitle').value = campaign?.title || '';
   $('campaignCategory').value = campaign?.category || '';
   $('campaignType').value = campaign?.type || 'İndirim';
+  if ($('campaignLink')) $('campaignLink').value = campaign?.link || '';
   $('campaignDescription').value = campaign?.description || '';
   $('campaignActive').checked = campaign ? campaign.active !== false : true;
   campaignFormCard.hidden = false;
@@ -263,17 +307,13 @@ function startEdit(id) {
   if (campaign) openForm(campaign);
 }
 
-async function confirmDelete(id) {
+function confirmDelete(id) {
   const campaign = campaigns.find((c) => c.id === id);
   if (!campaign) return;
-  if (!confirm(`"${campaign.title}" kampanyasını silmek istediğine emin misin?`)) return;
-  try {
-    await deleteCampaign(id);
-    showAdminMessage('success', 'Kampanya silindi.');
-    await refreshData();
-  } catch (err) {
-    showAdminMessage('error', mapAuthError(err));
-  }
+  if (!confirm(`"${campaign.title}" kampanyasını listeden kaldırmak istediğine emin misin?`)) return;
+  campaigns = campaigns.filter((c) => c.id !== id);
+  renderCampaignsTable();
+  showAdminMessage('success', 'Kampanya listeden kaldırıldı. Kalıcı olması için "JSON Kopyala" veya "campaigns.json İndir" ile dosyayı güncelle.');
 }
 
 loginForm?.addEventListener('submit', async (e) => {
@@ -296,37 +336,49 @@ loginForm?.addEventListener('submit', async (e) => {
 $('btnNewCampaign')?.addEventListener('click', () => openForm());
 $('campaignCancelBtn')?.addEventListener('click', closeForm);
 
-campaignForm?.addEventListener('submit', async (e) => {
+campaignForm?.addEventListener('submit', (e) => {
   e.preventDefault();
   showAdminMessage('error', '');
-  const btn = $('campaignSaveBtn');
-  btn.disabled = true;
-  const data = {
-    title: $('campaignTitle').value,
-    category: $('campaignCategory').value,
-    type: $('campaignType').value,
-    description: $('campaignDescription').value,
-    active: $('campaignActive').checked,
-  };
+  const title = $('campaignTitle').value.trim();
+  const category = $('campaignCategory').value.trim() || 'Genel';
+  const type = $('campaignType').value.trim() || 'İndirim';
+  const link = ($('campaignLink')?.value || '').trim();
+  const description = $('campaignDescription').value.trim();
+  const active = $('campaignActive').checked;
 
-  try {
-    const user = getCurrentUser();
-    if (!user) throw new Error('Oturum gerekli.');
-    if (editingId) {
-      await updateCampaign(editingId, data);
-      showAdminMessage('success', 'Kampanya güncellendi.');
-    } else {
-      await createCampaign(data, user.uid);
-      showAdminMessage('success', 'Kampanya oluşturuldu.');
-    }
-    closeForm();
-    await refreshData();
-  } catch (err) {
-    console.error(err);
-    showAdminMessage('error', mapAuthError(err));
-  } finally {
-    btn.disabled = false;
+  if (!title) {
+    showAdminMessage('error', 'Kampanya başlığı gerekli.');
+    return;
   }
+
+  if (editingId) {
+    campaigns = campaigns.map((c) =>
+      c.id === editingId
+        ? { ...c, title, category, type, link, description, active }
+        : c
+    );
+  } else {
+    const newId = `kampanya-${Date.now()}`;
+    campaigns.unshift({
+      id: newId,
+      active,
+      category,
+      type,
+      title,
+      description,
+      link,
+      date: 'Güncel',
+      cities: [],
+      universities: [],
+    });
+  }
+
+  closeForm();
+  renderCampaignsTable();
+  showAdminMessage(
+    'success',
+    'Kampanya listeye kaydedildi! Kalıcı olması için üstteki "📋 JSON Kopyala" veya "⬇️ campaigns.json İndir" ile proje dosyasını güncelle.'
+  );
 });
 
 // =====================

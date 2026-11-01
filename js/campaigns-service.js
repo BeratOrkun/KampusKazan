@@ -1,198 +1,131 @@
 /**
- * Firestore kampanya servisi
+ * KampüsKazan — Kampanya Servisi (campaigns.json tabanlı, Firebase yükü 0)
+ *
+ * Kampanyalar doğrudan kök dizindeki `campaigns.json` dosyasından okunur.
+ * Böylece öğrenciler siteye girdiğinde Firebase Firestore'a hiçbir kampanya sorgusu atılmaz,
+ * sunucuya veya kotaya yük binmez. Yeni kampanya eklemek veya mevcutları güncellemek için
+ * `campaigns.json` dosyasını düzenlemeniz yeterlidir.
  */
 
 import {
   db,
   collection,
-  doc,
   getDocs,
-  getDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  serverTimestamp,
 } from './firebase.js';
 
-const COLLECTION = 'campaigns';
-const SHEET_ID = '1mCZvq-fdDG7E4CtNaoTtxMITPtWAoMGXn2ys0aYwh4E';
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+const CAMPAIGNS_JSON_URL = './campaigns.json';
 
 /**
- * Google Sheets'teki mevcut kampanyaları yedek/ek kaynak olarak getirir
- * @returns {Promise<Array>}
+ * file:// protokolünde (Finder'dan çift tıklayarak açıldığında) fetch() tarayıcı tarafından
+ * engellenirse kullanılacak yerleşik yedek liste (campaigns.json ile senkron tutulur).
  */
-async function fetchSheetCampaigns() {
-  try {
-    const response = await fetch(SHEET_URL);
-    if (!response.ok) return [];
-    const text = await response.text();
-    const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/);
-    if (!jsonStr || !jsonStr[1]) return [];
-    const data = JSON.parse(jsonStr[1]);
-    const rows = data?.table?.rows;
-    if (!Array.isArray(rows) || rows.length === 0) return [];
+const FALLBACK_CAMPAIGNS = [
+  {
+    id: 'kuveytturk-davet-1000tl',
+    active: true,
+    category: 'Banka',
+    type: 'Hediye',
+    title: "Kuveyt Türk'te arkadaşını davet edenlere 1000 TL.",
+    description: 'Çağırdığın her arkadasın ıcın 1000 TL. Toplamda 10.000 TL.',
+    link: '',
+    date: 'Güncel',
+    cities: [],
+    universities: [],
+  },
+];
 
-    const campaigns = [];
-    for (let i = 0; i < rows.length; i++) {
-      const cells = rows[i]?.c;
-      if (!cells) continue;
-      const category = String(cells[0]?.v || '').trim();
-      const title = String(cells[1]?.v || '').trim();
-      const description = String(cells[2]?.v || '').trim();
-      const type = String(cells[3]?.v || '').trim();
+/**
+ * Ham JSON verisini normalize eder.
+ * @param {any} raw
+ * @returns {Array<object>}
+ */
+export function normalizeCampaignList(raw) {
+  const list = Array.isArray(raw)
+    ? raw
+    : Array.isArray(raw?.campaigns)
+    ? raw.campaigns
+    : [];
 
-      if (category === 'Kampanya Kategori' && title === 'Kampanya Başlığı') continue;
-      if (!title) continue;
+  return list
+    .map((item, idx) => {
+      if (!item || typeof item !== 'object') return null;
+      const title = String(item.title || '').trim();
+      if (!title) return null;
 
-      campaigns.push({
-        id: `sheet-${i}`,
-        category: category || 'Genel',
+      return {
+        id: String(item.id || `kampanya-${idx + 1}`).trim(),
+        active: item.active !== false,
+        category: String(item.category || 'Genel').trim(),
+        type: String(item.type || '').trim(),
         title,
-        description,
-        type,
-        active: true,
-      });
-    }
-    return campaigns;
-  } catch {
-    return [];
-  }
+        description: String(item.description || '').trim(),
+        link: String(item.link || '').trim(),
+        date: String(item.date || 'Güncel').trim(),
+        cities: Array.isArray(item.cities) ? item.cities.filter(Boolean) : [],
+        universities: Array.isArray(item.universities) ? item.universities.filter(Boolean) : [],
+        faculties: Array.isArray(item.faculties) ? item.faculties.filter(Boolean) : [],
+        departments: Array.isArray(item.departments) ? item.departments.filter(Boolean) : [],
+      };
+    })
+    .filter(Boolean);
 }
 
 /**
- * Aktif kampanyaları getir (öğrenciler için: Firestore + Google Sheets birleşimi)
- * @returns {Promise<Array>}
- */
-export async function fetchActiveCampaigns() {
-  let firestoreItems = [];
-
-  if (db) {
-    try {
-      const q = query(
-        collection(db, COLLECTION),
-        where('active', '==', true),
-        orderBy('createdAt', 'desc')
-      );
-      const snap = await getDocs(q);
-      firestoreItems = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    } catch (err) {
-      if (err?.code === 'failed-precondition') {
-        try {
-          const fallback = query(collection(db, COLLECTION), where('active', '==', true));
-          const snap = await getDocs(fallback);
-          const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-          firestoreItems = items.sort((a, b) => {
-            const ta = a.createdAt?.toMillis?.() || 0;
-            const tb = b.createdAt?.toMillis?.() || 0;
-            return tb - ta;
-          });
-        } catch {
-          // ignore
-        }
-      }
-    }
-  }
-
-  const sheetItems = await fetchSheetCampaigns();
-  if (firestoreItems.length === 0) {
-    return sheetItems;
-  }
-
-  const seenTitles = new Set(
-    firestoreItems.map((item) => String(item.title || '').trim().toLocaleLowerCase('tr'))
-  );
-  const merged = [...firestoreItems];
-  for (const item of sheetItems) {
-    const key = String(item.title || '').trim().toLocaleLowerCase('tr');
-    if (key && !seenTitles.has(key)) {
-      seenTitles.add(key);
-      merged.push(item);
-    }
-  }
-  return merged;
-}
-
-/**
- * Tüm kampanyaları getir (admin)
- * @returns {Promise<Array>}
+ * `campaigns.json` dosyasından tüm kampanyaları getirir (Firebase'e istek atmaz).
+ * @returns {Promise<Array<object>>}
  */
 export async function fetchAllCampaigns() {
-  const q = query(collection(db, COLLECTION), orderBy('createdAt', 'desc'));
   try {
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  } catch (err) {
-    console.warn('Admin kampanya listesi fallback:', err);
-    const snap = await getDocs(collection(db, COLLECTION));
-    const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    return items.sort((a, b) => {
-      const ta = a.createdAt?.toMillis?.() || 0;
-      const tb = b.createdAt?.toMillis?.() || 0;
-      return tb - ta;
+    const res = await fetch(`${CAMPAIGNS_JSON_URL}?t=${Date.now()}`, {
+      cache: 'no-store',
     });
+    if (res.ok) {
+      const json = await res.json();
+      const parsed = normalizeCampaignList(json);
+      if (parsed.length > 0 || Array.isArray(json) || Array.isArray(json?.campaigns)) {
+        return parsed;
+      }
+    }
+  } catch {
+    // file:// protokolünde veya çevrimdışı durumda yerleşik listeye düşer
   }
+  return normalizeCampaignList(FALLBACK_CAMPAIGNS);
 }
 
 /**
- * @param {object} data
- * @param {string} uid
+ * Kampanyanın öğrencinin seçtiği şehir/üniversite/fakülte/bölüm ile eşleşip eşleşmediğini kontrol eder.
+ * Eğer kampanyada ilgili filtre dizisi boşsa (`[]`), tüm öğrencilere gösterilir.
+ * @param {object} campaign
+ * @param {{ cityId?: string, universityId?: string, facultyId?: string, departmentId?: string } | null} profile
  */
-export async function createCampaign(data, uid) {
-  const payload = {
-    title: (data.title || '').trim(),
-    description: (data.description || '').trim(),
-    category: (data.category || '').trim(),
-    type: (data.type || '').trim(),
-    active: data.active !== false,
-    createdBy: uid,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  };
+export function matchesStudentProfile(campaign, profile) {
+  if (!profile) return true;
 
-  if (!payload.title) throw new Error('Kampanya başlığı gerekli.');
-  if (!payload.category) throw new Error('Kategori gerekli.');
+  if (Array.isArray(campaign.cities) && campaign.cities.length > 0) {
+    if (!profile.cityId || !campaign.cities.includes(profile.cityId)) return false;
+  }
+  if (Array.isArray(campaign.universities) && campaign.universities.length > 0) {
+    if (!profile.universityId || !campaign.universities.includes(profile.universityId)) return false;
+  }
+  if (Array.isArray(campaign.faculties) && campaign.faculties.length > 0) {
+    if (!profile.facultyId || !campaign.faculties.includes(profile.facultyId)) return false;
+  }
+  if (Array.isArray(campaign.departments) && campaign.departments.length > 0) {
+    if (!profile.departmentId || !campaign.departments.includes(profile.departmentId)) return false;
+  }
 
-  const ref = await addDoc(collection(db, COLLECTION), payload);
-  return ref.id;
+  return true;
 }
 
 /**
- * @param {string} id
- * @param {object} data
+ * Aktif kampanyaları `campaigns.json` dosyasından getirir (öğrenciler için).
+ * Firebase Firestore'a hiçbir okuma isteği gönderilmez.
+ * @param {{ cityId?: string, universityId?: string, facultyId?: string, departmentId?: string } | null} [profile]
+ * @returns {Promise<Array<object>>}
  */
-export async function updateCampaign(id, data) {
-  const payload = {
-    title: (data.title || '').trim(),
-    description: (data.description || '').trim(),
-    category: (data.category || '').trim(),
-    type: (data.type || '').trim(),
-    active: Boolean(data.active),
-    updatedAt: serverTimestamp(),
-  };
-
-  if (!payload.title) throw new Error('Kampanya başlığı gerekli.');
-  await updateDoc(doc(db, COLLECTION, id), payload);
-}
-
-/**
- * @param {string} id
- */
-export async function deleteCampaign(id) {
-  await deleteDoc(doc(db, COLLECTION, id));
-}
-
-/**
- * @param {string} id
- * @returns {Promise<object|null>}
- */
-export async function getCampaign(id) {
-  const snap = await getDoc(doc(db, COLLECTION, id));
-  if (!snap.exists()) return null;
-  return { id: snap.id, ...snap.data() };
+export async function fetchActiveCampaigns(profile = null) {
+  const all = await fetchAllCampaigns();
+  return all.filter((c) => c.active !== false && matchesStudentProfile(c, profile));
 }
 
 /**
@@ -201,7 +134,6 @@ export async function getCampaign(id) {
  * @returns {Promise<{ total: number, pushEnabled: number, byCity: Map<string, number>, byUniversity: Map<string, number>, byFaculty: Map<string, number>, byDepartment: Map<string, number> }>}
  */
 export async function fetchStudentStats() {
-  const snap = await getDocs(collection(db, 'users'));
   const stats = {
     total: 0,
     pushEnabled: 0,
@@ -210,6 +142,9 @@ export async function fetchStudentStats() {
     byFaculty: new Map(),
     byDepartment: new Map(),
   };
+  if (!db) return stats;
+
+  const snap = await getDocs(collection(db, 'users'));
   const inc = (map, key) => map.set(key, (map.get(key) || 0) + 1);
 
   snap.forEach((d) => {

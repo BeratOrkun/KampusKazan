@@ -1,4 +1,4 @@
-# KVKK Notları — KazananÖğrenci
+# KVKK Notları — KampüsKazan
 
 > ⚠️ Bu dosya teknik bir kontrol listesidir, **hukuki görüş değildir**. Yayına almadan önce
 > `kvkk.html` metnini bir KVKK avukatına kontrol ettirmen önerilir.
@@ -58,7 +58,7 @@ Risk **düşük** ama **sıfır değil**:
 
 Kampanya bildirimleri ticari ileti niteliğinde olabilir. İYS (İleti Yönetim Sistemi) SMS, e-posta ve sesli arama içindir;
 web push için İYS kaydı gerekmez. Yine de **önceden onay** (bizdeki açık onay kutusu + tarayıcı izni) ve **kolay ret**
-(🔕 düğmesi) zorunlu kabul edilmeli — ikisi de projede var. Bildirimlerde kim olduğunu (KazananÖğrenci) açıkça belirt.
+(🔕 düğmesi) zorunlu kabul edilmeli — ikisi de projede var. Bildirimlerde kim olduğunu (KampüsKazan) açıkça belirt.
 
 ## Ek iyileştirme önerileri (opsiyonel)
 

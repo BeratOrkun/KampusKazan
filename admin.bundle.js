@@ -926,191 +926,128 @@ function mapAuthError(error) {
 }
 
 /**
- * Firestore kampanya servisi
+ * KampüsKazan — Kampanya Servisi (campaigns.json tabanlı, Firebase yükü 0)
+ *
+ * Kampanyalar doğrudan kök dizindeki `campaigns.json` dosyasından okunur.
+ * Böylece öğrenciler siteye girdiğinde Firebase Firestore'a hiçbir kampanya sorgusu atılmaz,
+ * sunucuya veya kotaya yük binmez. Yeni kampanya eklemek veya mevcutları güncellemek için
+ * `campaigns.json` dosyasını düzenlemeniz yeterlidir.
  */
 
-const COLLECTION = 'campaigns';
-const SHEET_ID = '1mCZvq-fdDG7E4CtNaoTtxMITPtWAoMGXn2ys0aYwh4E';
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+const CAMPAIGNS_JSON_URL = './campaigns.json';
 
 /**
- * Google Sheets'teki mevcut kampanyaları yedek/ek kaynak olarak getirir
- * @returns {Promise<Array>}
+ * file:// protokolünde (Finder'dan çift tıklayarak açıldığında) fetch() tarayıcı tarafından
+ * engellenirse kullanılacak yerleşik yedek liste (campaigns.json ile senkron tutulur).
  */
-async function fetchSheetCampaigns() {
-  try {
-    const response = await fetch(SHEET_URL);
-    if (!response.ok) return [];
-    const text = await response.text();
-    const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/);
-    if (!jsonStr || !jsonStr[1]) return [];
-    const data = JSON.parse(jsonStr[1]);
-    const rows = data?.table?.rows;
-    if (!Array.isArray(rows) || rows.length === 0) return [];
+const FALLBACK_CAMPAIGNS = [
+  {
+    id: 'kuveytturk-davet-1000tl',
+    active: true,
+    category: 'Banka',
+    type: 'Hediye',
+    title: "Kuveyt Türk'te arkadaşını davet edenlere 1000 TL.",
+    description: 'Çağırdığın her arkadasın ıcın 1000 TL. Toplamda 10.000 TL.',
+    link: '',
+    date: 'Güncel',
+    cities: [],
+    universities: [],
+  },
+];
 
-    const campaigns = [];
-    for (let i = 0; i < rows.length; i++) {
-      const cells = rows[i]?.c;
-      if (!cells) continue;
-      const category = String(cells[0]?.v || '').trim();
-      const title = String(cells[1]?.v || '').trim();
-      const description = String(cells[2]?.v || '').trim();
-      const type = String(cells[3]?.v || '').trim();
+/**
+ * Ham JSON verisini normalize eder.
+ * @param {any} raw
+ * @returns {Array<object>}
+ */
+function normalizeCampaignList(raw) {
+  const list = Array.isArray(raw)
+    ? raw
+    : Array.isArray(raw?.campaigns)
+    ? raw.campaigns
+    : [];
 
-      if (category === 'Kampanya Kategori' && title === 'Kampanya Başlığı') continue;
-      if (!title) continue;
+  return list
+    .map((item, idx) => {
+      if (!item || typeof item !== 'object') return null;
+      const title = String(item.title || '').trim();
+      if (!title) return null;
 
-      campaigns.push({
-        id: `sheet-${i}`,
-        category: category || 'Genel',
+      return {
+        id: String(item.id || `kampanya-${idx + 1}`).trim(),
+        active: item.active !== false,
+        category: String(item.category || 'Genel').trim(),
+        type: String(item.type || '').trim(),
         title,
-        description,
-        type,
-        active: true,
-      });
-    }
-    return campaigns;
-  } catch {
-    return [];
-  }
+        description: String(item.description || '').trim(),
+        link: String(item.link || '').trim(),
+        date: String(item.date || 'Güncel').trim(),
+        cities: Array.isArray(item.cities) ? item.cities.filter(Boolean) : [],
+        universities: Array.isArray(item.universities) ? item.universities.filter(Boolean) : [],
+        faculties: Array.isArray(item.faculties) ? item.faculties.filter(Boolean) : [],
+        departments: Array.isArray(item.departments) ? item.departments.filter(Boolean) : [],
+      };
+    })
+    .filter(Boolean);
 }
 
 /**
- * Aktif kampanyaları getir (öğrenciler için: Firestore + Google Sheets birleşimi)
- * @returns {Promise<Array>}
- */
-async function fetchActiveCampaigns() {
-  const sdkOk = await ensureFirebaseSdk();
-  if (!sdkOk || !db) return [];
-  let firestoreItems = [];
-
-  if (db) {
-    try {
-      const q = query(
-        collection(db, COLLECTION),
-        where('active', '==', true),
-        orderBy('createdAt', 'desc')
-      );
-      const snap = await getDocs(q);
-      firestoreItems = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    } catch (err) {
-      if (err?.code === 'failed-precondition') {
-        try {
-          const fallback = query(collection(db, COLLECTION), where('active', '==', true));
-          const snap = await getDocs(fallback);
-          const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-          firestoreItems = items.sort((a, b) => {
-            const ta = a.createdAt?.toMillis?.() || 0;
-            const tb = b.createdAt?.toMillis?.() || 0;
-            return tb - ta;
-          });
-        } catch {
-          // ignore
-        }
-      }
-    }
-  }
-
-  const sheetItems = await fetchSheetCampaigns();
-  if (firestoreItems.length === 0) {
-    return sheetItems;
-  }
-
-  const seenTitles = new Set(
-    firestoreItems.map((item) => String(item.title || '').trim().toLocaleLowerCase('tr'))
-  );
-  const merged = [...firestoreItems];
-  for (const item of sheetItems) {
-    const key = String(item.title || '').trim().toLocaleLowerCase('tr');
-    if (key && !seenTitles.has(key)) {
-      seenTitles.add(key);
-      merged.push(item);
-    }
-  }
-  return merged;
-}
-
-/**
- * Tüm kampanyaları getir (admin)
- * @returns {Promise<Array>}
+ * `campaigns.json` dosyasından tüm kampanyaları getirir (Firebase'e istek atmaz).
+ * @returns {Promise<Array<object>>}
  */
 async function fetchAllCampaigns() {
   await ensureFirebaseSdk();
-  const q = query(collection(db, COLLECTION), orderBy('createdAt', 'desc'));
   try {
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  } catch (err) {
-    console.warn('Admin kampanya listesi fallback:', err);
-    const snap = await getDocs(collection(db, COLLECTION));
-    const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    return items.sort((a, b) => {
-      const ta = a.createdAt?.toMillis?.() || 0;
-      const tb = b.createdAt?.toMillis?.() || 0;
-      return tb - ta;
+    const res = await fetch(`${CAMPAIGNS_JSON_URL}?t=${Date.now()}`, {
+      cache: 'no-store',
     });
+    if (res.ok) {
+      const json = await res.json();
+      const parsed = normalizeCampaignList(json);
+      if (parsed.length > 0 || Array.isArray(json) || Array.isArray(json?.campaigns)) {
+        return parsed;
+      }
+    }
+  } catch {
+    // file:// protokolünde veya çevrimdışı durumda yerleşik listeye düşer
   }
+  return normalizeCampaignList(FALLBACK_CAMPAIGNS);
 }
 
 /**
- * @param {object} data
- * @param {string} uid
+ * Kampanyanın öğrencinin seçtiği şehir/üniversite/fakülte/bölüm ile eşleşip eşleşmediğini kontrol eder.
+ * Eğer kampanyada ilgili filtre dizisi boşsa (`[]`), tüm öğrencilere gösterilir.
+ * @param {object} campaign
+ * @param {{ cityId?: string, universityId?: string, facultyId?: string, departmentId?: string } | null} profile
  */
-async function createCampaign(data, uid) {
-  await ensureFirebaseSdk();
-  const payload = {
-    title: (data.title || '').trim(),
-    description: (data.description || '').trim(),
-    category: (data.category || '').trim(),
-    type: (data.type || '').trim(),
-    active: data.active !== false,
-    createdBy: uid,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  };
+function matchesStudentProfile(campaign, profile) {
+  if (!profile) return true;
 
-  if (!payload.title) throw new Error('Kampanya başlığı gerekli.');
-  if (!payload.category) throw new Error('Kategori gerekli.');
+  if (Array.isArray(campaign.cities) && campaign.cities.length > 0) {
+    if (!profile.cityId || !campaign.cities.includes(profile.cityId)) return false;
+  }
+  if (Array.isArray(campaign.universities) && campaign.universities.length > 0) {
+    if (!profile.universityId || !campaign.universities.includes(profile.universityId)) return false;
+  }
+  if (Array.isArray(campaign.faculties) && campaign.faculties.length > 0) {
+    if (!profile.facultyId || !campaign.faculties.includes(profile.facultyId)) return false;
+  }
+  if (Array.isArray(campaign.departments) && campaign.departments.length > 0) {
+    if (!profile.departmentId || !campaign.departments.includes(profile.departmentId)) return false;
+  }
 
-  const ref = await addDoc(collection(db, COLLECTION), payload);
-  return ref.id;
+  return true;
 }
 
 /**
- * @param {string} id
- * @param {object} data
+ * Aktif kampanyaları `campaigns.json` dosyasından getirir (öğrenciler için).
+ * Firebase Firestore'a hiçbir okuma isteği gönderilmez.
+ * @param {{ cityId?: string, universityId?: string, facultyId?: string, departmentId?: string } | null} [profile]
+ * @returns {Promise<Array<object>>}
  */
-async function updateCampaign(id, data) {
-  await ensureFirebaseSdk();
-  const payload = {
-    title: (data.title || '').trim(),
-    description: (data.description || '').trim(),
-    category: (data.category || '').trim(),
-    type: (data.type || '').trim(),
-    active: Boolean(data.active),
-    updatedAt: serverTimestamp(),
-  };
-
-  if (!payload.title) throw new Error('Kampanya başlığı gerekli.');
-  await updateDoc(doc(db, COLLECTION, id), payload);
-}
-
-/**
- * @param {string} id
- */
-async function deleteCampaign(id) {
-  await ensureFirebaseSdk();
-  await deleteDoc(doc(db, COLLECTION, id));
-}
-
-/**
- * @param {string} id
- * @returns {Promise<object|null>}
- */
-async function getCampaign(id) {
-  const snap = await getDoc(doc(db, COLLECTION, id));
-  if (!snap.exists()) return null;
-  return { id: snap.id, ...snap.data() };
+async function fetchActiveCampaigns(profile = null) {
+  const all = await fetchAllCampaigns();
+  return all.filter((c) => c.active !== false && matchesStudentProfile(c, profile));
 }
 
 /**
@@ -1120,7 +1057,6 @@ async function getCampaign(id) {
  */
 async function fetchStudentStats() {
   await ensureFirebaseSdk();
-  const snap = await getDocs(collection(db, 'users'));
   const stats = {
     total: 0,
     pushEnabled: 0,
@@ -1129,6 +1065,9 @@ async function fetchStudentStats() {
     byFaculty: new Map(),
     byDepartment: new Map(),
   };
+  if (!db) return stats;
+
+  const snap = await getDocs(collection(db, 'users'));
   const inc = (map, key) => map.set(key, (map.get(key) || 0) + 1);
 
   snap.forEach((d) => {
@@ -1145,8 +1084,12 @@ async function fetchStudentStats() {
 }
 
 /**
- * KazananÖğrenci — Admin paneli
- * KVKK: Öğrenci tekil kayıtları gösterilmez; yalnızca toplu dağılım.
+ * KampüsKazan — Admin paneli
+ *
+ * - Kampanyalar doğrudan `campaigns.json` dosyasından yönetilir (Firebase sunucusuna yük binmez).
+ * - Admin panelinden kampanya ekleyip/düzenleyip `campaigns.json` olarak indirebilir veya kopyalayabilirsiniz;
+ *   ya da doğrudan kod editöründen `campaigns.json` dosyasını düzenleyebilirsiniz.
+ * - KVKK: Öğrenci tekil kayıtları gösterilmez; yalnızca toplu dağılım gösterilir.
  */
 
 
@@ -1216,10 +1159,10 @@ function showDashboard() {
 }
 
 // =====================
-// CAMPAIGNS
+// CAMPAIGNS (campaigns.json)
 // =====================
 function renderCampaignsTable() {
-  const active = campaigns.filter((c) => c.active).length;
+  const active = campaigns.filter((c) => c.active !== false).length;
   $('statTotal').textContent = String(campaigns.length);
   $('statActive').textContent = String(active);
 
@@ -1236,8 +1179,8 @@ function renderCampaignsTable() {
         <td>${escapeHtml(c.category || '—')}</td>
         <td>${escapeHtml(c.type || '—')}</td>
         <td>
-          <span class="status-pill ${c.active ? 'active' : 'inactive'}">
-            ${c.active ? 'Aktif' : 'Pasif'}
+          <span class="status-pill ${c.active !== false ? 'active' : 'inactive'}">
+            ${c.active !== false ? 'Aktif' : 'Pasif'}
           </span>
         </td>
         <td class="admin-actions">
@@ -1255,6 +1198,44 @@ campaignsTableBody?.addEventListener('click', (e) => {
   const delBtn = e.target.closest('[data-delete]');
   if (editBtn) startEdit(editBtn.getAttribute('data-edit'));
   if (delBtn) confirmDelete(delBtn.getAttribute('data-delete'));
+});
+
+function formatCampaignsJson() {
+  const clean = campaigns.map((c, idx) => ({
+    id: c.id || `kampanya-${idx + 1}`,
+    active: c.active !== false,
+    category: c.category || 'Genel',
+    type: c.type || 'İndirim',
+    title: c.title || '',
+    description: c.description || '',
+    link: c.link || '',
+    date: c.date || 'Güncel',
+    cities: Array.isArray(c.cities) ? c.cities : [],
+    universities: Array.isArray(c.universities) ? c.universities : [],
+  }));
+  return JSON.stringify(clean, null, 2) + '\n';
+}
+
+$('btnCopyJson')?.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(formatCampaignsJson());
+    showAdminMessage('success', 'campaigns.json içeriği panoya kopyalandı! Kodda campaigns.json dosyasına yapıştırabilirsin.');
+  } catch {
+    showAdminMessage('error', 'Panoya kopyalanamadı.');
+  }
+});
+
+$('btnDownloadJson')?.addEventListener('click', () => {
+  const blob = new Blob([formatCampaignsJson()], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'campaigns.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showAdminMessage('success', 'campaigns.json indirildi! Proje klasöründeki campaigns.json dosyasının üzerine kaydedebilirsin.');
 });
 
 // =====================
@@ -1293,14 +1274,18 @@ function renderStudentStats(stats) {
 async function refreshData() {
   showAdminMessage('error', '');
   try {
-    const [cams, stats] = await Promise.all([fetchAllCampaigns(), fetchStudentStats()]);
-    campaigns = cams;
+    campaigns = await fetchAllCampaigns();
     renderCampaignsTable();
-    renderStudentStats(stats);
   } catch (err) {
     console.error(err);
-    showAdminMessage('error', 'Veriler yüklenemedi: ' + mapAuthError(err));
     campaignsTableBody.innerHTML = `<tr><td colspan="5" class="admin-empty">Yükleme hatası</td></tr>`;
+  }
+
+  try {
+    const stats = await fetchStudentStats();
+    renderStudentStats(stats);
+  } catch (err) {
+    console.warn('Öğrenci istatistikleri okunamadı:', err);
   }
 }
 
@@ -1367,6 +1352,7 @@ function openForm(campaign = null) {
   $('campaignTitle').value = campaign?.title || '';
   $('campaignCategory').value = campaign?.category || '';
   $('campaignType').value = campaign?.type || 'İndirim';
+  if ($('campaignLink')) $('campaignLink').value = campaign?.link || '';
   $('campaignDescription').value = campaign?.description || '';
   $('campaignActive').checked = campaign ? campaign.active !== false : true;
   campaignFormCard.hidden = false;
@@ -1385,17 +1371,13 @@ function startEdit(id) {
   if (campaign) openForm(campaign);
 }
 
-async function confirmDelete(id) {
+function confirmDelete(id) {
   const campaign = campaigns.find((c) => c.id === id);
   if (!campaign) return;
-  if (!confirm(`"${campaign.title}" kampanyasını silmek istediğine emin misin?`)) return;
-  try {
-    await deleteCampaign(id);
-    showAdminMessage('success', 'Kampanya silindi.');
-    await refreshData();
-  } catch (err) {
-    showAdminMessage('error', mapAuthError(err));
-  }
+  if (!confirm(`"${campaign.title}" kampanyasını listeden kaldırmak istediğine emin misin?`)) return;
+  campaigns = campaigns.filter((c) => c.id !== id);
+  renderCampaignsTable();
+  showAdminMessage('success', 'Kampanya listeden kaldırıldı. Kalıcı olması için "JSON Kopyala" veya "campaigns.json İndir" ile dosyayı güncelle.');
 }
 
 loginForm?.addEventListener('submit', async (e) => {
@@ -1418,37 +1400,49 @@ loginForm?.addEventListener('submit', async (e) => {
 $('btnNewCampaign')?.addEventListener('click', () => openForm());
 $('campaignCancelBtn')?.addEventListener('click', closeForm);
 
-campaignForm?.addEventListener('submit', async (e) => {
+campaignForm?.addEventListener('submit', (e) => {
   e.preventDefault();
   showAdminMessage('error', '');
-  const btn = $('campaignSaveBtn');
-  btn.disabled = true;
-  const data = {
-    title: $('campaignTitle').value,
-    category: $('campaignCategory').value,
-    type: $('campaignType').value,
-    description: $('campaignDescription').value,
-    active: $('campaignActive').checked,
-  };
+  const title = $('campaignTitle').value.trim();
+  const category = $('campaignCategory').value.trim() || 'Genel';
+  const type = $('campaignType').value.trim() || 'İndirim';
+  const link = ($('campaignLink')?.value || '').trim();
+  const description = $('campaignDescription').value.trim();
+  const active = $('campaignActive').checked;
 
-  try {
-    const user = getCurrentUser();
-    if (!user) throw new Error('Oturum gerekli.');
-    if (editingId) {
-      await updateCampaign(editingId, data);
-      showAdminMessage('success', 'Kampanya güncellendi.');
-    } else {
-      await createCampaign(data, user.uid);
-      showAdminMessage('success', 'Kampanya oluşturuldu.');
-    }
-    closeForm();
-    await refreshData();
-  } catch (err) {
-    console.error(err);
-    showAdminMessage('error', mapAuthError(err));
-  } finally {
-    btn.disabled = false;
+  if (!title) {
+    showAdminMessage('error', 'Kampanya başlığı gerekli.');
+    return;
   }
+
+  if (editingId) {
+    campaigns = campaigns.map((c) =>
+      c.id === editingId
+        ? { ...c, title, category, type, link, description, active }
+        : c
+    );
+  } else {
+    const newId = `kampanya-${Date.now()}`;
+    campaigns.unshift({
+      id: newId,
+      active,
+      category,
+      type,
+      title,
+      description,
+      link,
+      date: 'Güncel',
+      cities: [],
+      universities: [],
+    });
+  }
+
+  closeForm();
+  renderCampaignsTable();
+  showAdminMessage(
+    'success',
+    'Kampanya listeye kaydedildi! Kalıcı olması için üstteki "📋 JSON Kopyala" veya "⬇️ campaigns.json İndir" ile proje dosyasını güncelle.'
+  );
 });
 
 // =====================

@@ -1,5 +1,5 @@
 {
-  "name": "kazananogrenci-functions",
+  "name": "kampuskazan-functions",
   "private": true,
   "description": "Opsiyonel: FCM topic senkronizasyonu (il / üniversite bazlı bildirim)",
   "main": "index.js",

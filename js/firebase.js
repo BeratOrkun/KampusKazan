@@ -34,7 +34,7 @@ import { firebaseConfig, isFirebaseConfigured } from './firebase-config.js';
 
 if (!isFirebaseConfigured()) {
   console.warn(
-    '[KazananÖğrenci] Firebase yapılandırılmamış. js/firebase-config.js dosyasını doldurun. Bkz: FIREBASE_SETUP.md'
+    '[KampüsKazan] Firebase yapılandırılmamış. js/firebase-config.js dosyasını doldurun. Bkz: FIREBASE_SETUP.md'
   );
 }
 

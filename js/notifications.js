@@ -159,7 +159,7 @@ export async function listenForegroundMessages(cb) {
       const n = payload.notification || {};
       const d = payload.data || {};
       cb({
-        title: n.title || d.title || 'KazananÖğrenci',
+        title: n.title || d.title || 'KampüsKazan',
         body: n.body || d.body || '',
         link: payload.fcmOptions?.link || d.link,
       });

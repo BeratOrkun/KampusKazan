@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin — KazananÖğrenci</title>
+  <title>Admin — KampüsKazan</title>
   <meta name="robots" content="noindex,nofollow" />
   <link rel="icon" href="icons/icon-192.png" type="image/png" />
   <link rel="stylesheet" href="style.css" />
@@ -16,8 +16,8 @@
   <header class="header scrolled" id="header">
     <div class="container header-inner">
       <a href="index.html" class="logo">
-        <img src="logo.png" alt="KazananÖğrenci Logo" />
-        <span>KazananÖğrenci Admin</span>
+        <img src="logo.png" alt="KampüsKazan Logo" />
+        <span>KampüsKazan Admin</span>
       </a>
       <div class="auth-area" id="adminAuthArea"></div>
     </div>
@@ -28,7 +28,7 @@
       <!-- Login gate -->
       <section class="admin-card" id="adminLoginCard">
         <h1 class="admin-title">Admin Girişi</h1>
-        <p class="admin-subtitle">Kampanya yönetimi için yönetici hesabınla giriş yap.</p>
+        <p class="admin-subtitle">Öğrenci istatistikleri ve kampanya yönetimi için yönetici hesabınla giriş yap.</p>
         <div class="form-alert error" id="adminLoginError" hidden></div>
         <form id="adminLoginForm" class="auth-form">
           <div class="form-field">
@@ -52,10 +52,17 @@
       <section id="adminDashboard" hidden>
         <div class="admin-header-row">
           <div>
-            <h1 class="admin-title">Kampanya Yönetimi</h1>
-            <p class="admin-subtitle">Sitedeki kampanyaları oluştur, düzenle veya kaldır.</p>
+            <h1 class="admin-title">Kampanya & Öğrenci Yönetimi</h1>
+            <p class="admin-subtitle">
+              Kampanyalar sunucuya yük binmemesi için doğrudan <code>campaigns.json</code> dosyasından okunur.
+              Buradan düzenleyip JSON olarak kopyalayabilir veya doğrudan kodda <code>campaigns.json</code> dosyasını güncelleyebilirsin.
+            </p>
           </div>
-          <button type="button" class="btn btn-primary" id="btnNewCampaign">+ Yeni Kampanya</button>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline" id="btnCopyJson">📋 JSON Kopyala</button>
+            <button type="button" class="btn btn-outline" id="btnDownloadJson">⬇️ campaigns.json İndir</button>
+            <button type="button" class="btn btn-primary" id="btnNewCampaign">+ Yeni Kampanya</button>
+          </div>
         </div>
 
         <div class="admin-stats admin-stats-4" id="adminStats">
@@ -92,9 +99,11 @@
               </div>
               <div class="form-field">
                 <label for="campaignCategory">Kategori</label>
-                <input type="text" id="campaignCategory" required list="categoryList" placeholder="Örn: Yemek" />
+                <input type="text" id="campaignCategory" required list="categoryList" placeholder="Örn: Banka, Yemek" />
                 <datalist id="categoryList">
+                  <option value="Banka"></option>
                   <option value="Yemek"></option>
+                  <option value="Kafe"></option>
                   <option value="Teknoloji"></option>
                   <option value="Eğitim"></option>
                   <option value="Ulaşım"></option>
@@ -116,21 +125,26 @@
                   <option value="İndirim">İndirim</option>
                   <option value="Fırsat">Fırsat</option>
                   <option value="Ücretsiz">Ücretsiz</option>
+                  <option value="Hediye">Hediye</option>
                 </select>
               </div>
-              <div class="form-field form-field-checkbox">
-                <label class="checkbox-label">
-                  <input type="checkbox" id="campaignActive" checked />
-                  Aktif (sitede görünsün)
-                </label>
+              <div class="form-field">
+                <label for="campaignLink">Kampanya Linki (isteğe bağlı)</label>
+                <input type="url" id="campaignLink" placeholder="https://..." />
               </div>
+            </div>
+            <div class="form-field form-field-checkbox">
+              <label class="checkbox-label">
+                <input type="checkbox" id="campaignActive" checked />
+                Aktif (sitede görünsün)
+              </label>
             </div>
             <div class="form-field">
               <label for="campaignDescription">Açıklama</label>
-              <textarea id="campaignDescription" rows="5" placeholder="Kampanya detayları, linkler..."></textarea>
+              <textarea id="campaignDescription" rows="5" placeholder="Kampanya detayları, katılım şartları..."></textarea>
             </div>
             <div class="form-actions">
-              <button type="submit" class="btn btn-primary" id="campaignSaveBtn">Kaydet</button>
+              <button type="submit" class="btn btn-primary" id="campaignSaveBtn">Listeye Kaydet</button>
               <button type="button" class="btn btn-outline" id="campaignCancelBtn">İptal</button>
             </div>
           </form>
@@ -138,7 +152,7 @@
 
         <!-- Campaigns table -->
         <div class="admin-card">
-          <h2 class="admin-section-title">Kampanyalar</h2>
+          <h2 class="admin-section-title">Kampanyalar (<code>campaigns.json</code>)</h2>
           <div class="admin-table-wrap">
             <table class="admin-table" id="campaignsTable">
               <thead>
