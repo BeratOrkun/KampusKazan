@@ -73,16 +73,9 @@
   <section class="onboarding-screen" id="onboardingScreen" hidden>
     <div class="container onboarding-container">
       <div class="onboarding-top">
-        <div class="onboarding-badge">
-          <span class="pulse-dot"></span>
-          ✨ İlk Giriş Kurulumu • Ad, Soyad veya E-posta İstenmez
-        </div>
         <h1 class="onboarding-main-title">
-          Sana uygun kampanyalar için <span class="gradient-text">aşağıdaki kısımları seç</span>
+          Sana uygun kampanyalar için <span class="gradient-text">seçimini yap</span>
         </h1>
-        <p class="onboarding-main-subtitle">
-          Birini seçtiğin anda bir sonraki kutu otomatik açılır. Seçimin cihazına kaydedilir ve bir daha sorulmaz.
-        </p>
       </div>
 
       <!-- 4 Adımlı Otomatik Açılan Kutu (Progressive Accordion Boxes) -->
@@ -93,18 +86,15 @@
           <button type="button" class="onb-acc-header" id="onbHeaderCity" aria-expanded="true">
             <div class="onb-acc-header-left">
               <span class="onb-acc-num" id="onbNumCity">1</span>
-              <div class="onb-acc-titles">
-                <span class="onb-acc-label">1. Adım • Şehir</span>
-                <strong class="onb-acc-value" id="onbValCity">Hangi şehirde okuyorsun?</strong>
-              </div>
+              <strong class="onb-acc-value" id="onbValCity">Şehir</strong>
             </div>
-            <span class="onb-acc-action" id="onbActionCity">Seçiniz</span>
+            <span class="onb-acc-action" id="onbActionCity"></span>
           </button>
           <div class="onb-acc-body" id="onbBodyCity">
             <div class="wizard-search-wrap">
               <span class="wizard-search-icon">🔍</span>
               <input type="text" class="wizard-search-input" id="onbSearchCity"
-                placeholder="Şehir ara... (örn: İstanbul, Ankara, İzmir, Kayseri)" autocomplete="off" />
+                placeholder="Şehir ara..." autocomplete="off" />
               <button type="button" class="wizard-search-clear" id="onbClearCity" hidden aria-label="Temizle">✕</button>
             </div>
             <div class="wizard-list is-city-grid" id="onbListCity" role="listbox"></div>
@@ -116,12 +106,9 @@
           <button type="button" class="onb-acc-header" id="onbHeaderUni" disabled aria-expanded="false">
             <div class="onb-acc-header-left">
               <span class="onb-acc-num" id="onbNumUni">2</span>
-              <div class="onb-acc-titles">
-                <span class="onb-acc-label">2. Adım • Üniversite</span>
-                <strong class="onb-acc-value" id="onbValUni">Önce şehir seçin</strong>
-              </div>
+              <strong class="onb-acc-value" id="onbValUni">Üniversite</strong>
             </div>
-            <span class="onb-acc-action" id="onbActionUni">🔒</span>
+            <span class="onb-acc-action" id="onbActionUni"></span>
           </button>
           <div class="onb-acc-body" id="onbBodyUni" hidden>
             <div class="wizard-search-wrap">
@@ -139,18 +126,15 @@
           <button type="button" class="onb-acc-header" id="onbHeaderFac" disabled aria-expanded="false">
             <div class="onb-acc-header-left">
               <span class="onb-acc-num" id="onbNumFac">3</span>
-              <div class="onb-acc-titles">
-                <span class="onb-acc-label">3. Adım • Fakülte / Yüksekokul</span>
-                <strong class="onb-acc-value" id="onbValFac">Önce üniversite seçin</strong>
-              </div>
+              <strong class="onb-acc-value" id="onbValFac">Fakülte / Yüksekokul</strong>
             </div>
-            <span class="onb-acc-action" id="onbActionFac">🔒</span>
+            <span class="onb-acc-action" id="onbActionFac"></span>
           </button>
           <div class="onb-acc-body" id="onbBodyFac" hidden>
             <div class="wizard-search-wrap">
               <span class="wizard-search-icon">🔍</span>
               <input type="text" class="wizard-search-input" id="onbSearchFac"
-                placeholder="Fakülte veya MYO ara..." autocomplete="off" />
+                placeholder="Fakülte ara..." autocomplete="off" />
               <button type="button" class="wizard-search-clear" id="onbClearFac" hidden aria-label="Temizle">✕</button>
             </div>
             <div class="wizard-list is-item-grid" id="onbListFac" role="listbox"></div>
@@ -162,18 +146,15 @@
           <button type="button" class="onb-acc-header" id="onbHeaderDep" disabled aria-expanded="false">
             <div class="onb-acc-header-left">
               <span class="onb-acc-num" id="onbNumDep">4</span>
-              <div class="onb-acc-titles">
-                <span class="onb-acc-label">4. Adım • Bölüm</span>
-                <strong class="onb-acc-value" id="onbValDep">Önce fakülte seçin</strong>
-              </div>
+              <strong class="onb-acc-value" id="onbValDep">Bölüm</strong>
             </div>
-            <span class="onb-acc-action" id="onbActionDep">🔒</span>
+            <span class="onb-acc-action" id="onbActionDep"></span>
           </button>
           <div class="onb-acc-body" id="onbBodyDep" hidden>
             <div class="wizard-search-wrap">
               <span class="wizard-search-icon">🔍</span>
               <input type="text" class="wizard-search-input" id="onbSearchDep"
-                placeholder="Bölüm ara... (örn: Bilgisayar, Hukuk, Tıp, İşletme)" autocomplete="off" />
+                placeholder="Bölüm ara..." autocomplete="off" />
               <button type="button" class="wizard-search-clear" id="onbClearDep" hidden aria-label="Temizle">✕</button>
             </div>
             <div class="wizard-list is-item-grid" id="onbListDep" role="listbox"></div>
@@ -181,10 +162,6 @@
         </div>
 
       </div>
-
-      <p class="onb-kvkk-note">
-        🔒 Seçtiğin akademik bilgiler cihazına ve <a href="kvkk.html" target="_blank" rel="noopener">KVKK Aydınlatma Metni</a> kapsamında anonim cihaz kimliğiyle kaydedilir.
-      </p>
     </div>
   </section>
 

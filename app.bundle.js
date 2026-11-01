@@ -1564,6 +1564,7 @@ async function syncPushToken(profile) {
   $('btnContextEditProfile')?.addEventListener('click', () => openProfileModal());
 
   function showOnboardingScreen() {
+    document.body.classList.add('is-onboarding');
     mainAppView.hidden = true;
     onboardingScreen.hidden = false;
     onbState.step = 'city';
@@ -1581,6 +1582,7 @@ async function syncPushToken(profile) {
   }
 
   function showMainCampaignScreen(profile) {
+    document.body.classList.remove('is-onboarding');
     onboardingScreen.hidden = true;
     mainAppView.hidden = false;
     updateStudentContextBar(profile);
@@ -1593,12 +1595,6 @@ async function syncPushToken(profile) {
     onbState.step = step;
     renderOnboardingBoxes();
 
-    const boxMap = {
-      city: onbBoxCity,
-      uni: onbBoxUni,
-      fac: onbBoxFac,
-      dep: onbBoxDep,
-    };
     const searchMap = {
       city: onbSearchCity,
       uni: onbSearchUni,
@@ -1606,16 +1602,10 @@ async function syncPushToken(profile) {
       dep: onbSearchDep,
     };
 
-    const targetBox = boxMap[step];
-    if (targetBox) {
+    if (window.innerWidth > 768) {
       setTimeout(() => {
-        const rect = targetBox.getBoundingClientRect();
-        const scrollTop = window.scrollY + rect.top - 84;
-        window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' });
-        if (window.innerWidth > 768) {
-          searchMap[step]?.focus();
-        }
-      }, 60);
+        searchMap[step]?.focus();
+      }, 40);
     }
   }
 
@@ -1631,8 +1621,9 @@ async function syncPushToken(profile) {
     onbHeaderCity.disabled = false;
     onbHeaderCity.setAttribute('aria-expanded', String(cityActive));
     onbNumCity.textContent = hasCity && !cityActive ? '✓' : '1';
-    onbValCity.textContent = hasCity ? cityName(onbState.cityId) : 'Hangi şehirde okuyorsun?';
-    onbActionCity.textContent = hasCity && !cityActive ? 'Değiştir ✎' : 'Şehir Seçin';
+    onbValCity.textContent = hasCity ? cityName(onbState.cityId) : 'Şehir';
+    onbActionCity.textContent = hasCity && !cityActive ? 'Değiştir' : '';
+    onbActionCity.hidden = !(hasCity && !cityActive);
     onbBodyCity.hidden = !cityActive;
     if (cityActive) renderOnbStepList('city');
 
@@ -1643,15 +1634,12 @@ async function syncPushToken(profile) {
     onbHeaderUni.disabled = uniLocked;
     onbHeaderUni.setAttribute('aria-expanded', String(uniActive));
     onbNumUni.textContent = hasUni && !uniActive ? '✓' : '2';
-    onbValUni.textContent = hasUni
-      ? universityName(onbState.universityId)
-      : hasCity
-        ? `${cityName(onbState.cityId)} içindeki üniversiteni seç`
-        : 'Önce şehir seçin';
-    onbActionUni.textContent = uniLocked ? '🔒' : hasUni && !uniActive ? 'Değiştir ✎' : 'Üniversite Seçin';
+    onbValUni.textContent = hasUni ? universityName(onbState.universityId) : 'Üniversite';
+    onbActionUni.textContent = hasUni && !uniActive ? 'Değiştir' : '';
+    onbActionUni.hidden = !(hasUni && !uniActive);
     onbBodyUni.hidden = !uniActive;
     if (uniActive) {
-      onbSearchUni.placeholder = `${cityName(onbState.cityId)} üniversitelerinde ara...`;
+      onbSearchUni.placeholder = 'Üniversite ara...';
       renderOnbStepList('uni');
     }
 
@@ -1662,12 +1650,9 @@ async function syncPushToken(profile) {
     onbHeaderFac.disabled = facLocked;
     onbHeaderFac.setAttribute('aria-expanded', String(facActive));
     onbNumFac.textContent = hasFac && !facActive ? '✓' : '3';
-    onbValFac.textContent = hasFac
-      ? facultyName(onbState.facultyId)
-      : hasUni
-        ? `${universityShortName(onbState.universityId)} — Fakülte / MYO seç`
-        : 'Önce üniversite seçin';
-    onbActionFac.textContent = facLocked ? '🔒' : hasFac && !facActive ? 'Değiştir ✎' : 'Fakülte Seçin';
+    onbValFac.textContent = hasFac ? facultyName(onbState.facultyId) : 'Fakülte / Yüksekokul';
+    onbActionFac.textContent = hasFac && !facActive ? 'Değiştir' : '';
+    onbActionFac.hidden = !(hasFac && !facActive);
     onbBodyFac.hidden = !facActive;
     if (facActive) renderOnbStepList('fac');
 
@@ -1678,12 +1663,9 @@ async function syncPushToken(profile) {
     onbHeaderDep.disabled = depLocked;
     onbHeaderDep.setAttribute('aria-expanded', String(depActive));
     onbNumDep.textContent = hasDep && !depActive ? '✓' : '4';
-    onbValDep.textContent = hasDep
-      ? departmentName(onbState.facultyId, onbState.departmentId)
-      : hasFac
-        ? `${facultyName(onbState.facultyId)} — Bölümünü seç`
-        : 'Önce fakülte seçin';
-    onbActionDep.textContent = depLocked ? '🔒' : hasDep && !depActive ? 'Değiştir ✎' : 'Bölüm Seçin';
+    onbValDep.textContent = hasDep ? departmentName(onbState.facultyId, onbState.departmentId) : 'Bölüm';
+    onbActionDep.textContent = hasDep && !depActive ? 'Değiştir' : '';
+    onbActionDep.hidden = !(hasDep && !depActive);
     onbBodyDep.hidden = !depActive;
     if (depActive) renderOnbStepList('dep');
   }
@@ -1698,8 +1680,6 @@ async function syncPushToken(profile) {
       items = getCities().map((c) => ({
         id: c.id,
         title: c.name,
-        badge: c.popular ? `🔥 ${c.uniCount} Üni` : `${c.uniCount} Üni`,
-        badgeClass: c.popular ? 'badge-devlet' : 'badge-count',
         selected: c.id === onbState.cityId,
       }));
     } else if (step === 'uni') {
@@ -1707,9 +1687,6 @@ async function syncPushToken(profile) {
       items = getUniversitiesByCity(onbState.cityId).map((u) => ({
         id: u.id,
         title: u.name,
-        sub: u.id === OTHER_ID ? 'Listede olmayan üniversite' : `${u.facultyCount} Fakülte / MYO`,
-        badge: u.type,
-        badgeClass: u.type === 'Vakıf' ? 'badge-vakif' : u.type === 'Devlet' ? 'badge-devlet' : 'badge-count',
         selected: u.id === onbState.universityId,
       }));
     } else if (step === 'fac') {
@@ -1717,8 +1694,6 @@ async function syncPushToken(profile) {
       items = getFacultiesByUniversity(onbState.universityId).map((f) => ({
         id: f.id,
         title: f.name,
-        badge: f.id === OTHER_ID ? 'Diğer' : `${f.departmentCount} Bölüm`,
-        badgeClass: 'badge-count',
         selected: f.id === onbState.facultyId,
       }));
     } else if (step === 'dep') {
@@ -1726,8 +1701,6 @@ async function syncPushToken(profile) {
       items = getDepartmentsByUniversityFaculty(onbState.universityId, onbState.facultyId).map((d) => ({
         id: d.id,
         title: d.name,
-        badge: 'Seç ve Başla →',
-        badgeClass: 'badge-devlet',
         selected: d.id === onbState.departmentId,
       }));
     }
@@ -1741,7 +1714,7 @@ async function syncPushToken(profile) {
     if (filtered.length === 0) {
       listEl.innerHTML = `
         <div class="wizard-empty">
-          <span>🔍 "${escapeHtml(onbState.queries[step])}" için sonuç bulunamadı.</span>
+          <span>Sonuç bulunamadı</span>
         </div>
       `;
       return;
@@ -1751,15 +1724,13 @@ async function syncPushToken(profile) {
       .map(
         (item) => `
         <button type="button" class="wizard-option ${item.selected ? 'selected' : ''}" data-step="${step}" data-id="${escapeHtml(item.id)}" role="option" aria-selected="${item.selected}">
-          <div class="wizard-option-main">
-            <span class="wizard-option-title">${escapeHtml(item.title)}</span>
-            ${item.sub ? `<span class="wizard-option-sub">${escapeHtml(item.sub)}</span>` : ''}
-          </div>
-          <span class="wizard-option-badge ${item.badgeClass || ''}">${escapeHtml(item.badge || '')}</span>
+          <span class="wizard-option-title">${escapeHtml(item.title)}</span>
+          <span class="wizard-option-arrow">›</span>
         </button>
       `
       )
       .join('');
+    listEl.scrollTop = 0;
   }
 
   async function onSelectOnboardingItem(step, id) {
