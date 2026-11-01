@@ -1565,6 +1565,7 @@ async function syncPushToken(profile) {
 
   function showOnboardingScreen() {
     document.body.classList.add('is-onboarding');
+    if (header) header.hidden = true;
     mainAppView.hidden = true;
     onboardingScreen.hidden = false;
     onbState.step = 'city';
@@ -1583,6 +1584,7 @@ async function syncPushToken(profile) {
 
   function showMainCampaignScreen(profile) {
     document.body.classList.remove('is-onboarding');
+    if (header) header.hidden = false;
     onboardingScreen.hidden = true;
     mainAppView.hidden = false;
     updateStudentContextBar(profile);
@@ -1872,33 +1874,30 @@ async function syncPushToken(profile) {
   function renderAuthArea(user, profile, admin) {
     if (!authArea) return;
 
+    if (!profile) {
+      authArea.innerHTML = '';
+      return;
+    }
+
     const installBtn = deferredInstallPrompt
       ? `<button type="button" class="btn btn-outline btn-sm" id="btnInstallPwa" title="Uygulamayı ana ekrana ekle">📲 Yükle</button>`
       : '';
     const adminLink = admin ? `<a href="admin.html" class="btn btn-outline btn-sm">Admin</a>` : '';
-
-    if (!profile) {
-      authArea.innerHTML = `
-        ${installBtn}
-        ${adminLink}
-      `;
-    } else {
-      const uni = universityShortName(profile.universityId);
-      const dep = departmentName(profile.facultyId, profile.departmentId);
-      const bell = profile.pushEnabled ? '🔔' : '🔕';
-      const bellTitle = profile.pushEnabled ? 'Bildirimler açık — kapatmak için tıkla' : 'Bildirimleri aç';
-      authArea.innerHTML = `
-        <div class="user-chip" title="${escapeHtml(cityName(profile.cityId))} • ${escapeHtml(universityName(profile.universityId))}">
-          <span class="user-chip-name">${escapeHtml(uni)}</span>
-          <span class="user-chip-uni">${escapeHtml(dep)}</span>
-        </div>
-        ${installBtn}
-        ${adminLink}
-        <button type="button" class="btn btn-outline btn-sm icon-btn" id="btnTogglePush" title="${bellTitle}" aria-label="${bellTitle}">${bell}</button>
-        <button type="button" class="btn btn-outline btn-sm" id="btnOpenProfile">Profilim</button>
-      `;
-      $('btnTogglePush')?.addEventListener('click', onTogglePush);
-    }
+    const uni = universityShortName(profile.universityId);
+    const dep = departmentName(profile.facultyId, profile.departmentId);
+    const bell = profile.pushEnabled ? '🔔' : '🔕';
+    const bellTitle = profile.pushEnabled ? 'Bildirimler açık — kapatmak için tıkla' : 'Bildirimleri aç';
+    authArea.innerHTML = `
+      <div class="user-chip" title="${escapeHtml(cityName(profile.cityId))} • ${escapeHtml(universityName(profile.universityId))}">
+        <span class="user-chip-name">${escapeHtml(uni)}</span>
+        <span class="user-chip-uni">${escapeHtml(dep)}</span>
+      </div>
+      ${installBtn}
+      ${adminLink}
+      <button type="button" class="btn btn-outline btn-sm icon-btn" id="btnTogglePush" title="${bellTitle}" aria-label="${bellTitle}">${bell}</button>
+      <button type="button" class="btn btn-outline btn-sm" id="btnOpenProfile">Profilim</button>
+    `;
+    $('btnTogglePush')?.addEventListener('click', onTogglePush);
 
     $('btnOpenProfile')?.addEventListener('click', () => openProfileModal());
     $('btnInstallPwa')?.addEventListener('click', onInstallClick);

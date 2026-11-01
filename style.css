@@ -2825,11 +2825,8 @@ body.is-onboarding {
     overflow: hidden;
 }
 
-body.is-onboarding .header {
-    height: 48px;
-    background: rgba(10, 10, 26, 0.85);
-}
-
+.header[hidden],
+body.is-onboarding .header,
 body.is-onboarding .nav-links,
 body.is-onboarding .mobile-menu-btn,
 body.is-onboarding .auth-area,
@@ -2843,7 +2840,7 @@ body.is-onboarding .back-to-top {
     z-index: 2;
     height: 100vh;
     height: 100dvh;
-    padding: 56px 0 12px;
+    padding: 16px 0 12px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -3125,7 +3122,7 @@ body.is-onboarding .back-to-top {
 /* Mobil Uyumluluk (Telefon ve Tablet - Mobile First) */
 @media (max-width: 768px) {
     .onboarding-screen {
-        padding: 54px 0 max(10px, env(safe-area-inset-bottom));
+        padding: max(12px, env(safe-area-inset-top)) 0 max(10px, env(safe-area-inset-bottom));
     }
 
     .onboarding-top {

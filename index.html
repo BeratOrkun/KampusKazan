@@ -38,8 +38,8 @@
   <div class="floating-orb"></div>
   <div class="floating-orb"></div>
 
-  <!-- Header -->
-  <header class="header" id="header">
+  <!-- Header (İlk giriş/onboarding ekranında gizlidir, sadece kampanya ekranında açılır) -->
+  <header class="header" id="header" hidden>
     <div class="container header-inner">
       <a href="#campaigns" class="logo" id="logoLink">
         <img src="logo.png" alt="KampüsKazan Logo" />
@@ -49,15 +49,9 @@
       <nav class="nav-links" id="navLinks">
         <a href="#campaigns" class="active">Kampanyalar</a>
         <a href="#features">Neden Biz?</a>
-        <a href="kvkk.html">KVKK & Gizlilik</a>
       </nav>
 
-      <div class="auth-area" id="authArea">
-        <button type="button" class="btn btn-outline btn-sm" id="btnInstallPwa" hidden title="Uygulamayı ana ekrana ekle">
-          📲 Uygulamayı Yükle
-        </button>
-        <button type="button" class="btn btn-primary btn-sm" id="btnOpenProfile">Bilgilerim</button>
-      </div>
+      <div class="auth-area" id="authArea"></div>
 
       <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menüyü aç/kapat">
         <span></span>
