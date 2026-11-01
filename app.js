@@ -1326,10 +1326,26 @@ import {
     const icon = CATEGORY_ICONS[campaign.category] || CATEGORY_ICONS.default;
     const { typeClass, typeIcon } = typeInfo(campaign.type);
     const dateText = campaign.date || 'Güncel';
+    const hasBanner = Boolean(campaign.image);
+    const hasLogo = Boolean(campaign.logo);
 
     card.innerHTML = `
+      ${
+        hasBanner
+          ? `<div class="card-banner-wrap">
+              <img class="card-banner-img" src="${escapeHtml(campaign.image)}" alt="${escapeHtml(campaign.title)}" loading="lazy" />
+            </div>`
+          : ''
+      }
       <div class="card-header">
-        <span class="card-category">${icon} ${escapeHtml(campaign.category)}</span>
+        <div class="card-header-left">
+          ${
+            hasLogo
+              ? `<span class="card-brand-logo"><img src="${escapeHtml(campaign.logo)}" alt="${escapeHtml(campaign.brand || campaign.category)}" loading="lazy" /></span>`
+              : ''
+          }
+          <span class="card-category">${icon} ${escapeHtml(campaign.category)}</span>
+        </div>
         ${campaign.type ? `<span class="card-type ${typeClass}">${typeIcon} ${escapeHtml(campaign.type)}</span>` : ''}
       </div>
       <h3 class="card-title">${escapeHtml(campaign.title)}</h3>
@@ -1339,6 +1355,13 @@ import {
         <button class="card-action" type="button">Detaylar →</button>
       </div>
     `;
+
+    card.querySelectorAll('img').forEach((imgEl) => {
+      imgEl.addEventListener('error', () => {
+        const wrap = imgEl.closest('.card-banner-wrap, .card-brand-logo');
+        if (wrap) wrap.style.display = 'none';
+      });
+    });
 
     card.querySelector('.card-action')?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1396,18 +1419,28 @@ import {
   function openModal(campaign) {
     const icon = CATEGORY_ICONS[campaign.category] || CATEGORY_ICONS.default;
     const { typeClass, typeIcon } = typeInfo(campaign.type);
+    const hasLogo = Boolean(campaign.logo);
+    const hasBanner = Boolean(campaign.image);
 
     modalBadges.innerHTML = `
+      ${
+        hasLogo
+          ? `<span class="card-brand-logo modal-brand-logo"><img src="${escapeHtml(campaign.logo)}" alt="${escapeHtml(campaign.brand || campaign.category)}" /></span>`
+          : ''
+      }
       <span class="card-category">${icon} ${escapeHtml(campaign.category)}</span>
       ${campaign.type ? `<span class="card-type ${typeClass}">${typeIcon} ${escapeHtml(campaign.type)}</span>` : ''}
     `;
     modalTitle.textContent = campaign.title;
+    const bannerHtml = hasBanner
+      ? `<div class="modal-banner-wrap"><img class="modal-banner-img" src="${escapeHtml(campaign.image)}" alt="${escapeHtml(campaign.title)}" /></div>`
+      : '';
     const descHtml = linkifyText(escapeHtml(campaign.description || ''));
     const linkHtml =
       campaign.link && /^https?:\/\//i.test(campaign.link)
         ? `<div style="margin-top: 18px;"><a href="${escapeHtml(campaign.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Kampanyaya Git ↗</a></div>`
         : '';
-    modalDescription.innerHTML = descHtml + linkHtml;
+    modalDescription.innerHTML = bannerHtml + descHtml + linkHtml;
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }

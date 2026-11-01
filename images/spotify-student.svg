@@ -1,0 +1,53 @@
+<svg width="800" height="420" viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="spBg" x1="0" y1="0" x2="800" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B1F13"/>
+      <stop offset="55%" stop-color="#121212"/>
+      <stop offset="100%" stop-color="#191414"/>
+    </linearGradient>
+    <linearGradient id="spGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1ED760"/>
+      <stop offset="100%" stop-color="#1DB954"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="420" rx="24" fill="url(#spBg)"/>
+  <circle cx="690" cy="80" r="200" fill="#1ED760" fill-opacity="0.16"/>
+  <circle cx="140" cy="380" r="170" fill="#91EEDA" fill-opacity="0.12"/>
+
+  <!-- Official Spotify Logo + Premium Student Badge -->
+  <g transform="translate(44, 38)">
+    <circle cx="28" cy="28" r="28" fill="#1ED760"/>
+    <path d="M40.3 20.8C32.4 16.1 19.4 15.7 11.9 18C10.7 18.4 9.4 17.7 9 16.5C8.6 15.3 9.3 14 10.5 13.6C19.2 11 33.5 11.5 42.6 16.9C43.7 17.6 44.1 19 43.4 20.1C42.8 21.1 41.4 21.5 40.3 20.8ZM40 27.9C39.4 28.8 38.2 29.1 37.3 28.5C30.8 24.5 20.8 23.3 13 25.7C12 26 10.9 25.4 10.6 24.4C10.3 23.4 10.9 22.3 11.9 22C20.8 19.3 31.8 20.6 39.4 25.3C40.3 25.8 40.5 27 40 27.9ZM37.1 34.7C36.7 35.4 35.7 35.7 35 35.2C29.3 31.7 22.1 30.9 13.6 32.8C12.8 33 12 32.5 11.8 31.7C11.6 30.9 12.1 30.1 12.9 29.9C22.2 27.8 30.2 28.7 36.6 32.6C37.3 33 37.5 34 37.1 34.7Z" fill="#0A0A1A"/>
+    <text x="68" y="38" fill="#FFFFFF" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="30" letter-spacing="-0.6">Spotify</text>
+    <rect x="192" y="10" width="176" height="36" rx="18" fill="#91EEDA"/>
+    <text x="280" y="34" text-anchor="middle" fill="#0A0A1A" font-family="'Inter', -apple-system, sans-serif" font-weight="800" font-size="14" letter-spacing="0.6">PREMIUM ÖĞRENCİ</text>
+  </g>
+
+  <!-- Main Headlines -->
+  <text x="44" y="162" fill="#FFFFFF" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="36">Üniversitelilere Özel %50 İndirim</text>
+  <text x="44" y="228" fill="#1ED760" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="900" font-size="56">Aylık Sadece ₺60</text>
+  <text x="44" y="282" fill="#E2E8F0" font-family="'Inter', -apple-system, sans-serif" font-weight="600" font-size="22">İlk 1 Ay ₺0 (Ücretsiz) • Reklamsız &amp; Çevrimdışı Müzik</text>
+
+  <rect x="44" y="320" width="380" height="52" rx="14" fill="#FFFFFF" fill-opacity="0.1" stroke="#1ED760" stroke-width="1.5"/>
+  <text x="66" y="352" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="17">🎵 SheerID ile Öğrenci Belgeni Doğrula</text>
+
+  <!-- Right Graphic Card -->
+  <g transform="translate(528, 96)">
+    <rect x="0" y="0" width="228" height="264" rx="24" fill="#FFFFFF" fill-opacity="0.08" stroke="#1ED760" stroke-opacity="0.4" stroke-width="2"/>
+    <rect x="34" y="28" width="160" height="32" rx="16" fill="#1ED760"/>
+    <text x="114" y="49" text-anchor="middle" fill="#0A0A1A" font-family="'Inter', sans-serif" font-weight="800" font-size="14">İLK 1 AY ÜCRETSİZ</text>
+    <text x="114" y="122" text-anchor="middle" fill="#94A3B8" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="24" text-decoration="line-through">₺115 / ay</text>
+    <text x="114" y="176" text-anchor="middle" fill="#FFFFFF" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="48">₺60<tspan font-size="20" fill="#91EEDA">/ay</tspan></text>
+    <!-- Equalizer Bars -->
+    <g transform="translate(54, 206)" fill="#1ED760">
+      <rect x="0" y="14" width="10" height="24" rx="5"/>
+      <rect x="18" y="4" width="10" height="34" rx="5"/>
+      <rect x="36" y="10" width="10" height="28" rx="5"/>
+      <rect x="54" y="0" width="10" height="38" rx="5"/>
+      <rect x="72" y="8" width="10" height="30" rx="5"/>
+      <rect x="90" y="16" width="10" height="22" rx="5"/>
+      <rect x="108" y="6" width="10" height="32" rx="5"/>
+    </g>
+  </g>
+</svg>

@@ -140,10 +140,13 @@ function formatCampaignsJson() {
   const clean = campaigns.map((c, idx) => ({
     id: c.id || `kampanya-${idx + 1}`,
     active: c.active !== false,
+    ...(c.brand ? { brand: c.brand } : {}),
     category: c.category || 'Genel',
     type: c.type || 'İndirim',
     title: c.title || '',
     description: c.description || '',
+    image: c.image || '',
+    logo: c.logo || '',
     link: c.link || '',
     date: c.date || 'Güncel',
     cities: Array.isArray(c.cities) ? c.cities : [],
@@ -289,6 +292,8 @@ function openForm(campaign = null) {
   $('campaignCategory').value = campaign?.category || '';
   $('campaignType').value = campaign?.type || 'İndirim';
   if ($('campaignLink')) $('campaignLink').value = campaign?.link || '';
+  if ($('campaignImage')) $('campaignImage').value = campaign?.image || '';
+  if ($('campaignLogo')) $('campaignLogo').value = campaign?.logo || '';
   $('campaignDescription').value = campaign?.description || '';
   $('campaignActive').checked = campaign ? campaign.active !== false : true;
   campaignFormCard.hidden = false;
@@ -343,6 +348,8 @@ campaignForm?.addEventListener('submit', (e) => {
   const category = $('campaignCategory').value.trim() || 'Genel';
   const type = $('campaignType').value.trim() || 'İndirim';
   const link = ($('campaignLink')?.value || '').trim();
+  const image = ($('campaignImage')?.value || '').trim();
+  const logo = ($('campaignLogo')?.value || '').trim();
   const description = $('campaignDescription').value.trim();
   const active = $('campaignActive').checked;
 
@@ -354,7 +361,7 @@ campaignForm?.addEventListener('submit', (e) => {
   if (editingId) {
     campaigns = campaigns.map((c) =>
       c.id === editingId
-        ? { ...c, title, category, type, link, description, active }
+        ? { ...c, title, category, type, link, image, logo, description, active }
         : c
     );
   } else {
@@ -366,6 +373,8 @@ campaignForm?.addEventListener('submit', (e) => {
       type,
       title,
       description,
+      image,
+      logo,
       link,
       date: 'Güncel',
       cities: [],

@@ -944,11 +944,31 @@ const FALLBACK_CAMPAIGNS = [
   {
     id: 'kuveytturk-davet-1000tl',
     active: true,
+    brand: 'Kuveyt Türk Kampüs',
     category: 'Banka',
     type: 'Hediye',
-    title: "Kuveyt Türk'te arkadaşını davet edenlere 1000 TL.",
-    description: 'Çağırdığın her arkadasın ıcın 1000 TL. Toplamda 10.000 TL.',
-    link: '',
+    title: "Kuveyt Türk'te arkadaşını davet edenlere 1.000 TL, toplamda 10.000 TL!",
+    description:
+      'Kuveyt Türk Kampüslü üniversite öğrencilerine özel! Kuveyt Türk Mobil → Davet Et Kazan menüsünden davet kodunla çağırdığın her arkadaşın için 1.000 TL, toplamda 10 kişiye kadar 10.000 TL nakit ödül kazan.',
+    image: 'images/kuveytturk-kampus.svg',
+    logo: 'images/kuveytturk-logo.svg',
+    link: 'https://www.kuveytturk.com.tr/bireysel/kampus',
+    date: 'Güncel',
+    cities: [],
+    universities: [],
+  },
+  {
+    id: 'spotify-premium-ogrenci-60tl',
+    active: true,
+    brand: 'Spotify',
+    category: 'Müzik',
+    type: 'İndirim',
+    title: 'Spotify Premium Öğrenci — İlk 1 Ay Ücretsiz, Sonra Aylık ₺60',
+    description:
+      'Üniversite öğrencilerine özel Spotify Premium neredeyse yarı fiyatına! İlk 1 ay ₺0 (ücretsiz deneme), sonrasında öğrenci olduğun süre boyunca aylık ₺115 yerine sadece ₺60. Reklamsız müzik dinleme, çevrimdışı indirme ve istediğin an iptal imkanı. SheerID ile öğrenci belgeni doğrulayarak hemen katılabilirsin.',
+    image: 'images/spotify-student.svg',
+    logo: 'images/spotify-logo.svg',
+    link: 'https://www.spotify.com/tr-tr/student/',
     date: 'Güncel',
     cities: [],
     universities: [],
@@ -976,10 +996,13 @@ function normalizeCampaignList(raw) {
       return {
         id: String(item.id || `kampanya-${idx + 1}`).trim(),
         active: item.active !== false,
+        brand: String(item.brand || '').trim(),
         category: String(item.category || 'Genel').trim(),
         type: String(item.type || '').trim(),
         title,
         description: String(item.description || '').trim(),
+        image: String(item.image || '').trim(),
+        logo: String(item.logo || '').trim(),
         link: String(item.link || '').trim(),
         date: String(item.date || 'Güncel').trim(),
         cities: Array.isArray(item.cities) ? item.cities.filter(Boolean) : [],
@@ -1204,10 +1227,13 @@ function formatCampaignsJson() {
   const clean = campaigns.map((c, idx) => ({
     id: c.id || `kampanya-${idx + 1}`,
     active: c.active !== false,
+    ...(c.brand ? { brand: c.brand } : {}),
     category: c.category || 'Genel',
     type: c.type || 'İndirim',
     title: c.title || '',
     description: c.description || '',
+    image: c.image || '',
+    logo: c.logo || '',
     link: c.link || '',
     date: c.date || 'Güncel',
     cities: Array.isArray(c.cities) ? c.cities : [],
@@ -1353,6 +1379,8 @@ function openForm(campaign = null) {
   $('campaignCategory').value = campaign?.category || '';
   $('campaignType').value = campaign?.type || 'İndirim';
   if ($('campaignLink')) $('campaignLink').value = campaign?.link || '';
+  if ($('campaignImage')) $('campaignImage').value = campaign?.image || '';
+  if ($('campaignLogo')) $('campaignLogo').value = campaign?.logo || '';
   $('campaignDescription').value = campaign?.description || '';
   $('campaignActive').checked = campaign ? campaign.active !== false : true;
   campaignFormCard.hidden = false;
@@ -1407,6 +1435,8 @@ campaignForm?.addEventListener('submit', (e) => {
   const category = $('campaignCategory').value.trim() || 'Genel';
   const type = $('campaignType').value.trim() || 'İndirim';
   const link = ($('campaignLink')?.value || '').trim();
+  const image = ($('campaignImage')?.value || '').trim();
+  const logo = ($('campaignLogo')?.value || '').trim();
   const description = $('campaignDescription').value.trim();
   const active = $('campaignActive').checked;
 
@@ -1418,7 +1448,7 @@ campaignForm?.addEventListener('submit', (e) => {
   if (editingId) {
     campaigns = campaigns.map((c) =>
       c.id === editingId
-        ? { ...c, title, category, type, link, description, active }
+        ? { ...c, title, category, type, link, image, logo, description, active }
         : c
     );
   } else {
@@ -1430,6 +1460,8 @@ campaignForm?.addEventListener('submit', (e) => {
       type,
       title,
       description,
+      image,
+      logo,
       link,
       date: 'Güncel',
       cities: [],

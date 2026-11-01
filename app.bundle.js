@@ -944,11 +944,31 @@ const FALLBACK_CAMPAIGNS = [
   {
     id: 'kuveytturk-davet-1000tl',
     active: true,
+    brand: 'Kuveyt Türk Kampüs',
     category: 'Banka',
     type: 'Hediye',
-    title: "Kuveyt Türk'te arkadaşını davet edenlere 1000 TL.",
-    description: 'Çağırdığın her arkadasın ıcın 1000 TL. Toplamda 10.000 TL.',
-    link: '',
+    title: "Kuveyt Türk'te arkadaşını davet edenlere 1.000 TL, toplamda 10.000 TL!",
+    description:
+      'Kuveyt Türk Kampüslü üniversite öğrencilerine özel! Kuveyt Türk Mobil → Davet Et Kazan menüsünden davet kodunla çağırdığın her arkadaşın için 1.000 TL, toplamda 10 kişiye kadar 10.000 TL nakit ödül kazan.',
+    image: 'images/kuveytturk-kampus.svg',
+    logo: 'images/kuveytturk-logo.svg',
+    link: 'https://www.kuveytturk.com.tr/bireysel/kampus',
+    date: 'Güncel',
+    cities: [],
+    universities: [],
+  },
+  {
+    id: 'spotify-premium-ogrenci-60tl',
+    active: true,
+    brand: 'Spotify',
+    category: 'Müzik',
+    type: 'İndirim',
+    title: 'Spotify Premium Öğrenci — İlk 1 Ay Ücretsiz, Sonra Aylık ₺60',
+    description:
+      'Üniversite öğrencilerine özel Spotify Premium neredeyse yarı fiyatına! İlk 1 ay ₺0 (ücretsiz deneme), sonrasında öğrenci olduğun süre boyunca aylık ₺115 yerine sadece ₺60. Reklamsız müzik dinleme, çevrimdışı indirme ve istediğin an iptal imkanı. SheerID ile öğrenci belgeni doğrulayarak hemen katılabilirsin.',
+    image: 'images/spotify-student.svg',
+    logo: 'images/spotify-logo.svg',
+    link: 'https://www.spotify.com/tr-tr/student/',
     date: 'Güncel',
     cities: [],
     universities: [],
@@ -976,10 +996,13 @@ function normalizeCampaignList(raw) {
       return {
         id: String(item.id || `kampanya-${idx + 1}`).trim(),
         active: item.active !== false,
+        brand: String(item.brand || '').trim(),
         category: String(item.category || 'Genel').trim(),
         type: String(item.type || '').trim(),
         title,
         description: String(item.description || '').trim(),
+        image: String(item.image || '').trim(),
+        logo: String(item.logo || '').trim(),
         link: String(item.link || '').trim(),
         date: String(item.date || 'Güncel').trim(),
         cities: Array.isArray(item.cities) ? item.cities.filter(Boolean) : [],
@@ -2569,10 +2592,26 @@ async function syncPushToken(profile) {
     const icon = CATEGORY_ICONS[campaign.category] || CATEGORY_ICONS.default;
     const { typeClass, typeIcon } = typeInfo(campaign.type);
     const dateText = campaign.date || 'Güncel';
+    const hasBanner = Boolean(campaign.image);
+    const hasLogo = Boolean(campaign.logo);
 
     card.innerHTML = `
+      ${
+        hasBanner
+          ? `<div class="card-banner-wrap">
+              <img class="card-banner-img" src="${escapeHtml(campaign.image)}" alt="${escapeHtml(campaign.title)}" loading="lazy" />
+            </div>`
+          : ''
+      }
       <div class="card-header">
-        <span class="card-category">${icon} ${escapeHtml(campaign.category)}</span>
+        <div class="card-header-left">
+          ${
+            hasLogo
+              ? `<span class="card-brand-logo"><img src="${escapeHtml(campaign.logo)}" alt="${escapeHtml(campaign.brand || campaign.category)}" loading="lazy" /></span>`
+              : ''
+          }
+          <span class="card-category">${icon} ${escapeHtml(campaign.category)}</span>
+        </div>
         ${campaign.type ? `<span class="card-type ${typeClass}">${typeIcon} ${escapeHtml(campaign.type)}</span>` : ''}
       </div>
       <h3 class="card-title">${escapeHtml(campaign.title)}</h3>
@@ -2582,6 +2621,13 @@ async function syncPushToken(profile) {
         <button class="card-action" type="button">Detaylar →</button>
       </div>
     `;
+
+    card.querySelectorAll('img').forEach((imgEl) => {
+      imgEl.addEventListener('error', () => {
+        const wrap = imgEl.closest('.card-banner-wrap, .card-brand-logo');
+        if (wrap) wrap.style.display = 'none';
+      });
+    });
 
     card.querySelector('.card-action')?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -2639,18 +2685,28 @@ async function syncPushToken(profile) {
   function openModal(campaign) {
     const icon = CATEGORY_ICONS[campaign.category] || CATEGORY_ICONS.default;
     const { typeClass, typeIcon } = typeInfo(campaign.type);
+    const hasLogo = Boolean(campaign.logo);
+    const hasBanner = Boolean(campaign.image);
 
     modalBadges.innerHTML = `
+      ${
+        hasLogo
+          ? `<span class="card-brand-logo modal-brand-logo"><img src="${escapeHtml(campaign.logo)}" alt="${escapeHtml(campaign.brand || campaign.category)}" /></span>`
+          : ''
+      }
       <span class="card-category">${icon} ${escapeHtml(campaign.category)}</span>
       ${campaign.type ? `<span class="card-type ${typeClass}">${typeIcon} ${escapeHtml(campaign.type)}</span>` : ''}
     `;
     modalTitle.textContent = campaign.title;
+    const bannerHtml = hasBanner
+      ? `<div class="modal-banner-wrap"><img class="modal-banner-img" src="${escapeHtml(campaign.image)}" alt="${escapeHtml(campaign.title)}" /></div>`
+      : '';
     const descHtml = linkifyText(escapeHtml(campaign.description || ''));
     const linkHtml =
       campaign.link && /^https?:\/\//i.test(campaign.link)
         ? `<div style="margin-top: 18px;"><a href="${escapeHtml(campaign.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Kampanyaya Git ↗</a></div>`
         : '';
-    modalDescription.innerHTML = descHtml + linkHtml;
+    modalDescription.innerHTML = bannerHtml + descHtml + linkHtml;
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
