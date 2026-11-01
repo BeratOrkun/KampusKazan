@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — KazananÖğrenci</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="admin-body">
+  <div class="bg-grid"></div>
+
+  <header class="header scrolled" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="KazananÖğrenci Logo" />
+        <span>KazananÖğrenci Admin</span>
+      </a>
+      <div class="auth-area" id="adminAuthArea"></div>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="container">
+      <!-- Login gate -->
+      <section class="admin-card" id="adminLoginCard">
+        <h1 class="admin-title">Admin Girişi</h1>
+        <p class="admin-subtitle">Kampanya yönetimi için yönetici hesabınla giriş yap.</p>
+        <div class="form-alert error" id="adminLoginError" hidden></div>
+        <form id="adminLoginForm" class="auth-form">
+          <div class="form-field">
+            <label for="adminEmail">E-posta</label>
+            <input type="email" id="adminEmail" required autocomplete="email" placeholder="admin@..." />
+          </div>
+          <div class="form-field">
+            <label for="adminPassword">Şifre</label>
+            <input type="password" id="adminPassword" required autocomplete="current-password" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="adminLoginBtn">Giriş Yap</button>
+        </form>
+        <p class="admin-hint">
+          İlk admin: Firebase Console → Authentication’da e-posta/şifre kullanıcısı oluştur →
+          Firestore’da <code>admins/{uid}</code> belgesi ekle (içeriği boş olabilir).
+        </p>
+        <p class="admin-back"><a href="index.html">← Siteye dön</a></p>
+      </section>
+
+      <!-- Dashboard -->
+      <section id="adminDashboard" hidden>
+        <div class="admin-header-row">
+          <div>
+            <h1 class="admin-title">Kampanya Yönetimi</h1>
+            <p class="admin-subtitle">Sitedeki kampanyaları oluştur, düzenle veya kaldır.</p>
+          </div>
+          <button type="button" class="btn btn-primary" id="btnNewCampaign">+ Yeni Kampanya</button>
+        </div>
+
+        <div class="admin-stats admin-stats-4" id="adminStats">
+          <div class="admin-stat">
+            <span class="admin-stat-value" id="statTotal">0</span>
+            <span class="admin-stat-label">Kampanya</span>
+          </div>
+          <div class="admin-stat">
+            <span class="admin-stat-value" id="statActive">0</span>
+            <span class="admin-stat-label">Aktif Kampanya</span>
+          </div>
+          <div class="admin-stat">
+            <span class="admin-stat-value" id="statStudents">0</span>
+            <span class="admin-stat-label">Öğrenci</span>
+          </div>
+          <div class="admin-stat">
+            <span class="admin-stat-value" id="statPush">0</span>
+            <span class="admin-stat-label">Bildirim Açık</span>
+          </div>
+        </div>
+
+        <div class="form-alert error" id="adminError" hidden></div>
+        <div class="form-alert success" id="adminSuccess" hidden></div>
+
+        <!-- Campaign form -->
+        <div class="admin-card admin-form-card" id="campaignFormCard" hidden>
+          <h2 class="admin-section-title" id="formTitle">Yeni Kampanya</h2>
+          <form id="campaignForm" class="auth-form">
+            <input type="hidden" id="campaignId" />
+            <div class="form-row">
+              <div class="form-field">
+                <label for="campaignTitle">Başlık</label>
+                <input type="text" id="campaignTitle" required maxlength="120" placeholder="Kampanya başlığı" />
+              </div>
+              <div class="form-field">
+                <label for="campaignCategory">Kategori</label>
+                <input type="text" id="campaignCategory" required list="categoryList" placeholder="Örn: Yemek" />
+                <datalist id="categoryList">
+                  <option value="Yemek"></option>
+                  <option value="Teknoloji"></option>
+                  <option value="Eğitim"></option>
+                  <option value="Ulaşım"></option>
+                  <option value="Eğlence"></option>
+                  <option value="Sağlık"></option>
+                  <option value="Giyim"></option>
+                  <option value="Kitap"></option>
+                  <option value="Yazılım"></option>
+                  <option value="Spor"></option>
+                  <option value="Finans"></option>
+                  <option value="Alışveriş"></option>
+                </datalist>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="campaignType">Tür</label>
+                <select id="campaignType">
+                  <option value="İndirim">İndirim</option>
+                  <option value="Fırsat">Fırsat</option>
+                  <option value="Ücretsiz">Ücretsiz</option>
+                </select>
+              </div>
+              <div class="form-field form-field-checkbox">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="campaignActive" checked />
+                  Aktif (sitede görünsün)
+                </label>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="campaignDescription">Açıklama</label>
+              <textarea id="campaignDescription" rows="5" placeholder="Kampanya detayları, linkler..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="campaignSaveBtn">Kaydet</button>
+              <button type="button" class="btn btn-outline" id="campaignCancelBtn">İptal</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Campaigns table -->
+        <div class="admin-card">
+          <h2 class="admin-section-title">Kampanyalar</h2>
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="campaignsTable">
+              <thead>
+                <tr>
+                  <th>Başlık</th>
+                  <th>Kategori</th>
+                  <th>Tür</th>
+                  <th>Durum</th>
+                  <th>İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="campaignsTableBody">
+                <tr>
+                  <td colspan="5" class="admin-empty">Yükleniyor...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Push notification helper -->
+        <div class="admin-card">
+          <h2 class="admin-section-title">🔔 Bildirim Gönder</h2>
+          <p class="admin-subtitle">
+            Bildirimler Firebase Console üzerinden gönderilir:
+            <strong>Console → Messaging (Engage) → New campaign → Firebase Notification messages</strong>.
+          </p>
+          <ol class="admin-steps">
+            <li><strong>Herkese:</strong> Hedef olarak <em>User segment → Web uygulaması</em>’nı seç (Cloud Function gerekmez).</li>
+            <li>
+              <strong>İl / üniversiteye özel:</strong> <code>functions/</code> klasöründeki fonksiyonu deploy ettiysen
+              hedef olarak <em>Topic</em> seç ve aşağıda oluşan topic adını yapıştır.
+            </li>
+            <li>Bildirime tıklayınca belirli bir sayfa açılsın istersen “Additional options → Custom data” kısmına <code>link</code> = <code>/</code> gibi bir değer ekleyebilirsin.</li>
+          </ol>
+          <div class="form-row topic-helper">
+            <div class="form-field">
+              <label for="topicCity">İl</label>
+              <select id="topicCity"></select>
+            </div>
+            <div class="form-field">
+              <label for="topicUniversity">Üniversite (isteğe bağlı)</label>
+              <select id="topicUniversity" disabled></select>
+            </div>
+          </div>
+          <div class="topic-output">
+            <span>Topic adı:</span>
+            <code id="topicName">all</code>
+            <button type="button" class="btn btn-outline btn-xs" id="btnCopyTopic">Kopyala</button>
+          </div>
+        </div>
+
+        <!-- Aggregated stats (no individual records) -->
+        <div class="admin-card">
+          <h2 class="admin-section-title">Öğrenci Dağılımı</h2>
+          <p class="admin-hint" style="margin-top: -8px; margin-bottom: 16px;">
+            KVKK gereği tekil kayıt gösterilmez; yalnızca toplu sayılar listelenir.
+          </p>
+          <div class="stats-columns">
+            <div>
+              <h3 class="stats-col-title">İller</h3>
+              <table class="admin-table compact">
+                <tbody id="statsCityBody"><tr><td class="admin-empty">Yükleniyor...</td></tr></tbody>
+              </table>
+            </div>
+            <div>
+              <h3 class="stats-col-title">Üniversiteler</h3>
+              <table class="admin-table compact">
+                <tbody id="statsUniBody"><tr><td class="admin-empty">Yükleniyor...</td></tr></tbody>
+              </table>
+            </div>
+            <div>
+              <h3 class="stats-col-title">Fakülteler</h3>
+              <table class="admin-table compact">
+                <tbody id="statsFacultyBody"><tr><td class="admin-empty">Yükleniyor...</td></tr></tbody>
+              </table>
+            </div>
+            <div>
+              <h3 class="stats-col-title">Bölümler</h3>
+              <table class="admin-table compact">
+                <tbody id="statsDepartmentBody"><tr><td class="admin-empty">Yükleniyor...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script defer src="admin.bundle.js"></script>
+</body>
+
+</html>

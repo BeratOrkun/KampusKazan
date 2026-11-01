@@ -1,0 +1,18 @@
+{
+  "name": "KazananÖğrenci — Öğrenci Kampanyaları",
+  "short_name": "KazananÖğrenci",
+  "description": "Öğrencilere özel indirim, fırsat ve ücretsiz kampanyalar.",
+  "lang": "tr",
+  "dir": "ltr",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0A1A",
+  "theme_color": "#0A0A1A",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

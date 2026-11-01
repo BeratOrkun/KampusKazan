@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>KazananÖğrenci — Öğrenciler İçin En İyi Kampanyalar ve Fırsatlar</title>
+  <meta name="description"
+    content="KazananÖğrenci ile öğrencilere özel kampanyaları, indirimleri ve fırsatları keşfedin. E-posta veya isim vermeden üniversiteni seç, fırsatları yakala!" />
+  <meta name="keywords" content="öğrenci kampanyaları, öğrenci indirimleri, öğrenci fırsatları, kazanan öğrenci" />
+  <meta name="author" content="KazananÖğrenci" />
+  <meta name="theme-color" content="#0A0A1A" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="KazananÖğrenci" />
+  <meta property="og:title" content="KazananÖğrenci — Öğrenciler İçin Kampanyalar" />
+  <meta property="og:description" content="Öğrencilere özel en güncel kampanyaları keşfet!" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <script>
+    if (location.protocol === 'http:' || location.protocol === 'https:') {
+      var m = document.createElement('link');
+      m.rel = 'manifest';
+      m.href = 'manifest.webmanifest';
+      document.head.appendChild(m);
+    }
+  </script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Animated Background -->
+  <div class="bg-grid"></div>
+  <div class="floating-orb"></div>
+  <div class="floating-orb"></div>
+  <div class="floating-orb"></div>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#campaigns" class="logo" id="logoLink">
+        <img src="logo.png" alt="KazananÖğrenci Logo" />
+        <span>KazananÖğrenci</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#campaigns" class="active">Kampanyalar</a>
+        <a href="#features">Neden Biz?</a>
+        <a href="kvkk.html">KVKK & Gizlilik</a>
+      </nav>
+
+      <div class="auth-area" id="authArea">
+        <button type="button" class="btn btn-outline btn-sm" id="btnInstallPwa" hidden title="Uygulamayı ana ekrana ekle">
+          📲 Uygulamayı Yükle
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" id="btnOpenProfile">Bilgilerim</button>
+      </div>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menüyü aç/kapat">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       1. İLK GİRİŞ EKRANI (Sadece kullanıcı siteye hayatında ilk defa girdiğinde açılır)
+       ========================================================= -->
+  <section class="onboarding-screen" id="onboardingScreen" hidden>
+    <div class="container onboarding-container">
+      <div class="onboarding-top">
+        <div class="onboarding-badge">
+          <span class="pulse-dot"></span>
+          ✨ İlk Giriş Kurulumu • Ad, Soyad veya E-posta İstenmez
+        </div>
+        <h1 class="onboarding-main-title">
+          Sana uygun kampanyalar için <span class="gradient-text">aşağıdaki kısımları seç</span>
+        </h1>
+        <p class="onboarding-main-subtitle">
+          Birini seçtiğin anda bir sonraki kutu otomatik açılır. Seçimin cihazına kaydedilir ve bir daha sorulmaz.
+        </p>
+      </div>
+
+      <!-- 4 Adımlı Otomatik Açılan Kutu (Progressive Accordion Boxes) -->
+      <div class="onb-boxes" id="onbBoxes">
+
+        <!-- KUTU 1: ŞEHİR -->
+        <div class="onb-acc-box active" id="onbBoxCity" data-step="city">
+          <button type="button" class="onb-acc-header" id="onbHeaderCity" aria-expanded="true">
+            <div class="onb-acc-header-left">
+              <span class="onb-acc-num" id="onbNumCity">1</span>
+              <div class="onb-acc-titles">
+                <span class="onb-acc-label">1. Adım • Şehir</span>
+                <strong class="onb-acc-value" id="onbValCity">Hangi şehirde okuyorsun?</strong>
+              </div>
+            </div>
+            <span class="onb-acc-action" id="onbActionCity">Seçiniz</span>
+          </button>
+          <div class="onb-acc-body" id="onbBodyCity">
+            <div class="wizard-search-wrap">
+              <span class="wizard-search-icon">🔍</span>
+              <input type="text" class="wizard-search-input" id="onbSearchCity"
+                placeholder="Şehir ara... (örn: İstanbul, Ankara, İzmir, Kayseri)" autocomplete="off" />
+              <button type="button" class="wizard-search-clear" id="onbClearCity" hidden aria-label="Temizle">✕</button>
+            </div>
+            <div class="wizard-list is-city-grid" id="onbListCity" role="listbox"></div>
+          </div>
+        </div>
+
+        <!-- KUTU 2: ÜNİVERSİTE -->
+        <div class="onb-acc-box locked" id="onbBoxUni" data-step="uni">
+          <button type="button" class="onb-acc-header" id="onbHeaderUni" disabled aria-expanded="false">
+            <div class="onb-acc-header-left">
+              <span class="onb-acc-num" id="onbNumUni">2</span>
+              <div class="onb-acc-titles">
+                <span class="onb-acc-label">2. Adım • Üniversite</span>
+                <strong class="onb-acc-value" id="onbValUni">Önce şehir seçin</strong>
+              </div>
+            </div>
+            <span class="onb-acc-action" id="onbActionUni">🔒</span>
+          </button>
+          <div class="onb-acc-body" id="onbBodyUni" hidden>
+            <div class="wizard-search-wrap">
+              <span class="wizard-search-icon">🔍</span>
+              <input type="text" class="wizard-search-input" id="onbSearchUni"
+                placeholder="Üniversite ara..." autocomplete="off" />
+              <button type="button" class="wizard-search-clear" id="onbClearUni" hidden aria-label="Temizle">✕</button>
+            </div>
+            <div class="wizard-list is-item-grid" id="onbListUni" role="listbox"></div>
+          </div>
+        </div>
+
+        <!-- KUTU 3: FAKÜLTE / MYO -->
+        <div class="onb-acc-box locked" id="onbBoxFac" data-step="fac">
+          <button type="button" class="onb-acc-header" id="onbHeaderFac" disabled aria-expanded="false">
+            <div class="onb-acc-header-left">
+              <span class="onb-acc-num" id="onbNumFac">3</span>
+              <div class="onb-acc-titles">
+                <span class="onb-acc-label">3. Adım • Fakülte / Yüksekokul</span>
+                <strong class="onb-acc-value" id="onbValFac">Önce üniversite seçin</strong>
+              </div>
+            </div>
+            <span class="onb-acc-action" id="onbActionFac">🔒</span>
+          </button>
+          <div class="onb-acc-body" id="onbBodyFac" hidden>
+            <div class="wizard-search-wrap">
+              <span class="wizard-search-icon">🔍</span>
+              <input type="text" class="wizard-search-input" id="onbSearchFac"
+                placeholder="Fakülte veya MYO ara..." autocomplete="off" />
+              <button type="button" class="wizard-search-clear" id="onbClearFac" hidden aria-label="Temizle">✕</button>
+            </div>
+            <div class="wizard-list is-item-grid" id="onbListFac" role="listbox"></div>
+          </div>
+        </div>
+
+        <!-- KUTU 4: BÖLÜM -->
+        <div class="onb-acc-box locked" id="onbBoxDep" data-step="dep">
+          <button type="button" class="onb-acc-header" id="onbHeaderDep" disabled aria-expanded="false">
+            <div class="onb-acc-header-left">
+              <span class="onb-acc-num" id="onbNumDep">4</span>
+              <div class="onb-acc-titles">
+                <span class="onb-acc-label">4. Adım • Bölüm</span>
+                <strong class="onb-acc-value" id="onbValDep">Önce fakülte seçin</strong>
+              </div>
+            </div>
+            <span class="onb-acc-action" id="onbActionDep">🔒</span>
+          </button>
+          <div class="onb-acc-body" id="onbBodyDep" hidden>
+            <div class="wizard-search-wrap">
+              <span class="wizard-search-icon">🔍</span>
+              <input type="text" class="wizard-search-input" id="onbSearchDep"
+                placeholder="Bölüm ara... (örn: Bilgisayar, Hukuk, Tıp, İşletme)" autocomplete="off" />
+              <button type="button" class="wizard-search-clear" id="onbClearDep" hidden aria-label="Temizle">✕</button>
+            </div>
+            <div class="wizard-list is-item-grid" id="onbListDep" role="listbox"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="onb-kvkk-note">
+        🔒 Seçtiğin akademik bilgiler cihazına ve <a href="kvkk.html" target="_blank" rel="noopener">KVKK Aydınlatma Metni</a> kapsamında anonim cihaz kimliğiyle kaydedilir.
+      </p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       2. ANA UYGULAMA & KAMPANYA EKRANI (Kayıtlı kullanıcılar doğrudan buraya girer)
+       ========================================================= -->
+  <main id="mainAppView" hidden>
+
+    <!-- Campaigns Section (Directly at top of page for mobile-first app experience) -->
+    <section class="campaigns-section" id="campaigns">
+      <div class="container">
+
+        <!-- Active Student Profile Bar -->
+        <div class="student-context-bar" id="studentContextBar" hidden>
+          <div class="student-context-info">
+            <span class="student-context-badge">🎓 Senin Profilin</span>
+            <span class="student-context-text" id="studentContextText"></span>
+          </div>
+          <div class="student-context-actions">
+            <button type="button" class="btn btn-outline btn-xs" id="btnContextEditProfile">✏️ Değiştir</button>
+          </div>
+        </div>
+
+        <div class="campaigns-header">
+          <div class="campaigns-header-left">
+            <h2 class="section-title">
+              <span class="gradient-text">Sana Uygun Kampanyalar</span>
+            </h2>
+            <p class="section-subtitle">
+              Öğrencilere özel indirim ve fırsatları kategorilere göre hemen keşfet.
+            </p>
+          </div>
+          <div class="campaign-count" id="campaignCount">
+            📢 Toplam <strong>0</strong> kampanya
+          </div>
+        </div>
+
+        <!-- Optional Push Notification Banner (shown only after profile is saved) -->
+        <div class="push-banner" id="pushBanner" hidden>
+          <div class="push-banner-text">
+            <span class="push-banner-icon">🔔</span>
+            <div>
+              <strong id="pushBannerTitle">Yeni kampanyalardan anında haberdar ol!</strong>
+              <p id="pushBannerDesc">İsteğe bağlı bildirimleri açarak üniversitene ve şehrine özel fırsatları kaçırma.</p>
+            </div>
+          </div>
+          <div class="push-banner-actions">
+            <button type="button" class="btn btn-primary btn-sm" id="btnBannerEnablePush">Bildirimleri Aç</button>
+            <button type="button" class="btn btn-outline btn-sm" id="btnBannerDismissPush">Şimdi Değil</button>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-container">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" id="searchInput" placeholder="Kampanya veya marka ara..." autocomplete="off" />
+        </div>
+
+        <!-- Category Buttons -->
+        <div class="category-filter" id="categoryFilter">
+          <button class="category-btn active" data-category="all">✨ Tümü</button>
+        </div>
+
+        <!-- Campaign Cards -->
+        <div class="campaigns-grid" id="campaignsGrid">
+          <div class="loading-container" id="loadingState" style="grid-column: 1/-1;">
+            <div class="loading-spinner"></div>
+            <span class="loading-text">Kampanyalar yükleniyor...</span>
+          </div>
+        </div>
+
+        <!-- Hidden stats for compatibility -->
+        <div hidden>
+          <span id="statCampaigns">0</span>
+          <span id="statCategories">0</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="animate-on-scroll" style="text-align: center;">
+          <h2 class="section-title">
+            Neden <span class="gradient-text">KazananÖğrenci</span>?
+          </h2>
+          <p class="section-subtitle" style="margin: 0 auto;">
+            Öğrencilerin hayatını kolaylaştırmak ve gizliliğini korumak için buradayız.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon purple">🛡️</div>
+            <h3 class="feature-title">KVKK Dostu & Anonim</h3>
+            <p class="feature-text">
+              Ad, soyad, telefon veya e-posta istemiyoruz. Sadece il, üniversite, fakülte ve bölümünü seçmen yeterli.
+            </p>
+          </div>
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon blue">🔔</div>
+            <h3 class="feature-title">Anlık Bildirimler (PWA)</h3>
+            <p class="feature-text">
+              Uygulamayı telefonuna yükle ve bildirimleri aç; yeni kampanyalar eklendiğinde anında haberin olsun.
+            </p>
+          </div>
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon warm">📱</div>
+            <h3 class="feature-title">Cihazına Özel Kayıt</h3>
+            <p class="feature-text">
+              Bilgilerin ilk girişte cihazına kaydedilir, sonraki girişlerinde doğrudan kampanyalar açılır.
+            </p>
+          </div>
+          <div class="feature-card animate-on-scroll">
+            <div class="feature-icon green">💰</div>
+            <h3 class="feature-title">Tamamen Ücretsiz</h3>
+            <p class="feature-text">
+              Platform tamamen ücretsizdir. Şifresiz ve zahmetsizce hemen keşfetmeye başla!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <img src="logo.png" alt="KazananÖğrenci" />
+        <span>KazananÖğrenci</span>
+      </div>
+      <p class="footer-text">© 2026 KazananÖğrenci. KVKK Veri Minimizasyonu İlkesiyle Tasarlanmıştır.</p>
+      <div class="footer-links">
+        <a href="#campaigns">Kampanyalar</a>
+        <a href="kvkk.html">KVKK Aydınlatma Metni</a>
+        <a href="admin.html">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Yukarı çık">↑</button>
+
+  <!-- Foreground Notification Toast -->
+  <div class="push-toast" id="pushToast" hidden role="status" aria-live="polite">
+    <div class="push-toast-body">
+      <strong id="pushToastTitle">Yeni Kampanya</strong>
+      <p id="pushToastText"></p>
+    </div>
+    <button type="button" class="modal-close" id="pushToastClose" aria-label="Kapat">✕</button>
+  </div>
+
+  <!-- Campaign Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content" id="modalContent">
+      <div class="modal-top-bar">
+        <div class="modal-badges" id="modalBadges"></div>
+        <button class="modal-close" id="modalClose" aria-label="Kapat">✕</button>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <div class="modal-description" id="modalDescription"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline btn-sm" id="modalCloseBtn">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Profile Edit Modal (Opened only if user manually taps 'Profilim / Değiştir') -->
+  <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal-content wizard-modal-content">
+      <div class="modal-top-bar">
+        <span class="legal-badge" style="margin: 0;">🔒 Cihaz Kimliği ile Anonim Kayıt</span>
+        <button class="modal-close" id="authCloseBtn" aria-label="Kapat">✕</button>
+      </div>
+
+      <div class="modal-body wizard-body">
+        <div class="wizard-header">
+          <h2 class="modal-title" id="authTitle">Akademik Bilgilerim</h2>
+          <p class="auth-subtitle" id="authSubtitle">
+            Yukarıdaki adımlara tıklayarak şehir, üniversite, fakülte veya bölümünü güncelleyebilirsin.
+          </p>
+        </div>
+
+        <div class="form-alert error" id="authError" hidden></div>
+        <div class="form-alert success" id="authSuccess" hidden></div>
+
+        <!-- Interactive 4-Step Breadcrumb / Stepper -->
+        <div class="wizard-steps" id="wizardSteps" role="tablist" aria-label="Seçim adımları">
+          <button type="button" class="wizard-step active" data-step="city" id="stepBtnCity">
+            <span class="wizard-step-num">1</span>
+            <span class="wizard-step-info">
+              <span class="wizard-step-label">Şehir</span>
+              <span class="wizard-step-val" id="stepValCity">Seçiniz</span>
+            </span>
+          </button>
+          <button type="button" class="wizard-step" data-step="uni" id="stepBtnUni" disabled>
+            <span class="wizard-step-num">2</span>
+            <span class="wizard-step-info">
+              <span class="wizard-step-label">Üniversite</span>
+              <span class="wizard-step-val" id="stepValUni">Önce şehir</span>
+            </span>
+          </button>
+          <button type="button" class="wizard-step" data-step="fac" id="stepBtnFac" disabled>
+            <span class="wizard-step-num">3</span>
+            <span class="wizard-step-info">
+              <span class="wizard-step-label">Fakülte / MYO</span>
+              <span class="wizard-step-val" id="stepValFac">Önce üniversite</span>
+            </span>
+          </button>
+          <button type="button" class="wizard-step" data-step="dep" id="stepBtnDep" disabled>
+            <span class="wizard-step-num">4</span>
+            <span class="wizard-step-info">
+              <span class="wizard-step-label">Bölüm</span>
+              <span class="wizard-step-val" id="stepValDep">Önce fakülte</span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Step Selection Box (Search + Alphabetical Card List) -->
+        <div class="wizard-box" id="wizardBox">
+          <div class="wizard-box-header">
+            <div class="wizard-box-title-row">
+              <button type="button" class="wizard-back-btn" id="wizardBackBtn" hidden aria-label="Önceki adım">
+                ← Geri
+              </button>
+              <h3 class="wizard-box-title" id="wizardStepTitle">📍 Hangi şehirde okuyorsun?</h3>
+              <span class="wizard-box-count" id="wizardStepCount"></span>
+            </div>
+            <div class="wizard-search-wrap">
+              <span class="wizard-search-icon">🔍</span>
+              <input type="text" class="wizard-search-input" id="wizardSearchInput"
+                placeholder="Şehir ara... (örn: İstanbul, Ankara, Kayseri)" autocomplete="off" />
+              <button type="button" class="wizard-search-clear" id="wizardSearchClear" hidden aria-label="Aramayı temizle">✕</button>
+            </div>
+          </div>
+
+          <div class="wizard-list" id="wizardList" role="listbox"></div>
+        </div>
+
+        <!-- Final Confirmation & Submit Form -->
+        <form id="authForm" class="wizard-complete-panel" novalidate hidden>
+          <div class="wizard-summary-card" id="wizardSummaryCard"></div>
+
+          <!-- Optional Push Consent Checkbox -->
+          <div class="consent-box" id="pushConsentBox">
+            <label class="consent-checkbox-label">
+              <input type="checkbox" id="chkPushConsent" />
+              <span>
+                <strong>Bildirimleri aç (isteğe bağlı):</strong>
+                Kampanya bildirimleri için <a href="kvkk.html#acik-riza" target="_blank" rel="noopener">Açık Rıza Metni</a>’ni
+                okudum, onaylıyorum.
+              </span>
+            </label>
+            <p class="field-hint" id="pushStatusHint"></p>
+          </div>
+
+          <p class="kvkk-notice-line">
+            Seçtiğin 4 akademik bilgi, <a href="kvkk.html" target="_blank" rel="noopener">KVKK Aydınlatma Metni</a>
+            kapsamında anonim olarak işlenir.
+          </p>
+
+          <button type="submit" class="btn btn-primary btn-block wizard-submit-btn" id="authSubmitBtn">
+            🚀 Değişiklikleri Kaydet
+          </button>
+        </form>
+
+        <!-- Self-service KVKK Deletion -->
+        <div class="profile-danger-zone" id="profileDangerZone" hidden>
+          <button type="button" class="btn btn-danger btn-xs btn-block" id="btnDeleteMyData">
+            🗑️ Kaydımı ve Verilerimi Sil (KVKK m.11)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script defer src="app.bundle.js"></script>
+</body>
+
+</html>

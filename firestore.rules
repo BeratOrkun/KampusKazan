@@ -1,0 +1,78 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // Admin: Firebase Console'dan elle oluşturulan admins/{uid} belgesi.
+    // (Öğrenci belgesinde "role" alanı yok; kimse kendini admin yapamaz.)
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Katalog ID'si: küçük harf, rakam, tire (ör. "metu", "bilgisayar-muhendisligi")
+    function isCatalogId(v) {
+      return v is string && v.size() > 0 && v.size() <= 80 && v.matches('^[a-z0-9-]+$');
+    }
+
+    function isShortString(v, max) {
+      return v is string && v.size() > 0 && v.size() <= max;
+    }
+
+    // KVKK — veri minimizasyonu: users belgesine YALNIZCA bu alanlar yazılabilir.
+    // E-posta, isim, telefon vb. bir alan eklenmeye çalışılırsa yazma reddedilir.
+    function isValidProfile(d) {
+      return d.keys().hasOnly([
+          'cityId', 'universityId', 'facultyId', 'departmentId',
+          'deviceId', 'noticeVersion', 'createdAt', 'updatedAt',
+          'pushEnabled', 'pushToken', 'pushConsentVersion', 'pushConsentAt'
+        ])
+        && d.keys().hasAll(['cityId', 'universityId', 'facultyId', 'departmentId', 'noticeVersion'])
+        && isCatalogId(d.cityId)
+        && isCatalogId(d.universityId)
+        && isCatalogId(d.facultyId)
+        && isCatalogId(d.departmentId)
+        && (!('deviceId' in d) || isShortString(d.deviceId, 80))
+        && isShortString(d.noticeVersion, 20)
+        && (!('createdAt' in d) || d.createdAt is timestamp)
+        && (!('updatedAt' in d) || d.updatedAt is timestamp)
+        && (!('pushEnabled' in d) || d.pushEnabled is bool)
+        && (!('pushToken' in d) || isShortString(d.pushToken, 4096))
+        && (!('pushConsentVersion' in d) || isShortString(d.pushConsentVersion, 20))
+        && (!('pushConsentAt' in d) || d.pushConsentAt is timestamp)
+        // Bildirim açıksa onay kaydı zorunlu (açık rıza ispatı)
+        && (!('pushEnabled' in d) || d.pushEnabled == false
+            || ('pushToken' in d && 'pushConsentVersion' in d && 'pushConsentAt' in d));
+    }
+
+    // Öğrenci profili (anonim uid)
+    match /users/{userId} {
+      allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
+      allow create, update: if signedIn()
+        && request.auth.uid == userId
+        && isValidProfile(request.resource.data);
+      // Silme hakkı: öğrenci kendi verisini, admin talep üzerine herkesinkini silebilir.
+      allow delete: if signedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
+    // Admin listesi — sadece Firebase Console'dan yönetilir.
+    match /admins/{adminId} {
+      allow read: if signedIn() && request.auth.uid == adminId;
+      allow write: if false;
+    }
+
+    // Kampanyalar: profil oluşturmuş (oturumlu) herkes aktif olanları okur.
+    match /campaigns/{campaignId} {
+      allow read: if signedIn() && (resource.data.active == true || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Diğer her şey kapalı (eski "universities" koleksiyonu dahil).
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

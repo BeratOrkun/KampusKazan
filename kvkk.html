@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KVKK Aydınlatma Metni ve Gizlilik — KazananÖğrenci</title>
+  <meta name="description" content="KazananÖğrenci KVKK Aydınlatma Metni, bildirim açık rıza metni ve gizlilik ilkeleri." />
+  <meta name="theme-color" content="#0A0A1A" />
+  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="admin-body">
+  <div class="bg-grid"></div>
+
+  <header class="header scrolled" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="KazananÖğrenci Logo" />
+        <span>KazananÖğrenci</span>
+      </a>
+      <div class="auth-area">
+        <a href="index.html" class="btn btn-outline btn-sm">← Ana Sayfa</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="container" style="max-width: 880px;">
+
+      <!-- ============ AYDINLATMA METNİ ============ -->
+      <article class="admin-card legal-card" id="aydinlatma">
+        <span class="legal-badge">Sürüm 2026-11 • Son güncelleme: 01.11.2026</span>
+        <h1 class="admin-title">Kişisel Verilerin İşlenmesine İlişkin Aydınlatma Metni</h1>
+        <p class="admin-subtitle">
+          6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) m.10 ve Aydınlatma Yükümlülüğünün Yerine
+          Getirilmesinde Uyulacak Usul ve Esaslar Hakkında Tebliğ kapsamında hazırlanmıştır.
+        </p>
+
+        <section class="legal-section">
+          <h2>1. Veri Sorumlusu</h2>
+          <!-- TODO: Aşağıdaki köşeli parantezli alanları kendi bilgilerinle doldur. -->
+          <p>
+            <strong>Veri sorumlusu:</strong> <span class="legal-placeholder">[Ad Soyad / Şirket Unvanı]</span><br />
+            <strong>Adres:</strong> <span class="legal-placeholder">[Tebligat adresi]</span><br />
+            <strong>İletişim (KVKK başvuruları):</strong> <span class="legal-placeholder">[kvkk@alanadin.com]</span>
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>2. Hangi Verileri İşliyoruz?</h2>
+          <p>
+            KazananÖğrenci, KVKK m.4’teki <em>“amaçla bağlantılı, sınırlı ve ölçülü olma”</em> ilkesine göre
+            tasarlanmıştır. <strong>Ad, soyad, e-posta, telefon, T.C. kimlik no, öğrenci no, şifre, konum veya
+            fotoğraf istemiyor ve saklamıyoruz.</strong>
+          </p>
+          <table class="legal-table">
+            <thead>
+              <tr>
+                <th>Veri</th>
+                <th>Ne zaman?</th>
+                <th>Amaç</th>
+                <th>Hukuki sebep</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>İl, üniversite, fakülte, bölüm (listeden seçilen kodlar)</td>
+                <td>Profil oluştururken</td>
+                <td>Sana uygun kampanyaları göstermek; toplu (anonim) istatistik çıkarmak</td>
+                <td>KVKK m.5/2-c (hizmetin sunulması) ve m.5/2-f (meşru menfaat)</td>
+              </tr>
+              <tr>
+                <td>Rastgele anonim oturum kimliği (Firebase Anonymous UID)</td>
+                <td>Profil oluştururken</td>
+                <td>Seçimlerini her ziyarette tekrar sormamak</td>
+                <td>KVKK m.5/2-c</td>
+              </tr>
+              <tr>
+                <td>Bildirim anahtarı (FCM token), onay tarihi ve metin sürümü</td>
+                <td><strong>Yalnızca</strong> bildirimleri açarsan</td>
+                <td>Kampanya bildirimi göndermek; onayını ispatlamak</td>
+                <td>KVKK m.5/1 (açık rıza) — aşağıdaki Açık Rıza Metni</td>
+              </tr>
+              <tr>
+                <td>IP adresi, tarayıcı bilgisi gibi teknik bağlantı kayıtları</td>
+                <td>Siteye her bağlandığında (altyapı sağlayıcı tarafından)</td>
+                <td>Hizmetin güvenli ve kesintisiz çalışması</td>
+                <td>KVKK m.5/2-ç (hukuki yükümlülük) ve m.5/2-f</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Seçtiğin bilgiler yalnızca açılır listelerden seçilir; serbest metin alanı yoktur. Yönetici panelinde
+            tek tek kişi kaydı görüntülenmez, yalnızca “Ankara: 120 öğrenci” gibi toplu sayılar görülür.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>3. Toplama Yöntemi</h2>
+          <p>
+            Veriler, internet sitesi / uygulama (PWA) üzerinden senin seçimlerinle elektronik ortamda, otomatik
+            yollarla toplanır.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>4. Aktarım ve Yurt Dışı</h2>
+          <p>
+            Verilerin satılmaz, reklam ağlarıyla paylaşılmaz. Hizmetin altyapısı için veri işleyen sıfatıyla
+            <strong>Google LLC / Google Ireland Ltd. (Firebase: Authentication, Cloud Firestore, Cloud Messaging,
+            Hosting)</strong> kullanılmaktadır. Bu hizmetlerin sunucuları yurt dışında bulunduğundan verilerin
+            yurt dışına aktarılmaktadır. Aktarım, KVKK m.9 kapsamındaki uygun güvencelere
+            <span class="legal-placeholder">[ör. Kurul’a bildirilen standart sözleşme]</span> dayanılarak yapılır.
+            Bildirim anahtarı ise ayrıca açık rızana dayanır.
+          </p>
+          <p>Yetkili kamu kurum ve kuruluşlarına, yalnızca kanunen zorunlu hallerde aktarım yapılabilir.</p>
+        </section>
+
+        <section class="legal-section">
+          <h2>5. Saklama Süresi</h2>
+          <ul class="legal-list">
+            <li><strong>Profil bilgileri:</strong> Sen silene kadar; en son güncellemeden itibaren
+              <span class="legal-placeholder">[24 ay]</span> boyunca kullanılmayan kayıtlar periyodik olarak silinir.</li>
+            <li><strong>Bildirim anahtarı:</strong> Bildirimleri kapattığın veya verilerini sildiğin anda silinir.</li>
+            <li><strong>Teknik bağlantı kayıtları:</strong> Altyapı sağlayıcının politikası ve mevzuattaki süreler kadar.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section">
+          <h2>6. Cihazında Saklanan Bilgiler</h2>
+          <p>
+            Reklam veya takip çerezi kullanmıyoruz, Google Analytics kullanmıyoruz. Tarayıcında yalnızca hizmetin
+            çalışması için zorunlu bilgiler tutulur: anonim oturum (Firebase), uygulamanın çevrimdışı açılabilmesi
+            için önbellek (service worker) ve bildirim kutusunu kapattığını hatırlayan küçük bir tercih kaydı.
+          </p>
+        </section>
+
+        <section class="legal-section">
+          <h2>7. Hakların (KVKK m.11) ve Başvuru</h2>
+          <p>
+            Kişisel verinin işlenip işlenmediğini öğrenme, bilgi talep etme, amacını öğrenme, aktarıldığı üçüncü
+            kişileri bilme, düzeltilmesini veya silinmesini isteme, bunların aktarılan kişilere bildirilmesini isteme,
+            otomatik analiz sonucu aleyhine bir sonuca itiraz etme ve kanuna aykırı işleme sebebiyle zararın
+            giderilmesini talep etme haklarına sahipsin.
+          </p>
+          <p><strong>Uygulama içinden anında:</strong> Sağ üstteki <strong>“Profilim”</strong> butonundan</p>
+          <ul class="legal-list">
+            <li>Seçimlerini değiştirebilir,</li>
+            <li>Bildirimleri kapatabilir (anahtar derhal silinir),</li>
+            <li><strong>“Kaydımı ve Verilerimi Sil”</strong> ile kaydını ve anonim oturumunu kalıcı olarak silebilirsin.</li>
+          </ul>
+          <p>
+            Diğer talepler için Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğ’e uygun olarak
+            <span class="legal-placeholder">[kvkk@alanadin.com]</span> adresine yazabilirsin. Hesap bilgisi tutmadığımız
+            için talebinde (varsa) “Profilim” ekranındaki seçimlerini belirtmen, kaydını bulmamızı kolaylaştırır.
+            Başvurular en geç 30 gün içinde ücretsiz sonuçlandırılır.
+          </p>
+        </section>
+      </article>
+
+      <!-- ============ AÇIK RIZA METNİ (BİLDİRİM) ============ -->
+      <article class="admin-card legal-card" id="acik-riza">
+        <span class="legal-badge">Sürüm 2026-11 • İsteğe bağlı</span>
+        <h1 class="admin-title">Bildirimler İçin Açık Rıza Metni</h1>
+        <section class="legal-section">
+          <p>
+            “Bildirimleri Aç” seçeneğini işaretleyerek; tarayıcıma / cihazıma özel oluşturulan bildirim anahtarının
+            (FCM token) ve bu onayın tarih ve sürüm bilgisinin, bana kampanya ve fırsat bildirimleri gönderilmesi
+            amacıyla işlenmesine ve bu amaçla Google Firebase Cloud Messaging altyapısı üzerinden yurt dışına
+            aktarılmasına, bu metni ve Aydınlatma Metni’ni okuyarak, özgür irademle açık rıza veriyorum.
+          </p>
+          <ul class="legal-list">
+            <li>Bildirim izni vermek <strong>zorunlu değildir</strong>; vermesen de tüm kampanyaları görebilirsin.</li>
+            <li>Rızanı istediğin an <strong>🔔 / 🔕</strong> düğmesiyle, “Profilim” ekranından veya tarayıcı ayarlarından geri alabilirsin.</li>
+            <li>Geri aldığında bildirim anahtarın silinir ve artık bildirim gönderilmez.</li>
+          </ul>
+        </section>
+
+        <div class="legal-footer">
+          <a href="index.html" class="btn btn-primary btn-sm">Ana Sayfaya Dön</a>
+        </div>
+      </article>
+    </div>
+  </main>
+</body>
+
+</html>
