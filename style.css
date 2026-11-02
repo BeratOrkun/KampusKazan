@@ -2887,10 +2887,11 @@ body.is-onboarding .back-to-top {
 
 .onboarding-brand-name {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     font-weight: 700;
     letter-spacing: -0.02em;
-    background: var(--gradient-text);
+    color: var(--text-primary);
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
