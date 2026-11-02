@@ -628,7 +628,6 @@ import {
     const installBtn = deferredInstallPrompt
       ? `<button type="button" class="btn btn-outline btn-sm" id="btnInstallPwa" title="Uygulamayı ana ekrana ekle">📲 Yükle</button>`
       : '';
-    const adminLink = admin ? `<a href="admin.html" class="btn btn-outline btn-sm">Admin</a>` : '';
     const uni = universityShortName(profile.universityId);
     const dep = departmentName(profile.facultyId, profile.departmentId);
     const bell = profile.pushEnabled ? '🔔' : '🔕';
@@ -639,7 +638,6 @@ import {
         <span class="user-chip-uni">${escapeHtml(dep)}</span>
       </div>
       ${installBtn}
-      ${adminLink}
       <button type="button" class="btn btn-outline btn-sm icon-btn" id="btnTogglePush" title="${bellTitle}" aria-label="${bellTitle}">${bell}</button>
       <button type="button" class="btn btn-outline btn-sm" id="btnOpenProfile">Profilim</button>
     `;

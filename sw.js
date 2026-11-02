@@ -8,7 +8,7 @@
  * Bu dosya değiştiğinde CACHE_VERSION'ı artır.
  */
 
-const CACHE_VERSION = 'kk-v7';
+const CACHE_VERSION = 'kk-v8';
 const APP_SHELL = [
   './',
   './index.html',
