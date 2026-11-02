@@ -30,12 +30,7 @@ const defaultConfig = {
 };
 
 /** @type {typeof defaultConfig} */
-const firebaseConfig = {
-  ...defaultConfig,
-  ...(typeof window !== 'undefined' && window.__FIREBASE_CONFIG__
-    ? window.__FIREBASE_CONFIG__
-    : {}),
-};
+const firebaseConfig = Object.freeze({ ...defaultConfig });
 
 /**
  * Web Push sertifikası (VAPID public key)
@@ -1138,9 +1133,12 @@ let editingId = null;
 let dashboardLoaded = false;
 
 function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str ?? '';
-  return div.innerHTML;
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function showError(el, msg) {

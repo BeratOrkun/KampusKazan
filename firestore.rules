@@ -48,16 +48,21 @@ service cloud.firestore {
             || ('pushToken' in d && 'pushConsentVersion' in d && 'pushConsentAt' in d));
     }
 
-    // Cihaz kimliği (dev- ile başlayan UUID)
+    // Cihaz kimliği: kriptografik UUID v4 formatı (122-bit entropi — tahmin/brute-force edilemez)
     function isDeviceDocId(id) {
-      return id is string && id.size() >= 12 && id.size() <= 80 && id.matches('^dev-[a-z0-9-]+$');
+      return id is string
+        && id.size() == 40
+        && id.matches('^dev-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
     }
 
-    // Öğrenci profili (anonim uid veya kalıcı cihaz kimliği dev-...)
+    // Öğrenci profili (anonim uid veya kalıcı kriptografik cihaz kimliği dev-...)
     match /users/{userId} {
       allow get: if (signedIn() && (request.auth.uid == userId || isAdmin())) || isDeviceDocId(userId);
       allow list: if isAdmin();
-      allow create, update: if ((signedIn() && request.auth.uid == userId) || isDeviceDocId(userId))
+      allow create, update: if (
+          (signedIn() && request.auth.uid == userId)
+          || (isDeviceDocId(userId) && 'deviceId' in request.resource.data && request.resource.data.deviceId == userId)
+        )
         && isValidProfile(request.resource.data);
       // Silme hakkı: öğrenci kendi verisini, admin talep üzerine herkesinkini silebilir.
       allow delete: if (signedIn() && (request.auth.uid == userId || isAdmin())) || isDeviceDocId(userId);
@@ -69,10 +74,9 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // Kampanyalar: aktif kampanyaları herkes okuyabilir, tümünü admin yönetir.
+    // Kampanyalar artık statik campaigns.json dosyasından sunuluyor; Firestore koleksiyonu sadece admin'e açık.
     match /campaigns/{campaignId} {
-      allow read: if resource.data.active == true || isAdmin();
-      allow create, update, delete: if isAdmin();
+      allow read, write: if isAdmin();
     }
 
     // Diğer her şey kapalı (eski "universities" koleksiyonu dahil).

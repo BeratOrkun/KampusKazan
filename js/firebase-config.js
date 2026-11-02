@@ -23,12 +23,7 @@ const defaultConfig = {
 };
 
 /** @type {typeof defaultConfig} */
-export const firebaseConfig = {
-  ...defaultConfig,
-  ...(typeof window !== 'undefined' && window.__FIREBASE_CONFIG__
-    ? window.__FIREBASE_CONFIG__
-    : {}),
-};
+export const firebaseConfig = Object.freeze({ ...defaultConfig });
 
 /**
  * Web Push sertifikası (VAPID public key)

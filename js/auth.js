@@ -65,7 +65,8 @@ function getCookie(name) {
 function setCookie(name, value, days = 400) {
   try {
     const maxAge = days * 24 * 60 * 60;
-    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}; SameSite=Lax`;
+    const secure = typeof location !== 'undefined' && location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
   } catch {
     // ignore cookie errors
   }
@@ -73,7 +74,8 @@ function setCookie(name, value, days = 400) {
 
 function removeCookie(name) {
   try {
-    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax`;
+    const secure = typeof location !== 'undefined' && location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax${secure}`;
   } catch {
     // ignore
   }
@@ -136,9 +138,19 @@ async function idbDelete(key) {
   }
 }
 
+const VALID_DEVICE_ID_RE = /^dev-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+
 function generateUUID() {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return 'dev-' + crypto.randomUUID();
+    return 'dev-' + crypto.randomUUID().toLowerCase();
+  }
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    const hex = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('');
+    return `dev-${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
   }
   return (
     'dev-' +
@@ -163,7 +175,7 @@ export function getDeviceId() {
   if (!id) {
     id = getCookie(DEVICE_ID_KEY);
   }
-  if (!id || typeof id !== 'string' || id.length < 8) {
+  if (!id || typeof id !== 'string' || !VALID_DEVICE_ID_RE.test(id)) {
     id = generateUUID();
   }
   try {

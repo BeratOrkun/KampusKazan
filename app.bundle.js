@@ -30,12 +30,7 @@ const defaultConfig = {
 };
 
 /** @type {typeof defaultConfig} */
-const firebaseConfig = {
-  ...defaultConfig,
-  ...(typeof window !== 'undefined' && window.__FIREBASE_CONFIG__
-    ? window.__FIREBASE_CONFIG__
-    : {}),
-};
+const firebaseConfig = Object.freeze({ ...defaultConfig });
 
 /**
  * Web Push sertifikası (VAPID public key)
@@ -397,7 +392,8 @@ function getCookie(name) {
 function setCookie(name, value, days = 400) {
   try {
     const maxAge = days * 24 * 60 * 60;
-    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}; SameSite=Lax`;
+    const secure = typeof location !== 'undefined' && location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
   } catch {
     // ignore cookie errors
   }
@@ -405,7 +401,8 @@ function setCookie(name, value, days = 400) {
 
 function removeCookie(name) {
   try {
-    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax`;
+    const secure = typeof location !== 'undefined' && location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax${secure}`;
   } catch {
     // ignore
   }
@@ -468,9 +465,19 @@ async function idbDelete(key) {
   }
 }
 
+const VALID_DEVICE_ID_RE = /^dev-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+
 function generateUUID() {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return 'dev-' + crypto.randomUUID();
+    return 'dev-' + crypto.randomUUID().toLowerCase();
+  }
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    const hex = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('');
+    return `dev-${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
   }
   return (
     'dev-' +
@@ -495,7 +502,7 @@ function getDeviceId() {
   if (!id) {
     id = getCookie(DEVICE_ID_KEY);
   }
-  if (!id || typeof id !== 'string' || id.length < 8) {
+  if (!id || typeof id !== 'string' || !VALID_DEVICE_ID_RE.test(id)) {
     id = generateUUID();
   }
   try {
@@ -1497,9 +1504,21 @@ async function syncPushToken(profile) {
   // HELPERS
   // =====================
   function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str ?? '';
-    return div.innerHTML;
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function sanitizeAssetUrl(url) {
+    const s = String(url || '').trim();
+    if (!s) return '';
+    if (/^(https:\/\/|images\/|icons\/|\.\/)/i.test(s) && !/[\s"'<>`\\]/.test(s)) {
+      return s;
+    }
+    return '';
   }
 
   function normalizeSearch(s) {
@@ -1520,10 +1539,10 @@ async function syncPushToken(profile) {
   }
 
   function linkifyText(text) {
-    const urlPattern = /(https?:\/\/[^\s<]+|www\.[^\s<]+)/gi;
+    const urlPattern = /(https?:\/\/[^\s<>"'&]+|www\.[^\s<>"'&]+)/gi;
     return text.replace(urlPattern, (url) => {
       const href = url.startsWith('http') ? url : 'https://' + url;
-      return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+      return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`;
     });
   }
 
@@ -2562,22 +2581,22 @@ async function syncPushToken(profile) {
     const icon = CATEGORY_ICONS[campaign.category] || CATEGORY_ICONS.default;
     const { typeClass, typeIcon } = typeInfo(campaign.type);
     const dateText = campaign.date || 'Güncel';
-    const hasBanner = Boolean(campaign.image);
-    const hasLogo = Boolean(campaign.logo);
+    const safeBanner = sanitizeAssetUrl(campaign.image);
+    const safeLogo = sanitizeAssetUrl(campaign.logo);
 
     card.innerHTML = `
       ${
-        hasBanner
+        safeBanner
           ? `<div class="card-banner-wrap">
-              <img class="card-banner-img" src="${escapeHtml(campaign.image)}" alt="${escapeHtml(campaign.title)}" loading="lazy" />
+              <img class="card-banner-img" src="${escapeHtml(safeBanner)}" alt="${escapeHtml(campaign.title)}" loading="lazy" />
             </div>`
           : ''
       }
       <div class="card-header">
         <div class="card-header-left">
           ${
-            hasLogo
-              ? `<span class="card-brand-logo"><img src="${escapeHtml(campaign.logo)}" alt="${escapeHtml(campaign.brand || campaign.category)}" loading="lazy" /></span>`
+            safeLogo
+              ? `<span class="card-brand-logo"><img src="${escapeHtml(safeLogo)}" alt="${escapeHtml(campaign.brand || campaign.category)}" loading="lazy" /></span>`
               : ''
           }
           <span class="card-category">${icon} ${escapeHtml(campaign.category)}</span>
@@ -2645,7 +2664,7 @@ async function syncPushToken(profile) {
 
   function updateCount(count) {
     if (campaignCount) {
-      campaignCount.innerHTML = `📢 Toplam <strong>${count}</strong> kampanya`;
+      campaignCount.innerHTML = `📢 Toplam <strong>${Number(count) || 0}</strong> kampanya`;
     }
   }
 
@@ -2655,25 +2674,25 @@ async function syncPushToken(profile) {
   function openModal(campaign) {
     const icon = CATEGORY_ICONS[campaign.category] || CATEGORY_ICONS.default;
     const { typeClass, typeIcon } = typeInfo(campaign.type);
-    const hasLogo = Boolean(campaign.logo);
-    const hasBanner = Boolean(campaign.image);
+    const safeLogo = sanitizeAssetUrl(campaign.logo);
+    const safeBanner = sanitizeAssetUrl(campaign.image);
 
     modalBadges.innerHTML = `
       ${
-        hasLogo
-          ? `<span class="card-brand-logo modal-brand-logo"><img src="${escapeHtml(campaign.logo)}" alt="${escapeHtml(campaign.brand || campaign.category)}" /></span>`
+        safeLogo
+          ? `<span class="card-brand-logo modal-brand-logo"><img src="${escapeHtml(safeLogo)}" alt="${escapeHtml(campaign.brand || campaign.category)}" /></span>`
           : ''
       }
       <span class="card-category">${icon} ${escapeHtml(campaign.category)}</span>
       ${campaign.type ? `<span class="card-type ${typeClass}">${typeIcon} ${escapeHtml(campaign.type)}</span>` : ''}
     `;
     modalTitle.textContent = campaign.title;
-    const bannerHtml = hasBanner
-      ? `<div class="modal-banner-wrap"><img class="modal-banner-img" src="${escapeHtml(campaign.image)}" alt="${escapeHtml(campaign.title)}" /></div>`
+    const bannerHtml = safeBanner
+      ? `<div class="modal-banner-wrap"><img class="modal-banner-img" src="${escapeHtml(safeBanner)}" alt="${escapeHtml(campaign.title)}" /></div>`
       : '';
     const descHtml = linkifyText(escapeHtml(campaign.description || ''));
     const linkHtml =
-      campaign.link && /^https?:\/\//i.test(campaign.link)
+      campaign.link && /^https:\/\//i.test(campaign.link) && !/[\s"'<>`\\]/.test(campaign.link)
         ? `<div style="margin-top: 18px;"><a href="${escapeHtml(campaign.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Kampanyaya Git ↗</a></div>`
         : '';
     modalDescription.innerHTML = bannerHtml + descHtml + linkHtml;

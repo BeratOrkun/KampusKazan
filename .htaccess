@@ -1,0 +1,56 @@
+# =====================================================================
+# KampüsKazan — Hostinger (LiteSpeed / Apache) Siber Güvenlik Yapılandırması
+# =====================================================================
+
+# 1. Dizin Listelemeyi Kapat (Klasör içeriklerinin görünmesini engeller)
+Options -Indexes
+
+# 2. Otomatik HTTPS Yönlendirmesi (MITM & SSL Stripping Koruması)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Gizli klasörlere (.git, functions vb.) erişimi tamamen engelle
+  RewriteRule ^(?:functions|\.git|\.github|\.vscode)(?:/|$) - [F,L,NC]
+</IfModule>
+
+# 3. Hassas Yapılandırma ve Kod Dosyalarına Doğrudan Erişimi Engelle (403 Forbidden)
+<FilesMatch "(^\.|firestore\.rules|firestore\.indexes\.json|firebase\.json|package(-lock)?\.json|README\.md|FIREBASE_SETUP\.md|KVKK_NOTLARI\.md|\.sh|\.sql|\.bak|\.log)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# 4. Modern HTTP Güvenlik Başlıkları (XSS, Clickjacking, MIME-Sniffing, HSTS)
+<IfModule mod_headers.c>
+  # HSTS: Tarayıcıyı her zaman HTTPS kullanmaya zorlar (1 yıl)
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+  # Clickjacking Koruması: Sitenin başka bir sitede <iframe> içine alınmasını engeller
+  Header always set X-Frame-Options "DENY"
+
+  # MIME-Sniffing Koruması: Tarayıcının dosya türünü tahmin edip çalıştırmasını engeller
+  Header always set X-Content-Type-Options "nosniff"
+
+  # Referrer Gizliliği
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Tarayıcı Donanım İzinlerini Kısıtla
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+
+  # Cross-Origin İzolasyonu
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+
+  # Content Security Policy (CSP): Yalnızca güvenilir kaynaklardan (Kendi siten + Firebase + Google Fonts) kod ve veri yüklenmesine izin verir
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebaseapp.com https://www.gstatic.com; frame-src 'self' https://*.firebaseapp.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';"
+
+  # campaigns.json ve sw.js için önbellek kontrolü (Her zaman güncel kampanya ve SW kontrolü)
+  <FilesMatch "^(campaigns\.json|sw\.js)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>
