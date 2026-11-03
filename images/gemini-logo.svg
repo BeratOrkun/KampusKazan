@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 32" fill="none">
+  <defs>
+    <linearGradient id="geminiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4E82EE" />
+      <stop offset="50%" stop-color="#9B72CB" />
+      <stop offset="100%" stop-color="#D96570" />
+    </linearGradient>
+  </defs>
+  <path d="M14 2C14 8.627 8.627 14 2 14C8.627 14 14 19.373 14 26C14 19.373 19.373 14 26 14C19.373 14 14 8.627 14 2Z" fill="url(#geminiGrad)" />
+  <text x="34" y="21" fill="#1E293B" font-family="'Space Grotesk', -apple-system, sans-serif" font-weight="700" font-size="15" letter-spacing="-0.02em">Gemini</text>
+</svg>

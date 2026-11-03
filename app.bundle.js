@@ -1327,9 +1327,10 @@ async function syncPushToken(profile) {
   'use strict';
 
   const CATEGORY_ICONS = {
+    'Yapay Zeka': '✨',
+    Teknoloji: '💻',
     Yemek: '🍔',
     Kafe: '☕',
-    Teknoloji: '💻',
     Eğitim: '📚',
     Ulaşım: '🚌',
     Eğlence: '🎮',
