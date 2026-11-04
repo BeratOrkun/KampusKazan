@@ -15,6 +15,36 @@
     "universities": []
   },
   {
+    "id": "kuveytturk-restoran-250tl",
+    "active": true,
+    "brand": "Kuveyt Türk Kampüs",
+    "category": "Yemek",
+    "type": "İndirim",
+    "title": "Kuveyt Türk Kampüs — Restoran ve Kafelerde %10 İndirim (Her Ay 250 TL)",
+    "description": "Kampüslü üniversitelilere özel kafe ve restoran harcamalarında indirim fırsatı! Sağlam Kart Kampüs ile kafe, restoran ve yemek yerlerinde yapacağın 250 TL ve üzeri harcamalarında %10 indirim kazan. Her ay 250 TL, yılda toplam 3.000 TL indirim hakkı! Katılmak için ONAY YEMEK yazıp 2848'e SMS göndermek yeterlidir.",
+    "image": "images/kuveytturk-restoran.svg",
+    "logo": "images/kuveytturk-logo.svg",
+    "link": "https://www.kuveytturk.com.tr/kendim-icin/kampus/restoran-harcamalarina-10-indirim-kazan",
+    "date": "31 Aralık 2026'ya kadar",
+    "cities": [],
+    "universities": []
+  },
+  {
+    "id": "kuveytturk-market-250tl",
+    "active": true,
+    "brand": "Kuveyt Türk Kampüs",
+    "category": "Market",
+    "type": "İndirim",
+    "title": "Kuveyt Türk Kampüs — Market Harcamalarında %10 İndirim (Her Ay 250 TL)",
+    "description": "Üniversite öğrencilerine özel market ve gıda alışverişi desteği! Sağlam Kart Kampüs ile süpermarket, bakkal ve gıda alışverişlerinde 250 TL ve üzeri harcamalarında %10 indirim kazan. Her ay 250 TL, yılda tam 3.000 TL doğrudan bütçe avantajı! Katılmak için ONAY MRKT yazıp 2848'e SMS göndermek yeterlidir.",
+    "image": "images/kuveytturk-market.svg",
+    "logo": "images/kuveytturk-logo.svg",
+    "link": "https://www.kuveytturk.com.tr/kendim-icin/kampus/market-harcamalarina-10-indirim-kazan",
+    "date": "31 Aralık 2026'ya kadar",
+    "cities": [],
+    "universities": []
+  },
+  {
     "id": "gemini-pro-1yil-ucretsiz",
     "active": true,
     "brand": "Google Gemini Pro",

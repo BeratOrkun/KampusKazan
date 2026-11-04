@@ -543,15 +543,19 @@ select {
 }
 
 .category-btn {
-    padding: 10px 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
     font-size: 0.88rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-secondary);
     background: var(--bg-glass);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-full);
     transition: var(--transition-smooth);
     cursor: pointer;
+    user-select: none;
 }
 
 .category-btn:hover {
@@ -565,6 +569,31 @@ select {
     background: var(--gradient-primary);
     border-color: transparent;
     box-shadow: 0 4px 16px rgba(108, 60, 225, 0.3);
+}
+
+.category-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    transition: var(--transition-smooth);
+}
+
+.category-btn:hover .category-count {
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--text-primary);
+}
+
+.category-btn.active .category-count {
+    background: rgba(255, 255, 255, 0.28);
+    color: #ffffff;
 }
 
 /* --- Search Bar --- */

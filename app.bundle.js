@@ -1344,6 +1344,7 @@ async function syncPushToken(profile) {
     Finans: '💳',
     Banka: '🏦',
     Alışveriş: '🛍️',
+    Market: '🛒',
     default: '🎯',
   };
 
@@ -2499,12 +2500,18 @@ async function syncPushToken(profile) {
     const categories = [...new Set(allCampaigns.map((c) => c.category).filter(Boolean))];
     categoryFilter.querySelectorAll('.category-btn:not([data-category="all"])').forEach((btn) => btn.remove());
 
+    const allBtn = categoryFilter.querySelector('.category-btn[data-category="all"]');
+    if (allBtn) {
+      allBtn.innerHTML = `✨ Tümü <span class="category-count">${allCampaigns.length}</span>`;
+    }
+
     categories.forEach((cat) => {
       const icon = CATEGORY_ICONS[cat] || CATEGORY_ICONS.default;
+      const count = allCampaigns.filter((c) => c.category === cat).length;
       const btn = document.createElement('button');
       btn.className = 'category-btn';
       btn.dataset.category = cat;
-      btn.textContent = `${icon} ${cat}`;
+      btn.innerHTML = `${icon} ${escapeHtml(cat)} <span class="category-count">${count}</span>`;
       if (cat === activeCategory) btn.classList.add('active');
       categoryFilter.appendChild(btn);
     });
@@ -2541,6 +2548,7 @@ async function syncPushToken(profile) {
         (c) =>
           (c.title || '').toLocaleLowerCase('tr').includes(q) ||
           (c.description || '').toLocaleLowerCase('tr').includes(q) ||
+          (c.brand || '').toLocaleLowerCase('tr').includes(q) ||
           (c.category || '').toLocaleLowerCase('tr').includes(q) ||
           (c.type || '').toLocaleLowerCase('tr').includes(q)
       );
