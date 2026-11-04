@@ -1,0 +1,55 @@
+<svg width="800" height="420" viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ingBg1" x1="0" y1="0" x2="800" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#260C00"/>
+      <stop offset="50%" stop-color="#4D1900"/>
+      <stop offset="100%" stop-color="#140600"/>
+    </linearGradient>
+    <linearGradient id="ingOrangeGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF8A3D"/>
+      <stop offset="100%" stop-color="#FF6200"/>
+    </linearGradient>
+    <linearGradient id="goldIng" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF3B0"/>
+      <stop offset="50%" stop-color="#FFD100"/>
+      <stop offset="100%" stop-color="#FFA826"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="420" rx="24" fill="url(#ingBg1)"/>
+  <circle cx="710" cy="80" r="190" fill="#FF6200" fill-opacity="0.22"/>
+  <circle cx="120" cy="360" r="170" fill="#FF8A3D" fill-opacity="0.18"/>
+
+  <!-- Brand White Pill -->
+  <rect x="44" y="38" width="190" height="52" rx="14" fill="#FFFFFF"/>
+  <g transform="translate(56, 48)">
+    <rect width="26" height="26" rx="5" fill="#FF6200"/>
+    <text x="13" y="19" fill="#FFFFFF" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="14" text-anchor="middle">🦁</text>
+    <text x="34" y="15" fill="#FF6200" font-family="-apple-system, sans-serif" font-weight="900" font-size="14">ING</text>
+    <rect x="34" y="19" width="76" height="10" rx="3" fill="#525199"/>
+    <text x="72" y="27" fill="#FFFFFF" font-family="-apple-system, sans-serif" font-weight="900" font-size="7" letter-spacing="0.5" text-anchor="middle">DİJİTAL KART</text>
+  </g>
+
+  <!-- Tag -->
+  <rect x="248" y="44" width="220" height="40" rx="20" fill="url(#ingOrangeGrad)"/>
+  <text x="358" y="69" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="800" font-size="15" letter-spacing="0.5">🎁 500 TL HARCA &amp; AL</text>
+
+  <!-- Main Headlines -->
+  <text x="44" y="160" fill="#FFFFFF" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="34">ING Dijital Kredi Kartı ile</text>
+  <text x="44" y="222" fill="url(#goldIng)" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="900" font-size="52">500 TL Harcamaya 500 TL!</text>
+  <text x="44" y="272" fill="#FED7AA" font-family="'Inter', -apple-system, sans-serif" font-weight="600" font-size="20">İlk 500 TL ve Üzeri Harcamana Anında 500 TL Bonus Hediye</text>
+
+  <rect x="44" y="316" width="430" height="56" rx="16" fill="#FFFFFF" fill-opacity="0.12" stroke="#FF6200" stroke-width="1.8"/>
+  <text x="66" y="351" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="17">📱 ING Mobil'den Dijital Kredi Kartına Hemen Başvur</text>
+
+  <!-- Right Visual Feature Card -->
+  <g transform="translate(520, 90)">
+    <rect x="0" y="0" width="236" height="276" rx="24" fill="#FFFFFF" fill-opacity="0.1" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2"/>
+    <circle cx="118" cy="80" r="46" fill="url(#ingOrangeGrad)"/>
+    <text x="118" y="90" text-anchor="middle" fill="#FFFFFF" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="34">💳✨</text>
+    <text x="118" y="164" text-anchor="middle" fill="#FFD100" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="36">500 TL</text>
+    <text x="118" y="196" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="800" font-size="16">Bonus Hediye</text>
+    <rect x="24" y="222" width="188" height="32" rx="16" fill="#FF6200" fill-opacity="0.8"/>
+    <text x="118" y="243" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="700" font-size="12">ING Dijital Kredi Kartı</text>
+  </g>
+</svg>

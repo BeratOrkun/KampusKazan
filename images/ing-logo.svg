@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 34" fill="none">
+  <!-- ING Orange Badge -->
+  <g transform="translate(4, 3)">
+    <rect width="28" height="28" rx="6" fill="#FF6200"/>
+    <!-- Stylized lion silhouette / symbol -->
+    <circle cx="14" cy="14" r="8" fill="#FFFFFF" fill-opacity="0.2"/>
+    <text x="14" y="19" fill="#FFFFFF" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="14" text-anchor="middle">🦁</text>
+  </g>
+  <!-- Text -->
+  <text x="38" y="17" fill="#FF6200" font-family="-apple-system, 'Inter', sans-serif" font-weight="900" font-size="15" letter-spacing="-0.02em">ING</text>
+  <rect x="38" y="21" width="70" height="10" rx="3" fill="#525199"/>
+  <text x="73" y="28.5" fill="#FFFFFF" font-family="-apple-system, 'Inter', sans-serif" font-weight="900" font-size="7" letter-spacing="0.5" text-anchor="middle">TURUNCU GENÇ</text>
+</svg>

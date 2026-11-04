@@ -1,0 +1,55 @@
+<svg width="800" height="420" viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="halkbankBg1" x1="0" y1="0" x2="800" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#021A38"/>
+      <stop offset="50%" stop-color="#043266"/>
+      <stop offset="100%" stop-color="#011024"/>
+    </linearGradient>
+    <linearGradient id="halkbankBlueGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00B2E3"/>
+      <stop offset="100%" stop-color="#004A99"/>
+    </linearGradient>
+    <linearGradient id="primeGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF3B0"/>
+      <stop offset="50%" stop-color="#FFD100"/>
+      <stop offset="100%" stop-color="#FF9900"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="420" rx="24" fill="url(#halkbankBg1)"/>
+  <circle cx="710" cy="80" r="190" fill="#00B2E3" fill-opacity="0.18"/>
+  <circle cx="120" cy="360" r="170" fill="#004A99" fill-opacity="0.25"/>
+
+  <!-- Brand White Pill -->
+  <rect x="44" y="38" width="190" height="52" rx="14" fill="#FFFFFF"/>
+  <g transform="translate(56, 48)">
+    <rect width="26" height="26" rx="5" fill="#004A99"/>
+    <path d="M6 7H11V13H6V7ZM13 7H18V13H13V7ZM6 15H11V21H6V15ZM13 15H18V21H13V15Z" fill="#00B2E3"/>
+    <text x="32" y="15" fill="#004A99" font-family="-apple-system, sans-serif" font-weight="900" font-size="12">HALKBANK</text>
+    <rect x="32" y="19" width="82" height="10" rx="3" fill="#00B2E3"/>
+    <text x="73" y="27" fill="#FFFFFF" font-family="-apple-system, sans-serif" font-weight="900" font-size="7.5" letter-spacing="0.5" text-anchor="middle">PARAF GENÇİZ</text>
+  </g>
+
+  <!-- Tag -->
+  <rect x="248" y="44" width="220" height="40" rx="20" fill="url(#halkbankBlueGrad)"/>
+  <text x="358" y="69" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="800" font-size="15" letter-spacing="0.5">🎁 TAMAMEN ÜCRETSİZ</text>
+
+  <!-- Main Headlines -->
+  <text x="44" y="160" fill="#FFFFFF" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="34">Paraf Gençİz Kartlılara Özel</text>
+  <text x="44" y="222" fill="url(#primeGold)" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="900" font-size="52">Amazon Prime Hediye!</text>
+  <text x="44" y="272" fill="#BAE6FD" font-family="'Inter', -apple-system, sans-serif" font-weight="600" font-size="20">Ücretsiz &amp; Hızlı Kargo • Prime Video • Prime Gaming • Özel İndirimler</text>
+
+  <rect x="44" y="316" width="430" height="56" rx="16" fill="#FFFFFF" fill-opacity="0.12" stroke="#00B2E3" stroke-width="1.8"/>
+  <text x="66" y="351" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="17">📦 Paraf Gençİz Kartınla Prime Üyeliğin 0 TL!</text>
+
+  <!-- Right Visual Feature Card -->
+  <g transform="translate(520, 90)">
+    <rect x="0" y="0" width="236" height="276" rx="24" fill="#FFFFFF" fill-opacity="0.1" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2"/>
+    <circle cx="118" cy="80" r="46" fill="url(#halkbankBlueGrad)"/>
+    <text x="118" y="90" text-anchor="middle" fill="#FFFFFF" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="34">📦🎬</text>
+    <text x="118" y="164" text-anchor="middle" fill="#FFD100" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="34">PRIME</text>
+    <text x="118" y="196" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="800" font-size="16">Her Ay Hediye</text>
+    <rect x="24" y="222" width="188" height="32" rx="16" fill="#00B2E3" fill-opacity="0.7"/>
+    <text x="118" y="243" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="700" font-size="13">Paraf Gençİz Kart</text>
+  </g>
+</svg>

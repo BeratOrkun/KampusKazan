@@ -8,7 +8,7 @@
  * Bu dosya değiştiğinde CACHE_VERSION'ı artır.
  */
 
-const CACHE_VERSION = 'kk-v14';
+const CACHE_VERSION = 'kk-v15';
 const APP_SHELL = [
   './',
   './index.html',
@@ -43,6 +43,14 @@ const APP_SHELL = [
   './images/isbankasi-davet.svg',
   './images/teb-logo.svg',
   './images/teb-dijital.svg',
+  './images/halkbank-logo.svg',
+  './images/halkbank-prime.svg',
+  './images/halkbank-dijital.svg',
+  './images/halkbank-internet.svg',
+  './images/ing-logo.svg',
+  './images/ing-harcama.svg',
+  './images/ing-kafe.svg',
+  './images/ing-kultur.svg',
   './images/spotify-logo.svg',
   './images/spotify-student.svg',
   './js/firebase-config.js',
