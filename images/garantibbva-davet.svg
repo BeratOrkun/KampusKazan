@@ -1,0 +1,59 @@
+<svg width="800" height="420" viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="garantiDavetBg" x1="0" y1="0" x2="800" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#021C1B"/>
+      <stop offset="50%" stop-color="#063531"/>
+      <stop offset="100%" stop-color="#011211"/>
+    </linearGradient>
+    <linearGradient id="davetCyanGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#008542"/>
+    </linearGradient>
+    <linearGradient id="davetGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FEF08A"/>
+      <stop offset="50%" stop-color="#FACC15"/>
+      <stop offset="100%" stop-color="#EAB308"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="420" rx="24" fill="url(#garantiDavetBg)"/>
+  <circle cx="710" cy="80" r="190" fill="#FACC15" fill-opacity="0.16"/>
+  <circle cx="120" cy="360" r="170" fill="#06B6D4" fill-opacity="0.18"/>
+
+  <!-- Garanti BBVA Logo White Pill -->
+  <rect x="44" y="38" width="180" height="52" rx="14" fill="#FFFFFF"/>
+  <g transform="translate(60, 48)">
+    <g transform="translate(14, 16)">
+      <circle cx="-5" cy="-5" r="4.5" fill="#00A349"/>
+      <circle cx="5" cy="-5" r="4.5" fill="#00A349"/>
+      <circle cx="-5" cy="5" r="4.5" fill="#00A349"/>
+      <circle cx="5" cy="5" r="4.5" fill="#00A349"/>
+      <circle cx="0" cy="0" r="3" fill="#00A349"/>
+    </g>
+    <text x="32" y="16" fill="#002147" font-family="-apple-system, sans-serif" font-weight="800" font-size="13">Garanti</text>
+    <text x="32" y="28" fill="#008542" font-family="-apple-system, sans-serif" font-weight="900" font-size="11" letter-spacing="0.5">BBVA</text>
+  </g>
+
+  <!-- Tag -->
+  <rect x="238" y="44" width="220" height="40" rx="20" fill="url(#davetCyanGrad)"/>
+  <text x="348" y="69" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="800" font-size="15" letter-spacing="0.5">👥 DAVET ET KAZAN</text>
+
+  <!-- Main Headlines -->
+  <text x="44" y="160" fill="#FFFFFF" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="34">Arkadaşını Davet Et</text>
+  <text x="44" y="222" fill="url(#davetGold)" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="900" font-size="52">50.000 TL Bonus!</text>
+  <text x="44" y="272" fill="#FEF08A" font-family="'Inter', -apple-system, sans-serif" font-weight="600" font-size="20">Her Arkadaşın İçin 2.000 TL • Arkadaşına da 2.000 TL Hediye</text>
+
+  <rect x="44" y="316" width="410" height="56" rx="16" fill="#FFFFFF" fill-opacity="0.12" stroke="#FACC15" stroke-width="1.8"/>
+  <text x="66" y="351" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="17">📲 Garanti BBVA Mobil → Davet Kodunu Paylaş</text>
+
+  <!-- Right Visual Feature Card -->
+  <g transform="translate(520, 90)">
+    <rect x="0" y="0" width="236" height="276" rx="24" fill="#FFFFFF" fill-opacity="0.1" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2"/>
+    <circle cx="118" cy="80" r="46" fill="url(#davetCyanGrad)"/>
+    <text x="118" y="90" text-anchor="middle" fill="#FFFFFF" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="36">🎁💰</text>
+    <text x="118" y="164" text-anchor="middle" fill="#FEF08A" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="32">50.000 TL</text>
+    <text x="118" y="196" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="800" font-size="16">Toplam Bonus Limiti</text>
+    <rect x="28" y="222" width="180" height="32" rx="16" fill="#FACC15" fill-opacity="0.3"/>
+    <text x="118" y="243" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="700" font-size="13">Arkadaş Başı 2.000 TL</text>
+  </g>
+</svg>

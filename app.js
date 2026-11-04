@@ -60,7 +60,7 @@ import {
     Kafe: '☕',
     Eğitim: '📚',
     Ulaşım: '🚌',
-    Eğlence: '🎮',
+    Eğlence: '🎬',
     Sağlık: '🏥',
     Giyim: '👕',
     Kitap: '📖',
