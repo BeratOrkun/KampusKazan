@@ -1,0 +1,52 @@
+<svg width="800" height="420" viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="psBg" x1="0" y1="0" x2="800" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0A1815"/>
+      <stop offset="50%" stop-color="#102621"/>
+      <stop offset="100%" stop-color="#06120F"/>
+    </linearGradient>
+    <linearGradient id="psGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="420" rx="24" fill="url(#psBg)"/>
+  <circle cx="710" cy="90" r="190" fill="#10B981" fill-opacity="0.25"/>
+  <circle cx="100" cy="350" r="170" fill="#34D399" fill-opacity="0.12"/>
+
+  <!-- Brand White Pill -->
+  <rect x="44" y="38" width="180" height="52" rx="14" fill="#FFFFFF"/>
+  <g transform="translate(56, 48)">
+    <rect width="26" height="26" rx="7" fill="#111113"/>
+    <path d="M9 8H14C16 8 18 9.5 18 11.5C18 13.5 16 15 14 15H9V8Z" fill="#FFFFFF"/>
+    <path d="M9 15H12V20H9V15Z" fill="#F63854"/>
+    <text x="34" y="19" fill="#111113" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="16">papara</text>
+  </g>
+
+  <!-- Tag -->
+  <rect x="238" y="44" width="230" height="40" rx="20" fill="url(#psGreen)"/>
+  <text x="353" y="69" text-anchor="middle" fill="#0A1815" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-size="14" letter-spacing="0.5">▶️ PLAY STORE CASHBACK</text>
+
+  <!-- Main Headlines -->
+  <text x="44" y="158" fill="#FFFFFF" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="33">Google Play Store Harcamalarında</text>
+  <text x="44" y="220" fill="url(#psGreen)" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="900" font-size="52">%25 Nakit İade!</text>
+  <text x="44" y="270" fill="#A7F3D0" font-family="'Inter', -apple-system, sans-serif" font-weight="600" font-size="18">200 TL'ye Kadar Uygulama ve Oyun Harcamanda 50 TL Anında Hesabına</text>
+
+  <rect x="44" y="316" width="440" height="56" rx="16" fill="#FFFFFF" fill-opacity="0.08" stroke="#34D399" stroke-width="1.8"/>
+  <text x="64" y="351" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="16">🤖 Android Uygulamalar ve Oyunlar • Papara Card ile İade Al</text>
+
+  <!-- Right Visual Feature Card -->
+  <g transform="translate(520, 85)">
+    <rect x="0" y="0" width="236" height="280" rx="24" fill="#FFFFFF" fill-opacity="0.06" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="2"/>
+    
+    <circle cx="118" cy="74" r="44" fill="url(#psGreen)"/>
+    <text x="118" y="86" text-anchor="middle" fill="#0A1815" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="26">▶️</text>
+
+    <text x="118" y="156" text-anchor="middle" fill="#34D399" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="34">50 TL</text>
+    <text x="118" y="186" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="800" font-size="15">Nakit İade</text>
+    <rect x="24" y="216" width="188" height="28" rx="14" fill="#102621" stroke="#10B981" stroke-width="1.2"/>
+    <text x="118" y="234" text-anchor="middle" fill="#A7F3D0" font-family="'Inter', sans-serif" font-weight="700" font-size="12">Google Play Store</text>
+    <text x="118" y="266" text-anchor="middle" fill="#9CA3AF" font-family="'Inter', sans-serif" font-weight="600" font-size="11">%25 Anında Cashback</text>
+  </g>
+</svg>

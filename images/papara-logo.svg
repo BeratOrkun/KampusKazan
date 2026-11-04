@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 34" fill="none">
+  <!-- Papara Black Rounded Badge -->
+  <g transform="translate(4, 3)">
+    <rect width="28" height="28" rx="8" fill="#111113"/>
+    <!-- Sleek P mark -->
+    <path d="M10 8H16C18.2 8 20 9.8 20 12C20 14.2 18.2 16 16 16H10V8Z" fill="#FFFFFF"/>
+    <path d="M10 16H13.5V21H10V16Z" fill="#F63854"/>
+  </g>
+  <!-- Text -->
+  <text x="38" y="23" fill="#111113" font-family="'Space Grotesk', -apple-system, sans-serif" font-weight="900" font-size="19" letter-spacing="-0.03em">papara</text>
+</svg>

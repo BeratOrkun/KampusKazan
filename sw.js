@@ -8,7 +8,7 @@
  * Bu dosya değiştiğinde CACHE_VERSION'ı artır.
  */
 
-const CACHE_VERSION = 'kk-v17';
+const CACHE_VERSION = 'kk-v18';
 const APP_SHELL = [
   './',
   './index.html',
@@ -59,6 +59,24 @@ const APP_SHELL = [
   './images/odeabank-harcama.svg',
   './images/odeabank-ekkart.svg',
   './images/odeabank-davet.svg',
+  './images/uption-logo.svg',
+  './images/uption-harcama.svg',
+  './images/papara-logo.svg',
+  './images/papara-claude.svg',
+  './images/papara-steam.svg',
+  './images/papara-epicgames.svg',
+  './images/papara-youtube.svg',
+  './images/papara-starbucks.svg',
+  './images/papara-burgerking.svg',
+  './images/papara-mcdonalds.svg',
+  './images/papara-yemeksepeti.svg',
+  './images/papara-gratis.svg',
+  './images/papara-carrefoursa.svg',
+  './images/papara-eczane.svg',
+  './images/papara-appstore.svg',
+  './images/papara-playstore.svg',
+  './images/papara-googleone.svg',
+  './images/papara-fatura.svg',
   './images/spotify-logo.svg',
   './images/spotify-student.svg',
   './js/firebase-config.js',
