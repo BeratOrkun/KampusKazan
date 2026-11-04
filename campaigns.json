@@ -208,5 +208,20 @@
     "date": "Güncel",
     "cities": [],
     "universities": []
+  },
+  {
+    "id": "teb-dijital-yuzde50",
+    "active": true,
+    "brand": "TEB ÜniversiTEB",
+    "category": "Eğlence",
+    "type": "İndirim",
+    "title": "ÜniversiTEB ile Dijital Platformlarda %50 Bonus! (Aylık 300 TL, Yılda 3.600 TL)",
+    "description": "ÜniversiTEB’liysen CEPTETEB Dijital Kredi Kartıyla yapacağın online dizi, müzik, film, oyun ve yapay zeka harcamalarında %50 Bonus fırsatı seni bekliyor! Netflix, Spotify, YouTube Premium, ChatGPT, App Store, Apple Music, Google Play, Amazon Prime, Disney+, BluTV, Exxen, Xbox ve S Sport Plus harcamalarında her ay 300 TL'ye kadar, kampanya süresince toplamda 3.600 TL Bonus kazanabilirsin.",
+    "image": "images/teb-dijital.svg",
+    "logo": "images/teb-logo.svg",
+    "link": "https://www.cepteteb.com.tr/kampanyalar/cepteteb-kampanyalari/dijital-uyelik",
+    "date": "Güncel",
+    "cities": [],
+    "universities": []
   }
 ]
