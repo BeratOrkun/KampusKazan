@@ -118,5 +118,35 @@
     "date": "Güncel",
     "cities": [],
     "universities": []
+  },
+  {
+    "id": "yapikredi-play-15000tl",
+    "active": true,
+    "brand": "Yapı Kredi Play",
+    "category": "Banka",
+    "type": "Fırsat",
+    "title": "Yapı Kredi Mobil'den Müşteri Olan Play'lilere 15.000 TL'ye Varan Fırsat!",
+    "description": "Yapı Kredi Mobil'i indirip PLAY2026 referans kodu ile ilk kez Yapı Kredili olan 18-26 yaş arası gençlere rekor fırsat! Play kartınla harcamalarından 6.000 TL, davet ettiğin yakınların için ayda 6.000 TL puan, restoran & kafelerde 1.500 TL indirim, dijital dizi/müzik platformlarında 750 TL indirim ve e-ticarette 750 TL puan seni bekliyor. Üstelik mobil ve internetten EFT & Havale tamamen ücretsiz!",
+    "image": "images/yapikredi-play.svg",
+    "logo": "images/yapikredi-logo.svg",
+    "link": "https://www.yapikredi.com.tr/kampanyalar/detay/yapi-kredi-mobilden-musteri-olan-playlilere-ozel-15000-tlye-varan-firsat",
+    "date": "1 - 30 Kasım 2026",
+    "cities": [],
+    "universities": []
+  },
+  {
+    "id": "yapikredi-play-kafe-dijital",
+    "active": true,
+    "brand": "Yapı Kredi Play",
+    "category": "Eğlence",
+    "type": "İndirim",
+    "title": "Yapı Kredi Play — Restoranda %20, Dijital Platformlarda %50 İndirim!",
+    "description": "Play kredi kartı veya Play TLcard ile World üye işyeri restoran & kafelerde tek seferde 150 TL üzeri harcamana %20 indirim (aylık 300 TL, 5 ayda toplam 1.500 TL)! Netflix, Amazon Prime, Spotify, YouTube, Bein Connect, Fizy, Exxen, Digiturk, TV+, BluTV harcamalarında %50 indirim (5 ayda 750 TL) ve Trendyol, Hepsiburada, Amazon e-ticaret sitelerinde 750 TL puan fırsatı seni bekliyor. World Mobil'den hemen katıl!",
+    "image": "images/yapikredi-play-indirim.svg",
+    "logo": "images/yapikredi-logo.svg",
+    "link": "https://www.yapikredi.com.tr/kampanyalar/detay/yapi-kredi-mobilden-musteri-olan-playlilere-ozel-15000-tlye-varan-firsat",
+    "date": "5 ay boyunca geçerli",
+    "cities": [],
+    "universities": []
   }
 ]

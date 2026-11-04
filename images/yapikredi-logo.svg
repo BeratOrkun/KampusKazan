@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 34" fill="none">
+  <!-- Yapı Kredi Ram/Koç stylized symbol -->
+  <g transform="translate(4, 3)">
+    <path d="M14 2C7.37 2 2 7.37 2 14C2 20.63 7.37 26 14 26C20.63 26 26 20.63 26 14C26 7.37 20.63 2 14 2ZM14 6C18.42 6 22 9.58 22 14C22 18.42 18.42 22 14 22C9.58 22 6 18.42 6 14C6 9.58 9.58 6 14 6Z" fill="#002D72"/>
+    <path d="M14 9C11.24 9 9 11.24 9 14C9 16.76 11.24 19 14 19C16.76 19 19 16.76 19 14C19 11.24 16.76 9 14 9Z" fill="#0080FF"/>
+  </g>
+  <!-- Yapı Kredi Wordmark -->
+  <text x="36" y="16" fill="#002D72" font-family="-apple-system, 'Inter', 'Helvetica Neue', sans-serif" font-weight="800" font-size="12" letter-spacing="-0.02em">Yapı Kredi</text>
+  <rect x="36" y="20" width="38" height="11" rx="4" fill="#FFCC00"/>
+  <text x="55" y="28.5" fill="#002D72" font-family="-apple-system, 'Inter', sans-serif" font-weight="900" font-size="8.5" letter-spacing="0.5" text-anchor="middle">play</text>
+</svg>
