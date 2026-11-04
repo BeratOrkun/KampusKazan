@@ -8,7 +8,7 @@
  * Bu dosya değiştiğinde CACHE_VERSION'ı artır.
  */
 
-const CACHE_VERSION = 'kk-v19';
+const CACHE_VERSION = 'kk-v20';
 const APP_SHELL = [
   './',
   './index.html',
@@ -90,6 +90,10 @@ const APP_SHELL = [
   './images/paycell-store.svg',
   './images/paycell-watsons.svg',
   './images/paycell-giyim.svg',
+  './images/vodafonepay-logo.svg',
+  './images/vodafonepay-enuygun.svg',
+  './images/vodafonepay-bakiye.svg',
+  './images/vodafonepay-market.svg',
   './images/spotify-logo.svg',
   './images/spotify-student.svg',
   './js/firebase-config.js',

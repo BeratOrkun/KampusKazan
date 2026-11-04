@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 34" fill="none">
+  <!-- Vodafone Red Round Icon -->
+  <g transform="translate(4, 3)">
+    <circle cx="14" cy="14" r="14" fill="#E60000"/>
+    <!-- Iconic Vodafone speech mark -->
+    <path d="M14 7C10.5 7 8 9.5 8 13C8 16 10 18 13 18.5V21C7.5 20.5 6 16.5 6 13C6 8.5 9.5 5 14 5C18.5 5 22 8.5 22 13C22 17.5 18.5 21 14 21C13.5 21 13 20.9 12.5 20.8V18.6C13 18.8 13.5 18.9 14 18.9C17.3 18.9 20 16.3 20 13C20 9.7 17.3 7 14 7Z" fill="#FFFFFF"/>
+  </g>
+  <!-- Text -->
+  <text x="38" y="23" fill="#E60000" font-family="'Space Grotesk', -apple-system, sans-serif" font-weight="900" font-size="16" letter-spacing="-0.03em">vodafone <tspan fill="#111111" font-weight="700">pay</tspan></text>
+</svg>

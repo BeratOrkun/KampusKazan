@@ -808,5 +808,50 @@
     "date": "Güncel",
     "cities": [],
     "universities": []
+  },
+  {
+    "id": "vodafonepay-enuygun-400tl",
+    "active": true,
+    "brand": "Vodafone Pay",
+    "category": "Ulaşım",
+    "type": "İndirim",
+    "title": "Vodafone Pay ile ENUYGUN Otobüs Biletinde 400 TL İndirim!",
+    "description": "ENUYGUN.com ve mobil uygulamasında Vodafone Pay Faturana Yansıt ödeme yöntemiyle alacağınız otobüs biletlerine özel tam 400 TL anında indirim! Kampanyadan faydalanmak için harcama öncesi Vodafone Yanımda uygulamasında bulunan Happy kampanya detay sayfasından 'Kampanyaya Katıl' butonuna tıklayabilirsiniz.",
+    "image": "images/vodafonepay-enuygun.svg",
+    "logo": "images/vodafonepay-logo.svg",
+    "link": "https://www.enuygun.com/otobus-bileti/",
+    "date": "Güncel",
+    "cities": [],
+    "universities": []
+  },
+  {
+    "id": "vodafonepay-bakiye-200tl",
+    "active": true,
+    "brand": "Vodafone Pay",
+    "category": "Finans",
+    "type": "İndirim",
+    "title": "Vodafone Pay — Anında Bakiye ile İlk Alışverişe %20 (200 TL) Fatura İndirimi!",
+    "description": "Daha önce Anında Bakiye kullanmamış Vodafone müşterileri, Anında Bakiye ile gerçekleştirecekleri ilk alışveriş tutarının %20’si kadar, en fazla 200 TL fatura indirimi kazanabilir.",
+    "image": "images/vodafonepay-bakiye.svg",
+    "logo": "images/vodafonepay-logo.svg",
+    "link": "https://www.vodafone.com.tr/vodafone-pay",
+    "date": "Güncel",
+    "cities": [],
+    "universities": []
+  },
+  {
+    "id": "vodafonepay-market-qr-100tl",
+    "active": true,
+    "brand": "Vodafone Pay",
+    "category": "Market",
+    "type": "İndirim",
+    "title": "Vodafone Pay — Markette QR ile Faturana Yansıt'a 100 TL Fatura İndirimi!",
+    "description": "Daha önce QR ile Faturana Yansıt kullanmamış müşteriler, markette QR ile Faturana Yansıt kullanarak gerçekleştirecekleri ilk harcama tutarının %20’si kadar, en fazla 100 TL fatura indirimi kazanabilir.",
+    "image": "images/vodafonepay-market.svg",
+    "logo": "images/vodafonepay-logo.svg",
+    "link": "https://www.vodafone.com.tr/vodafone-pay",
+    "date": "Güncel",
+    "cities": [],
+    "universities": []
   }
 ]
