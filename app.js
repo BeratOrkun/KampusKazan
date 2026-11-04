@@ -93,6 +93,7 @@ import {
   let searchQuery = '';
   let foregroundListening = false;
   let tokenSynced = false;
+  let currentViewMode = 'brands'; // 'brands' | 'flat'
   /** @type {Promise<any> | null} */
   let authInitPromise = null;
   /** @type {any} */
@@ -172,6 +173,22 @@ import {
   const modalTitle = $('modalTitle');
   const modalDescription = $('modalDescription');
   const modalBadges = $('modalBadges');
+
+  // Brand Detail Modal (Pop-up Hub)
+  const brandModalOverlay = $('brandModalOverlay');
+  const brandModalContent = $('brandModalContent');
+  const brandModalLogoWrap = $('brandModalLogoWrap');
+  const brandModalTitle = $('brandModalTitle');
+  const brandModalSubtitle = $('brandModalSubtitle');
+  const brandModalFilterBar = $('brandModalFilterBar');
+  const brandModalCampaignsList = $('brandModalCampaignsList');
+  const brandModalClose = $('brandModalClose');
+  const brandModalBottomCloseBtn = $('brandModalBottomCloseBtn');
+
+  // View Switcher Elements
+  const viewModeBrands = $('viewModeBrands');
+  const viewModeFlat = $('viewModeFlat');
+  const campaignStatsText = $('campaignStatsText');
 
   // Profile Edit Modal (for manual editing later)
   const profileModal = $('authModal');
@@ -1224,7 +1241,16 @@ import {
   }
 
   function buildCategoryButtons() {
-    const categories = [...new Set(allCampaigns.map((c) => c.category).filter(Boolean))];
+    // Collect all distinct categories from category and tags
+    const catSet = new Set();
+    allCampaigns.forEach((c) => {
+      if (c.category) catSet.add(c.category);
+      if (Array.isArray(c.tags)) {
+        c.tags.forEach((t) => t && catSet.add(t));
+      }
+    });
+    const categories = Array.from(catSet);
+
     categoryFilter.querySelectorAll('.category-btn:not([data-category="all"])').forEach((btn) => btn.remove());
 
     const allBtn = categoryFilter.querySelector('.category-btn[data-category="all"]');
@@ -1234,7 +1260,9 @@ import {
 
     categories.forEach((cat) => {
       const icon = CATEGORY_ICONS[cat] || CATEGORY_ICONS.default;
-      const count = allCampaigns.filter((c) => c.category === cat).length;
+      const count = allCampaigns.filter(
+        (c) => c.category === cat || (Array.isArray(c.tags) && c.tags.includes(cat))
+      ).length;
       const btn = document.createElement('button');
       btn.className = 'category-btn';
       btn.dataset.category = cat;
@@ -1262,23 +1290,43 @@ import {
     if (getCurrentProfile()) renderCampaigns();
   });
 
+  // View Mode Switcher
+  viewModeBrands?.addEventListener('click', () => {
+    if (currentViewMode === 'brands') return;
+    currentViewMode = 'brands';
+    viewModeBrands.classList.add('active');
+    viewModeFlat?.classList.remove('active');
+    renderCampaigns();
+  });
+
+  viewModeFlat?.addEventListener('click', () => {
+    if (currentViewMode === 'flat') return;
+    currentViewMode = 'flat';
+    viewModeFlat.classList.add('active');
+    viewModeBrands?.classList.remove('active');
+    renderCampaigns();
+  });
+
   function renderCampaigns() {
     let filtered = [...allCampaigns];
 
     if (activeCategory !== 'all') {
-      filtered = filtered.filter((c) => c.category === activeCategory);
+      filtered = filtered.filter(
+        (c) => c.category === activeCategory || (Array.isArray(c.tags) && c.tags.includes(activeCategory))
+      );
     }
 
     if (searchQuery) {
       const q = searchQuery.toLocaleLowerCase('tr');
-      filtered = filtered.filter(
-        (c) =>
-          (c.title || '').toLocaleLowerCase('tr').includes(q) ||
-          (c.description || '').toLocaleLowerCase('tr').includes(q) ||
-          (c.brand || '').toLocaleLowerCase('tr').includes(q) ||
-          (c.category || '').toLocaleLowerCase('tr').includes(q) ||
-          (c.type || '').toLocaleLowerCase('tr').includes(q)
-      );
+      filtered = filtered.filter((c) => {
+        const matchTitle = (c.title || '').toLocaleLowerCase('tr').includes(q);
+        const matchDesc = (c.description || '').toLocaleLowerCase('tr').includes(q);
+        const matchBrand = (c.brand || '').toLocaleLowerCase('tr').includes(q);
+        const matchCat = (c.category || '').toLocaleLowerCase('tr').includes(q);
+        const matchType = (c.type || '').toLocaleLowerCase('tr').includes(q);
+        const matchTags = Array.isArray(c.tags) && c.tags.some((t) => t.toLocaleLowerCase('tr').includes(q));
+        return matchTitle || matchDesc || matchBrand || matchCat || matchType || matchTags;
+      });
     }
 
     if (loadingState) loadingState.style.display = 'none';
@@ -1293,10 +1341,292 @@ import {
     }
 
     updateCount(filtered.length);
-    filtered.forEach((campaign, index) => {
-      campaignsGrid.appendChild(createCampaignCard(campaign, index));
+
+    if (currentViewMode === 'brands') {
+      renderBrandCards(filtered);
+    } else {
+      filtered.forEach((campaign, index) => {
+        campaignsGrid.appendChild(createCampaignCard(campaign, index));
+      });
+    }
+  }
+
+  // =====================
+  // BRAND HUB CARDS (Markalara Göre Görünüm)
+  // =====================
+  function renderBrandCards(filteredCampaigns) {
+    const brandMap = new Map();
+    filteredCampaigns.forEach((c) => {
+      const brandKey = (c.brand || c.category || 'Genel').trim();
+      if (!brandMap.has(brandKey)) {
+        brandMap.set(brandKey, []);
+      }
+      brandMap.get(brandKey).push(c);
+    });
+
+    let index = 0;
+    brandMap.forEach((brandCampaigns, brandName) => {
+      const flagship = brandCampaigns.find((c) => c.featured) || brandCampaigns[0];
+      const card = createBrandHubCard(brandName, brandCampaigns, flagship, index++);
+      campaignsGrid.appendChild(card);
     });
   }
+
+  function createBrandHubCard(brandName, brandCampaigns, flagship, index) {
+    const card = document.createElement('div');
+    card.className = 'brand-card';
+    card.style.animationDelay = `${index * 0.05}s`;
+
+    const safeLogo = sanitizeAssetUrl(flagship.logo || brandCampaigns.find((c) => c.logo)?.logo);
+    const safeHeroBanner = sanitizeAssetUrl(flagship.image || brandCampaigns.find((c) => c.image)?.image);
+
+    const brandTags = new Set();
+    brandCampaigns.forEach((c) => {
+      if (c.category) brandTags.add(c.category);
+      if (Array.isArray(c.tags)) {
+        c.tags.forEach((t) => t && brandTags.add(t));
+      }
+    });
+
+    const otherCount = brandCampaigns.length - 1;
+
+    card.innerHTML = `
+      <div class="brand-card-top">
+        <div class="brand-card-identity">
+          ${
+            safeLogo
+              ? `<div class="brand-card-logo-wrap"><img src="${escapeHtml(safeLogo)}" alt="${escapeHtml(brandName)}" loading="lazy" /></div>`
+              : `<div class="brand-card-logo-wrap"><span style="font-size: 20px;">🏦</span></div>`
+          }
+          <div>
+            <h3 class="brand-card-name">${escapeHtml(brandName)}</h3>
+          </div>
+        </div>
+        <span class="brand-card-badge">🔥 ${brandCampaigns.length} Fırsat</span>
+      </div>
+
+      <div class="brand-tags-row">
+        ${Array.from(brandTags)
+          .slice(0, 4)
+          .map((t) => `<span class="brand-tag-chip">${CATEGORY_ICONS[t] || '🏷️'} ${escapeHtml(t)}</span>`)
+          .join('')}
+      </div>
+
+      <div class="brand-hero-preview">
+        ${
+          safeHeroBanner
+            ? `<div class="brand-hero-img-wrap">
+                <img src="${escapeHtml(safeHeroBanner)}" alt="${escapeHtml(flagship.title)}" loading="lazy" />
+                <span class="brand-hero-badge">👑 EN GÖZDE FIRSAT</span>
+              </div>`
+            : `<span class="brand-hero-badge" style="position: static; display: inline-block; margin-bottom: 8px;">👑 EN GÖZDE FIRSAT</span>`
+        }
+        <h4 class="brand-hero-title">${escapeHtml(flagship.title)}</h4>
+        <p class="brand-hero-desc">${escapeHtml(flagship.description || '')}</p>
+      </div>
+
+      <div class="brand-card-footer">
+        <span class="brand-other-hint">${otherCount > 0 ? `+${otherCount} fırsat daha` : 'Tek fırsat'}</span>
+        <button type="button" class="brand-card-cta">
+          Tüm Fırsatları Gör (${brandCampaigns.length}) ➔
+        </button>
+      </div>
+    `;
+
+    card.querySelectorAll('img').forEach((imgEl) => {
+      imgEl.addEventListener('error', () => {
+        const wrap = imgEl.closest('.brand-hero-img-wrap, .brand-card-logo-wrap');
+        if (wrap) wrap.style.display = 'none';
+      });
+    });
+
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      openBrandModal(brandName, brandCampaigns);
+    });
+
+    return card;
+  }
+
+  // =====================
+  // BRAND DETAIL POP-UP MODAL
+  // =====================
+  let activeBrandSubCategory = 'all';
+
+  function openBrandModal(brandName, brandCampaigns) {
+    if (!brandModalOverlay) return;
+
+    activeBrandSubCategory = 'all';
+    const brandLogo = sanitizeAssetUrl(brandCampaigns.find((c) => c.logo)?.logo || '');
+
+    if (brandModalLogoWrap) {
+      if (brandLogo) {
+        brandModalLogoWrap.innerHTML = `<img src="${escapeHtml(brandLogo)}" alt="${escapeHtml(brandName)}" />`;
+      } else {
+        brandModalLogoWrap.innerHTML = `<span style="font-size: 24px;">🏦</span>`;
+      }
+    }
+
+    if (brandModalTitle) {
+      brandModalTitle.textContent = brandName;
+    }
+
+    if (brandModalSubtitle) {
+      brandModalSubtitle.textContent = `${brandCampaigns.length} Doğrulanmış Öğrenci ve Gençlik Fırsatı`;
+    }
+
+    const brandCategories = new Set();
+    brandCampaigns.forEach((c) => {
+      if (c.category) brandCategories.add(c.category);
+      if (Array.isArray(c.tags)) {
+        c.tags.forEach((t) => t && brandCategories.add(t));
+      }
+    });
+
+    if (brandModalFilterBar) {
+      if (brandCategories.size > 1) {
+        brandModalFilterBar.hidden = false;
+        let pillsHtml = `<button type="button" class="brand-subfilter-btn active" data-bcat="all">✨ Tümü (${brandCampaigns.length})</button>`;
+        brandCategories.forEach((cat) => {
+          const catCount = brandCampaigns.filter(
+            (c) => c.category === cat || (Array.isArray(c.tags) && c.tags.includes(cat))
+          ).length;
+          const icon = CATEGORY_ICONS[cat] || '🏷️';
+          pillsHtml += `<button type="button" class="brand-subfilter-btn" data-bcat="${escapeHtml(cat)}">${icon} ${escapeHtml(cat)} (${catCount})</button>`;
+        });
+        brandModalFilterBar.innerHTML = pillsHtml;
+
+        brandModalFilterBar.querySelectorAll('.brand-subfilter-btn').forEach((pill) => {
+          pill.addEventListener('click', () => {
+            brandModalFilterBar.querySelectorAll('.brand-subfilter-btn').forEach((p) => p.classList.remove('active'));
+            pill.classList.add('active');
+            activeBrandSubCategory = pill.getAttribute('data-bcat');
+            renderBrandModalList(brandCampaigns);
+          });
+        });
+      } else {
+        brandModalFilterBar.hidden = true;
+        brandModalFilterBar.innerHTML = '';
+      }
+    }
+
+    renderBrandModalList(brandCampaigns);
+
+    brandModalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function renderBrandModalList(brandCampaigns) {
+    if (!brandModalCampaignsList) return;
+    brandModalCampaignsList.innerHTML = '';
+
+    let items = [...brandCampaigns];
+    if (activeBrandSubCategory !== 'all') {
+      items = items.filter(
+        (c) => c.category === activeBrandSubCategory || (Array.isArray(c.tags) && c.tags.includes(activeBrandSubCategory))
+      );
+    }
+
+    items.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+
+    items.forEach((c) => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'brand-modal-item';
+
+      const safeBanner = sanitizeAssetUrl(c.image);
+      const catIcon = CATEGORY_ICONS[c.category] || CATEGORY_ICONS.default;
+      const { typeClass, typeIcon } = typeInfo(c.type);
+
+      const allItemTags = [c.category, ...(Array.isArray(c.tags) ? c.tags.filter((t) => t !== c.category) : [])];
+
+      itemEl.innerHTML = `
+        ${
+          safeBanner
+            ? `<div class="brand-item-banner-wrap">
+                <img src="${escapeHtml(safeBanner)}" alt="${escapeHtml(c.title)}" loading="lazy" />
+                ${c.featured ? `<span class="brand-hero-badge">👑 EN GÖZDE FIRSAT</span>` : ''}
+              </div>`
+            : ''
+        }
+        <div class="brand-item-content">
+          <div class="brand-item-badges">
+            <span class="card-category">${catIcon} ${escapeHtml(c.category)}</span>
+            ${c.type ? `<span class="card-type ${typeClass}">${typeIcon} ${escapeHtml(c.type)}</span>` : ''}
+          </div>
+
+          <h3 class="brand-item-title">${escapeHtml(c.title)}</h3>
+          <p class="brand-item-description">${linkifyText(escapeHtml(c.description || ''))}</p>
+
+          ${
+            allItemTags.length > 1
+              ? `<div class="brand-tags-row" style="margin-bottom: 12px;">
+                  ${allItemTags.map((t) => `<span class="brand-tag-chip">${CATEGORY_ICONS[t] || '🏷️'} ${escapeHtml(t)}</span>`).join('')}
+                </div>`
+              : ''
+          }
+
+          <div class="brand-item-footer">
+            <span class="brand-item-date">📅 ${escapeHtml(c.date || 'Güncel')}</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              ${
+                c.link && /^https:\/\//i.test(c.link) && !/[\s"'<>`\\]/.test(c.link)
+                  ? `<a href="${escapeHtml(c.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm brand-item-btn">
+                      Kampanyaya Git ↗
+                    </a>`
+                  : ''
+              }
+              <button type="button" class="btn btn-outline btn-sm brand-item-detail-btn" style="padding: 6px 12px; font-size: 0.8rem;">
+                Detay ℹ️
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      itemEl.querySelectorAll('img').forEach((imgEl) => {
+        imgEl.addEventListener('error', () => {
+          const wrap = imgEl.closest('.brand-item-banner-wrap');
+          if (wrap) wrap.style.display = 'none';
+        });
+      });
+
+      itemEl.querySelector('.brand-item-detail-btn')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openModal(c);
+      });
+
+      brandModalCampaignsList.appendChild(itemEl);
+    });
+  }
+
+  function closeBrandModal() {
+    if (!brandModalOverlay) return;
+    brandModalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  brandModalClose?.addEventListener('click', closeBrandModal);
+  brandModalBottomCloseBtn?.addEventListener('click', closeBrandModal);
+  brandModalOverlay?.addEventListener('click', (e) => {
+    if (e.target === brandModalOverlay) closeBrandModal();
+  });
+
+  let brandTouchStartY = 0;
+  brandModalContent?.addEventListener(
+    'touchstart',
+    (e) => {
+      brandTouchStartY = e.touches[0].clientY;
+    },
+    { passive: true }
+  );
+  brandModalContent?.addEventListener(
+    'touchend',
+    (e) => {
+      const diff = e.changedTouches[0].clientY - brandTouchStartY;
+      if (diff > 80 && brandModalContent.scrollTop <= 0) closeBrandModal();
+    },
+    { passive: true }
+  );
 
   function typeInfo(type) {
     const typeClass = TYPE_MAP[type] || 'default';
@@ -1400,6 +1730,17 @@ import {
     if (campaignCount) {
       campaignCount.innerHTML = `📢 Toplam <strong>${Number(count) || 0}</strong> kampanya`;
     }
+    const statsTextEl = $('campaignStatsText');
+    if (statsTextEl) {
+      if (currentViewMode === 'brands') {
+        const brandCount = new Set(
+          (allCampaigns || []).map((c) => c.brand || c.category || 'Genel')
+        ).size;
+        statsTextEl.textContent = `${brandCount} Marka • ${count} Fırsat`;
+      } else {
+        statsTextEl.textContent = `${count} Fırsat Listeleniyor`;
+      }
+    }
   }
 
   // =====================
@@ -1447,7 +1788,8 @@ import {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      if (profileModal?.classList.contains('active')) closeProfileModal();
+      if (brandModalOverlay?.classList.contains('active')) closeBrandModal();
+      else if (profileModal?.classList.contains('active')) closeProfileModal();
       else if (modalOverlay?.classList.contains('active')) closeModal();
     }
   });

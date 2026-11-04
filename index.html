@@ -223,6 +223,21 @@
           <button class="category-btn active" data-category="all">✨ Tümü</button>
         </div>
 
+        <!-- View Switcher & Counter Bar -->
+        <div class="view-mode-bar">
+          <div class="campaign-stats-pill" id="campaignStatsPill">
+            📢 <span id="campaignStatsText">57 Fırsat Listeleniyor</span>
+          </div>
+          <div class="view-mode-toggle" id="viewModeToggle" role="group" aria-label="Görünüm Modu">
+            <button type="button" class="view-mode-btn active" data-mode="brands" id="viewModeBrands" title="Markalara göre gruplanmış görünüm">
+              🏛️ Markalara Göre
+            </button>
+            <button type="button" class="view-mode-btn" data-mode="flat" id="viewModeFlat" title="Tüm kampanyaları tek tek göster">
+              📋 Tek Tek Göster
+            </button>
+          </div>
+        </div>
+
         <!-- Campaign Cards -->
         <div class="campaigns-grid" id="campaignsGrid">
           <div class="loading-container" id="loadingState" style="grid-column: 1/-1;">
@@ -327,6 +342,43 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline btn-sm" id="modalCloseBtn">Kapat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand Detail / Hub Expansion Modal (Pop-up) -->
+  <div class="modal-overlay brand-modal-overlay" id="brandModalOverlay" role="dialog" aria-modal="true" aria-labelledby="brandModalTitle">
+    <div class="modal-content brand-modal-content" id="brandModalContent">
+      <div class="brand-modal-drag-handle"></div>
+      
+      <!-- Brand Modal Header -->
+      <div class="brand-modal-header">
+        <div class="brand-modal-header-info">
+          <div class="brand-modal-logo-wrap" id="brandModalLogoWrap"></div>
+          <div class="brand-modal-header-text">
+            <div class="brand-modal-title-row">
+              <h2 class="brand-modal-title" id="brandModalTitle">Marka Fırsatları</h2>
+              <span class="brand-modal-verified" title="Doğrulanmış Öğrenci Fırsatı">✓ Doğrulandı</span>
+            </div>
+            <p class="brand-modal-subtitle" id="brandModalSubtitle">Tüm Öğrenci ve Gençlik Kampanyaları</p>
+          </div>
+        </div>
+        <button class="modal-close brand-modal-close-btn" id="brandModalClose" aria-label="Kapat">✕</button>
+      </div>
+
+      <!-- In-Modal Category Filter Pills (if multiple categories exist) -->
+      <div class="brand-modal-filter-bar" id="brandModalFilterBar" hidden></div>
+
+      <!-- Campaign List of this Brand -->
+      <div class="brand-modal-body">
+        <div class="brand-modal-campaigns-list" id="brandModalCampaignsList"></div>
+      </div>
+
+      <!-- Brand Modal Footer -->
+      <div class="brand-modal-footer">
+        <button type="button" class="btn btn-outline btn-block" id="brandModalBottomCloseBtn">
+          ✕ Kapat
+        </button>
       </div>
     </div>
   </div>

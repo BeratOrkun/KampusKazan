@@ -12,7 +12,13 @@
     "link": "https://www.kuveytturk.com.tr/bireysel/kampus",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Hediye",
+      "Nakit"
+    ],
+    "featured": true
   },
   {
     "id": "kuveytturk-restoran-250tl",
@@ -27,7 +33,13 @@
     "link": "https://www.kuveytturk.com.tr/kendim-icin/kampus/restoran-harcamalarina-10-indirim-kazan",
     "date": "31 Aralık 2026'ya kadar",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Yemek",
+      "Kafe"
+    ],
+    "featured": false
   },
   {
     "id": "kuveytturk-market-250tl",
@@ -42,7 +54,13 @@
     "link": "https://www.kuveytturk.com.tr/kendim-icin/kampus/market-harcamalarina-10-indirim-kazan",
     "date": "31 Aralık 2026'ya kadar",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Market",
+      "Alışveriş"
+    ],
+    "featured": false
   },
   {
     "id": "gemini-pro-1yil-ucretsiz",
@@ -57,7 +75,13 @@
     "link": "https://one.google.com/explore-plan/ai-premium",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Yapay Zeka",
+      "Teknoloji",
+      "Ücretsiz"
+    ],
+    "featured": true
   },
   {
     "id": "akbank-dijital-yuzde50",
@@ -72,7 +96,13 @@
     "link": "https://www.akbank.com/tr-tr/kampanyalar/Sayfalar/universiteli-akbankli.aspx",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Eğlence",
+      "Müzik"
+    ],
+    "featured": false
   },
   {
     "id": "akbank-axess-1200tl",
@@ -87,7 +117,13 @@
     "link": "https://www.axess.com.tr",
     "date": "30 Kasım'a kadar",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Alışveriş",
+      "Hediye"
+    ],
+    "featured": true
   },
   {
     "id": "garantibbva-harcama-2000tl",
@@ -102,7 +138,13 @@
     "link": "https://www.garantibbva.com.tr",
     "date": "30 Mart 2027'ye kadar",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "İndirim",
+      "Alışveriş"
+    ],
+    "featured": false
   },
   {
     "id": "garantibbva-davet-50000tl",
@@ -117,7 +159,13 @@
     "link": "https://www.bonus.com.tr",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Hediye",
+      "Nakit"
+    ],
+    "featured": true
   },
   {
     "id": "yapikredi-play-15000tl",
@@ -132,7 +180,15 @@
     "link": "https://www.yapikredi.com.tr/kampanyalar/detay/yapi-kredi-mobilden-musteri-olan-playlilere-ozel-15000-tlye-varan-firsat",
     "date": "1 - 30 Kasım 2026",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Hediye",
+      "Yemek",
+      "Eğlence",
+      "Alışveriş"
+    ],
+    "featured": true
   },
   {
     "id": "yapikredi-play-kafe-dijital",
@@ -147,7 +203,14 @@
     "link": "https://www.yapikredi.com.tr/kampanyalar/detay/yapi-kredi-mobilden-musteri-olan-playlilere-ozel-15000-tlye-varan-firsat",
     "date": "5 ay boyunca geçerli",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Yemek",
+      "Kafe",
+      "Eğlence"
+    ],
+    "featured": false
   },
   {
     "id": "isbankasi-gaming-yuzde50",
@@ -162,7 +225,13 @@
     "link": "https://www.maximumgenc.com.tr/kampanyalar",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Eğlence",
+      "Oyun"
+    ],
+    "featured": true
   },
   {
     "id": "isbankasi-restoran-yuzde20",
@@ -177,7 +246,13 @@
     "link": "https://www.maximumgenc.com.tr/kampanyalar",
     "date": "31 Aralık 2026'ya kadar",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Yemek",
+      "Kafe"
+    ],
+    "featured": false
   },
   {
     "id": "isbankasi-ulasim-yuzde30",
@@ -191,8 +266,15 @@
     "logo": "images/isbankasi-logo.svg",
     "link": "https://www.maximumgenc.com.tr/kampanyalar",
     "date": "Güncel",
-    "cities": ["istanbul"],
-    "universities": []
+    "cities": [
+      "istanbul"
+    ],
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Ulaşım"
+    ],
+    "featured": false
   },
   {
     "id": "isbankasi-davet-500tl",
@@ -207,7 +289,12 @@
     "link": "https://www.maximum.com.tr/kampanyalar/is-bankasini-arkadasiniza-onerin-hem-siz-hem-de-arkadasiniz-maxipuan-kazanin",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Hediye"
+    ],
+    "featured": false
   },
   {
     "id": "teb-dijital-yuzde50",
@@ -222,7 +309,13 @@
     "link": "https://www.cepteteb.com.tr/kampanyalar/cepteteb-kampanyalari/dijital-uyelik",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Eğlence",
+      "Yapay Zeka"
+    ],
+    "featured": true
   },
   {
     "id": "halkbank-prime-ucretsiz",
@@ -237,7 +330,14 @@
     "link": "https://www.parafgenc.com.tr/tr/parafgencizi-taniyin/ucretsiz-amazon-prime-uyeligi.html",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Eğlence",
+      "Alışveriş",
+      "Ücretsiz"
+    ],
+    "featured": true
   },
   {
     "id": "halkbank-dijital-yuzde50",
@@ -252,7 +352,13 @@
     "link": "https://www.parafgenc.com.tr",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Eğlence",
+      "Oyun"
+    ],
+    "featured": false
   },
   {
     "id": "halkbank-internet-yuzde10",
@@ -267,7 +373,12 @@
     "link": "https://www.parafgenc.com.tr",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Alışveriş"
+    ],
+    "featured": false
   },
   {
     "id": "ing-dijital-500tl",
@@ -282,7 +393,12 @@
     "link": "https://www.ing.com.tr",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Hediye"
+    ],
+    "featured": true
   },
   {
     "id": "ing-kafe-fastfood-istanbulkart",
@@ -297,7 +413,14 @@
     "link": "https://www.ing.com.tr",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Yemek",
+      "Kafe",
+      "Ulaşım"
+    ],
+    "featured": false
   },
   {
     "id": "ing-kultur-dijital-900tl",
@@ -312,7 +435,13 @@
     "link": "https://www.ing.com.tr",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Kültür",
+      "Eğlence"
+    ],
+    "featured": false
   },
   {
     "id": "enpara-ai-250tl",
@@ -327,7 +456,12 @@
     "link": "https://www.enpara.com/kampanyalar",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Yapay Zeka"
+    ],
+    "featured": true
   },
   {
     "id": "enpara-dijital-yuzde50",
@@ -342,7 +476,13 @@
     "link": "https://www.enpara.com/kampanyalar",
     "date": "31 Aralık 2026'ya kadar",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Eğlence",
+      "Müzik"
+    ],
+    "featured": false
   },
   {
     "id": "enpara-tavsiye-1000tl",
@@ -357,7 +497,13 @@
     "link": "https://www.enpara.com/kampanyalar",
     "date": "30 Haziran 2027'ye kadar",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Hediye",
+      "Nakit"
+    ],
+    "featured": false
   },
   {
     "id": "odeabank-kart-1000tl",
@@ -372,7 +518,12 @@
     "link": "https://www.odeabank.com.tr/kampanyalar",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "İndirim"
+    ],
+    "featured": false
   },
   {
     "id": "odeabank-ekkart-250tl",
@@ -387,7 +538,12 @@
     "link": "https://www.odeabank.com.tr/kampanyalar",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "İndirim"
+    ],
+    "featured": false
   },
   {
     "id": "odeabank-davet-37500tl",
@@ -402,7 +558,13 @@
     "link": "https://www.odeabank.com.tr/kampanyalar",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Hediye",
+      "Nakit"
+    ],
+    "featured": true
   },
   {
     "id": "uption-harcama-500tl",
@@ -417,7 +579,14 @@
     "link": "https://www.uption.com.tr",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Banka",
+      "Hediye",
+      "Nakit"
+    ],
+    "featured": true
   },
   {
     "id": "papara-claude-250tl",
@@ -432,7 +601,12 @@
     "link": "https://www.papara.com/cashback/claude",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Yapay Zeka"
+    ],
+    "featured": true
   },
   {
     "id": "papara-steam-150tl",
@@ -447,7 +621,13 @@
     "link": "https://www.papara.com/cashback/steam",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Eğlence",
+      "Oyun"
+    ],
+    "featured": false
   },
   {
     "id": "papara-epicgames-100tl",
@@ -462,7 +642,13 @@
     "link": "https://www.papara.com/cashback/epic-games",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Eğlence",
+      "Oyun"
+    ],
+    "featured": false
   },
   {
     "id": "papara-youtube-50tl",
@@ -477,7 +663,12 @@
     "link": "https://www.papara.com/cashback/youtube",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Eğlence"
+    ],
+    "featured": false
   },
   {
     "id": "papara-starbucks-100tl",
@@ -492,7 +683,13 @@
     "link": "https://www.papara.com/cashback/starbucks",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Kafe",
+      "Yemek"
+    ],
+    "featured": false
   },
   {
     "id": "papara-burgerking-100tl",
@@ -507,7 +704,12 @@
     "link": "https://www.papara.com/cashback/burger-king",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Yemek"
+    ],
+    "featured": false
   },
   {
     "id": "papara-mcdonalds-100tl",
@@ -522,7 +724,12 @@
     "link": "https://www.papara.com/cashback/mcdonald-s",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Yemek"
+    ],
+    "featured": false
   },
   {
     "id": "papara-yemeksepeti-100tl",
@@ -537,7 +744,12 @@
     "link": "https://www.papara.com/cashback/yemeksepeti",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Yemek"
+    ],
+    "featured": false
   },
   {
     "id": "papara-gratis-100tl",
@@ -552,7 +764,12 @@
     "link": "https://www.papara.com/cashback/gratis",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Alışveriş"
+    ],
+    "featured": false
   },
   {
     "id": "papara-carrefoursa-375tl",
@@ -567,7 +784,13 @@
     "link": "https://www.papara.com/cashback/carrefoursa",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Market",
+      "Alışveriş"
+    ],
+    "featured": false
   },
   {
     "id": "papara-eczane-100tl",
@@ -582,7 +805,12 @@
     "link": "https://www.papara.com/cashback/eczane",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Sağlık"
+    ],
+    "featured": false
   },
   {
     "id": "papara-appstore-50tl",
@@ -597,7 +825,12 @@
     "link": "https://www.papara.com/cashback/app-store",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Teknoloji"
+    ],
+    "featured": false
   },
   {
     "id": "papara-playstore-50tl",
@@ -612,7 +845,12 @@
     "link": "https://www.papara.com/cashback/play-store",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Teknoloji"
+    ],
+    "featured": false
   },
   {
     "id": "papara-googleone-50tl",
@@ -627,7 +865,12 @@
     "link": "https://www.papara.com/cashback/google-one",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Teknoloji"
+    ],
+    "featured": false
   },
   {
     "id": "papara-fatura-200tl",
@@ -642,7 +885,13 @@
     "link": "https://www.papara.com/cashback",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Fatura",
+      "Hediye"
+    ],
+    "featured": false
   },
   {
     "id": "tami-enuygun-250tl",
@@ -657,7 +906,13 @@
     "link": "https://www.enuygun.com",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Ulaşım",
+      "Seyahat"
+    ],
+    "featured": true
   },
   {
     "id": "tami-spotify-yuzde50",
@@ -672,7 +927,13 @@
     "link": "https://www.tami.com.tr/kampanya/spotify-uyeliginde-50-oraninda-nakit-iade-kasim-26",
     "date": "30 Kasım 2026'ya kadar",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Eğlence",
+      "Müzik"
+    ],
+    "featured": false
   },
   {
     "id": "tami-netflix-yuzde50",
@@ -687,7 +948,12 @@
     "link": "https://www.tami.com.tr/kampanya/netflix-uyeliginde-50-oraninda-nakit-iade-kasim-26",
     "date": "30 Kasım 2026'ya kadar",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Banka",
+      "Eğlence"
+    ],
+    "featured": false
   },
   {
     "id": "paycell-ai-tasarim-250tl",
@@ -702,7 +968,13 @@
     "link": "https://www.paycell.com.tr/kampanyalar",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Yapay Zeka",
+      "Teknoloji"
+    ],
+    "featured": true
   },
   {
     "id": "paycell-otomatik-fatura-800tl",
@@ -717,7 +989,12 @@
     "link": "https://www.paycell.com.tr/kampanyalar",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Hediye"
+    ],
+    "featured": false
   },
   {
     "id": "paycell-gaming-200tl",
@@ -732,7 +1009,13 @@
     "link": "https://www.paycell.com.tr/kampanyalar/steamde-200-tlye-varan-nakit-iade",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Eğlence",
+      "Oyun"
+    ],
+    "featured": false
   },
   {
     "id": "paycell-youtube-ucretsiz",
@@ -747,7 +1030,13 @@
     "link": "https://www.paycell.com.tr/kampanyalar/paycellliler-simdi-youtube-premiumda",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Eğlence",
+      "Ücretsiz"
+    ],
+    "featured": false
   },
   {
     "id": "paycell-dijital-yuzde50",
@@ -762,7 +1051,13 @@
     "link": "https://www.paycell.com.tr/kampanyalar/spotify-premium-aboneliginin-yarisi-bizden",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Eğlence",
+      "Müzik"
+    ],
+    "featured": false
   },
   {
     "id": "paycell-store-100tl",
@@ -777,7 +1072,12 @@
     "link": "https://www.paycell.com.tr/kampanyalar/app-store-da-100-tl-hediye-para",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Teknoloji"
+    ],
+    "featured": false
   },
   {
     "id": "paycell-watsons-yuzde25",
@@ -792,7 +1092,12 @@
     "link": "https://www.paycell.com.tr/kampanyalar/watsonsta-aninda-yuzde-25-nakit-iade",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Alışveriş"
+    ],
+    "featured": false
   },
   {
     "id": "paycell-giyim-mavi-defacto-flo",
@@ -807,7 +1112,13 @@
     "link": "https://www.paycell.com.tr/kampanyalar/mavide-aninda-yuzde-20-nakit-iade",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Giyim",
+      "Alışveriş"
+    ],
+    "featured": false
   },
   {
     "id": "vodafonepay-enuygun-400tl",
@@ -822,7 +1133,13 @@
     "link": "https://www.enuygun.com/otobus-bileti/",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Ulaşım",
+      "Seyahat"
+    ],
+    "featured": true
   },
   {
     "id": "vodafonepay-bakiye-200tl",
@@ -837,7 +1154,13 @@
     "link": "https://www.vodafone.com.tr/vodafone-pay",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Fatura",
+      "İndirim"
+    ],
+    "featured": false
   },
   {
     "id": "vodafonepay-market-qr-100tl",
@@ -852,6 +1175,11 @@
     "link": "https://www.vodafone.com.tr/vodafone-pay",
     "date": "Güncel",
     "cities": [],
-    "universities": []
+    "universities": [],
+    "tags": [
+      "Finans",
+      "Market"
+    ],
+    "featured": false
   }
 ]
