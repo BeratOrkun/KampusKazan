@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 34" fill="none">
+  <!-- Paycell cyan rounded badge with yellow P/Paycell mark -->
+  <g transform="translate(4, 3)">
+    <rect width="28" height="28" rx="8" fill="#002855"/>
+    <!-- Yellow circular accent -->
+    <circle cx="14" cy="14" r="8" fill="#FFC709"/>
+    <path d="M11 10H15C16.1 10 17 10.9 17 12C17 13.1 16.1 14 15 14H11V10Z" fill="#002855"/>
+    <path d="M11 14H13V18H11V14Z" fill="#002855"/>
+  </g>
+  <!-- Text -->
+  <text x="38" y="23" fill="#002855" font-family="'Space Grotesk', -apple-system, sans-serif" font-weight="900" font-size="18" letter-spacing="-0.03em">pay<tspan fill="#00A3E0">cell</tspan></text>
+</svg>

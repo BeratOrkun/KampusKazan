@@ -1,0 +1,56 @@
+<svg width="800" height="420" viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="paycellGameBg" x1="0" y1="0" x2="800" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#05162D"/>
+      <stop offset="50%" stop-color="#0E2F5E"/>
+      <stop offset="100%" stop-color="#030C1A"/>
+    </linearGradient>
+    <linearGradient id="gameCyan" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <linearGradient id="paycellGoldGame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF570"/>
+      <stop offset="50%" stop-color="#FFC709"/>
+      <stop offset="100%" stop-color="#FFA826"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="420" rx="24" fill="url(#paycellGameBg)"/>
+  <circle cx="710" cy="90" r="190" fill="#0284C7" fill-opacity="0.25"/>
+  <circle cx="100" cy="350" r="170" fill="#FFC709" fill-opacity="0.15"/>
+
+  <!-- Brand White Pill -->
+  <rect x="44" y="38" width="180" height="52" rx="14" fill="#FFFFFF"/>
+  <g transform="translate(56, 48)">
+    <rect width="26" height="26" rx="7" fill="#002855"/>
+    <circle cx="13" cy="13" r="7" fill="#FFC709"/>
+    <text x="34" y="19" fill="#002855" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="16">pay<tspan fill="#00A3E0">cell</tspan></text>
+  </g>
+
+  <!-- Tag -->
+  <rect x="238" y="44" width="230" height="40" rx="20" fill="url(#gameCyan)"/>
+  <text x="353" y="69" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-size="14" letter-spacing="0.5">🎮 STEAM &amp; EPIC GAMES</text>
+
+  <!-- Main Headlines -->
+  <text x="44" y="158" fill="#FFFFFF" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="33">Steam &amp; Epic Games Harcamana</text>
+  <text x="44" y="220" fill="url(#paycellGoldGame)" font-family="'Space Grotesk', 'Inter', -apple-system, sans-serif" font-weight="900" font-size="52">200 TL Hediye Para!</text>
+  <text x="44" y="270" fill="#BAE6FD" font-family="'Inter', -apple-system, sans-serif" font-weight="600" font-size="18">Paycell Kart ile Oyun Alışverişlerinde 200 TL'ye Varan Anında Nakit İade</text>
+
+  <rect x="44" y="316" width="440" height="56" rx="16" fill="#FFFFFF" fill-opacity="0.08" stroke="#38BDF8" stroke-width="1.8"/>
+  <text x="64" y="351" fill="#FFFFFF" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="16">🕹️ 500-999 TL'ye 100 TL • 1.000 TL ve Üzerine 200 TL Hediye</text>
+
+  <!-- Right Visual Feature Card -->
+  <g transform="translate(520, 85)">
+    <rect x="0" y="0" width="236" height="280" rx="24" fill="#FFFFFF" fill-opacity="0.06" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="2"/>
+    
+    <circle cx="118" cy="74" r="44" fill="url(#gameCyan)"/>
+    <text x="118" y="86" text-anchor="middle" fill="#FFFFFF" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="28">🎮🕹️</text>
+
+    <text x="118" y="156" text-anchor="middle" fill="#FFC709" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="34">200 TL</text>
+    <text x="118" y="186" text-anchor="middle" fill="#FFFFFF" font-family="'Inter', sans-serif" font-weight="800" font-size="15">Nakit İade</text>
+    <rect x="24" y="216" width="188" height="28" rx="14" fill="#002855"/>
+    <text x="118" y="234" text-anchor="middle" fill="#FFC709" font-family="'Inter', sans-serif" font-weight="700" font-size="12">Steam + Epic Games</text>
+    <text x="118" y="266" text-anchor="middle" fill="#BAE6FD" font-family="'Inter', sans-serif" font-weight="600" font-size="11">Anında Hesaba Aktarım</text>
+  </g>
+</svg>
