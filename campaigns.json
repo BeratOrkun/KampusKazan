@@ -313,5 +313,50 @@
     "date": "Güncel",
     "cities": [],
     "universities": []
+  },
+  {
+    "id": "enpara-ai-250tl",
+    "active": true,
+    "brand": "Enpara.com",
+    "category": "Yapay Zeka",
+    "type": "İndirim",
+    "title": "Enpara.com — ChatGPT ve Gemini Üyelik Ücretlerinin 250 TL'si Bizden!",
+    "description": "Yapay zeka aboneliklerinde dev fırsat! ChatGPT ve Gemini üyelik ücretlerinizin 250 TL’si Enpara'dan. Enpara Kredi Kartı'nızla yapacağınız yapay zeka abonelik harcamalarınızda her ay 250 TL'ye kadar doğrudan nakit iade hesabınıza tanımlanır.",
+    "image": "images/enpara-ai.svg",
+    "logo": "images/enpara-logo.svg",
+    "link": "https://www.enpara.com/kampanyalar",
+    "date": "Güncel",
+    "cities": [],
+    "universities": []
+  },
+  {
+    "id": "enpara-dijital-yuzde50",
+    "active": true,
+    "brand": "Enpara.com",
+    "category": "Eğlence",
+    "type": "İndirim",
+    "title": "Enpara.com — Netflix, Spotify ve YouTube Premium Harcamalarının %50'si Bizden!",
+    "description": "31 Aralık 2026’ya kadar her ay, Netflix, Spotify ve YouTube Premium üyelikleriniz için Enpara Kredi Kartı’nızla ay boyunca yapacağınız toplam 300 TL’ye kadar olan harcamalarınızın %50’si bizden! Dizi ve müzik keyfi yarı yarıya indirimli.",
+    "image": "images/enpara-dijital.svg",
+    "logo": "images/enpara-logo.svg",
+    "link": "https://www.enpara.com/kampanyalar",
+    "date": "31 Aralık 2026'ya kadar",
+    "cities": [],
+    "universities": []
+  },
+  {
+    "id": "enpara-tavsiye-1000tl",
+    "active": true,
+    "brand": "Enpara.com",
+    "category": "Banka",
+    "type": "Hediye",
+    "title": "Enpara.com — Tavsiye ile Kazanın: Kişi Başı 1.000 TL Nakit Ödül!",
+    "description": "1 Ocak 2026 – 30 Haziran 2027 tarihleri arasında Cep Şube'mizin 'Tavsiye ile kazanın' adımından yapacağınız tavsiyelerle, Enpara hesabını kullanmaya başlayan her bir kişi için 500 TL, tavsiye ettiğiniz kişinin ek olarak Enpara Kredi Kartı’nı da kullanmaya başlaması durumunda her bir kişi için 1.000 TL ödül kazanabilirsiniz.",
+    "image": "images/enpara-davet.svg",
+    "logo": "images/enpara-logo.svg",
+    "link": "https://www.enpara.com/kampanyalar",
+    "date": "30 Haziran 2027'ye kadar",
+    "cities": [],
+    "universities": []
   }
 ]
