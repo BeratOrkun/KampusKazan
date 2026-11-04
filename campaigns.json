@@ -358,5 +358,50 @@
     "date": "30 Haziran 2027'ye kadar",
     "cities": [],
     "universities": []
+  },
+  {
+    "id": "odeabank-kart-1000tl",
+    "active": true,
+    "brand": "Odeabank",
+    "category": "Banka",
+    "type": "İndirim",
+    "title": "Yeni Odea Kredi Kartınla 5.000 TL Harcamana 1.000 TL İndirim!",
+    "description": "Odea kredi kartına başvurup, onaylanan kredi kartınızla yapacağınız toplam 5.000 TL harcamanıza 1.000 TL indirim kazanabilirsiniz. Kampanyadan ilk kez Odea kredi kartı sahibi olan müşteriler yararlanabilir.",
+    "image": "images/odeabank-harcama.svg",
+    "logo": "images/odeabank-logo.svg",
+    "link": "https://www.odeabank.com.tr/kampanyalar",
+    "date": "Güncel",
+    "cities": [],
+    "universities": []
+  },
+  {
+    "id": "odeabank-ekkart-250tl",
+    "active": true,
+    "brand": "Odeabank",
+    "category": "Banka",
+    "type": "İndirim",
+    "title": "Odeabank Ek Kredi Kartı Başvuruna 250 TL İndirim!",
+    "description": "İlk kez Odea ek kredi kartına başvurarak, onaylanan ek kredi kartıyla yapılacak toplam 1.000 TL harcamadan 250 TL indirim kazanın. Sevdikleriniz veya aileniz için ek kart çıkartarak harcama yaparken anında 250 TL ekstre indirimi elde edin.",
+    "image": "images/odeabank-ekkart.svg",
+    "logo": "images/odeabank-logo.svg",
+    "link": "https://www.odeabank.com.tr/kampanyalar",
+    "date": "Güncel",
+    "cities": [],
+    "universities": []
+  },
+  {
+    "id": "odeabank-davet-37500tl",
+    "active": true,
+    "brand": "Odeabank",
+    "category": "Banka",
+    "type": "Hediye",
+    "title": "Arkadaşını Odeabank'a Davet Et — Kişi Başı 2.500 TL, Toplam 37.500 TL Nakit Ödül!",
+    "description": "Arkadaşlarınızı Odeabank’a davet edin, her davet için 2.500 TL, toplamda 37.500 TL’ye varan nakit ödül kazanma şansını yakalayın! Davet ettiğiniz arkadaşlarınız da Odeabank’ın ayrıcalıklı dünyasından yararlansın.",
+    "image": "images/odeabank-davet.svg",
+    "logo": "images/odeabank-logo.svg",
+    "link": "https://www.odeabank.com.tr/kampanyalar",
+    "date": "Güncel",
+    "cities": [],
+    "universities": []
   }
 ]

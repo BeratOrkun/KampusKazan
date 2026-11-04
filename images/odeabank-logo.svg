@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 34" fill="none">
+  <!-- Odeabank signature lime square badge -->
+  <g transform="translate(4, 3)">
+    <rect width="28" height="28" rx="7" fill="#0055B8"/>
+    <!-- Lime green diamond/square accent -->
+    <rect x="7" y="7" width="14" height="14" rx="3.5" fill="#D4F636"/>
+  </g>
+  <!-- Text odeabank -->
+  <text x="38" y="23" fill="#003580" font-family="'Space Grotesk', -apple-system, sans-serif" font-weight="900" font-size="17" letter-spacing="-0.03em">odea<tspan fill="#0055B8" font-weight="700">bank</tspan></text>
+</svg>
